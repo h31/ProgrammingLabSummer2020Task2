@@ -1,0 +1,17 @@
+file0.txt
+123
+456
+789
+File ended
+
+file1.txt
+123
+456
+789
+File ended
+
+file2.txt
+123
+456
+789
+File ended
