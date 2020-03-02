@@ -28,8 +28,14 @@ public class Tar {
         }
     }
 
+    /**
+     * метод, архивирующий несколько файлов в один.
+     * @param filesToConnect - файлы, которые будут заархивированы
+     * @param output - название архива
+     * @throws FileNotFoundException - исключение в случае если файл не найден
+     */
     static void fileWriter(List<String> filesToConnect, String output) throws FileNotFoundException {
-        if (filesToConnect == null) throw new IllegalArgumentException();
+        if (filesToConnect.isEmpty()) throw new IllegalArgumentException();
         Formatter newFiles = new Formatter(output);// файл, куда буду записывать
         for (int i = 0; i < filesToConnect.size(); i++) {
             File part = new File(filesToConnect.get(i));//поочерёдно перебираю файлы, которые буду соединять
@@ -39,11 +45,16 @@ public class Tar {
             while (lines.hasNext()) {
                 newFiles.format(lines.next() + "\r\n");
             }
-            newFiles.format("File ended\r\n");
+            newFiles.format("File ended\r\n");//пометка что закончился этот файл
         }
         newFiles.close();
     }
 
+    /**
+     * метод, который разархивирует файл
+     * @param fileName - файл, который надо разархивировать.
+     * @throws FileNotFoundException - исключение в случае если файл не найден
+     */
     static void fileReader(String fileName) throws FileNotFoundException {
         String line;
         File x = new File(fileName);
