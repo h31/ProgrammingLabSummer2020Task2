@@ -1,17 +1,17 @@
 file0.txt
+3
 123
 456
 789
-File ended
 
 file1.txt
+3
 123
 456
 789
-File ended
 
 file2.txt
+3
 123
 456
 789
-File ended

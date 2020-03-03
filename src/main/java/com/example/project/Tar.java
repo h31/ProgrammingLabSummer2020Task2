@@ -12,11 +12,16 @@ public class Tar {
     public static void main(String[] args) throws FileNotFoundException {
         int k = 1;
         List<String> filesToConnect = new ArrayList<>();
-        String line = new Scanner(System.in).nextLine();
+        StringBuilder str = new StringBuilder();
+        for (int i = 0; i < args.length; i++) {
+            if (i != args.length - 1) str.append(args[i]).append(" ");
+            else str.append(args[i]);
+        }
+        String line = str.toString();
         if (line.contains("-u")) {
-            if (!line.matches("^tar\\s+-u\\s+[^\\\\*:?|\"<>]+\\.txt$")) throw new IllegalArgumentException();
+            if (!line.matches("^tar\\s+-u\\s+[^\\\\*:?|\"<>]+\\.txt$")) System.out.println("Wrong command");
         } else if (!line.matches("^tar\\s+([^\\\\*:?|\"<>]+\\.txt)+\\s+-out\\s+[^\\\\*:?|\"<>]+\\.txt$"))
-            throw new IllegalArgumentException();
+            System.out.println("Wrong command");;
         String[] parts = line.split("\\s+");
         if (parts[1].equals("-u")) fileReader(parts[2]);
         else {
@@ -35,18 +40,28 @@ public class Tar {
      * @throws FileNotFoundException - исключение в случае если файл не найден
      */
     static void fileWriter(List<String> filesToConnect, String output) throws FileNotFoundException {
+        StringBuilder lineToWrite = new StringBuilder();
+        int counterOfLines = 0;
         if (filesToConnect.isEmpty()) throw new IllegalArgumentException();
         Formatter newFiles = new Formatter(output);// файл, куда буду записывать
         for (int i = 0; i < filesToConnect.size(); i++) {
             File part = new File(filesToConnect.get(i));//поочерёдно перебираю файлы, которые буду соединять
             Scanner lines = new Scanner(part);
-            if (i != 0) newFiles.format("\r\n");
-            newFiles.format(part.toString() + "\r\n"); //отделяю файлы друг от друга пробелами и названиями
-            while (lines.hasNext()) {
-                newFiles.format(lines.next() + "\r\n");
+            if (i != 0) {
+                newFiles.format(counterOfLines + "\n");
+                newFiles.format(lineToWrite.toString());
+                counterOfLines = 0;
+                lineToWrite = new StringBuilder();
+                newFiles.format("\n");
             }
-            newFiles.format("File ended\r\n");//пометка что закончился этот файл
+            newFiles.format(part.toString()+ "\n"); //отделяю файлы друг от друга пробелами и названиями
+            while (lines.hasNext()) {
+                counterOfLines++;
+                lineToWrite.append(lines.nextLine() + "\n");
+            }
         }
+        newFiles.format(counterOfLines + "\n");
+        newFiles.format(lineToWrite.toString());
         newFiles.close();
     }
 
@@ -56,18 +71,19 @@ public class Tar {
      * @throws FileNotFoundException - исключение в случае если файл не найден
      */
     static void fileReader(String fileName) throws FileNotFoundException {
-        String line;
         File x = new File(fileName);
+        StringBuilder a = new StringBuilder();
         Scanner lines = new Scanner(x);
-        Formatter newFiles = new Formatter(lines.nextLine());
+        Formatter newFiles;
         while (lines.hasNext()) {
-            line = lines.nextLine();
-            if (line.equals("File ended") && lines.hasNext()) {
-                lines.nextLine();
-                newFiles.close();
-                newFiles = new Formatter(lines.nextLine());
-            } else newFiles.format(line + "\r\n");
+            newFiles = new Formatter(lines.nextLine());
+            int k = lines.nextInt();
+            lines.nextLine();
+            for (int i = 0; i < k; i++) {
+                newFiles.format(lines.nextLine() + "\n");
+            }
+            if (lines.hasNext()) lines.nextLine();
+            newFiles.close();
         }
-        newFiles.close();
     }
 }

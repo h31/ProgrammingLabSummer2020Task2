@@ -44,10 +44,10 @@ class TarTest {
         Assertions.assertTrue(new File("test.txt").exists());
         Scanner test = new Scanner(new File("test.txt"));
         Assertions.assertEquals("input\\file1.txt", test.nextLine());
+        Assertions.assertEquals("3", test.nextLine());
         Assertions.assertEquals("123", test.nextLine());
         Assertions.assertNotEquals("789", test.nextLine());
         Assertions.assertEquals("789", test.nextLine());
-        Assertions.assertEquals("File ended", test.nextLine());
         Assertions.assertEquals("", test.nextLine());
         Assertions.assertEquals("input\\file2.txt", test.nextLine());
         test.close();
