@@ -55,26 +55,4 @@ public class WhiteBoxTarTests {
         new File("file1.txt").delete();
         new File("file2.txt").delete();
     }
-
-    //проверка правильности разархивирования файлов и обратной архивации
-    @Test
-    void separateAndCompress() throws FileNotFoundException {
-        Separator.fileReader("input/read.txt");
-        Compressor.fileWriter(new ArrayList<String>() {{
-            add("file0.txt");
-            add("file1.txt");
-            add("file2.txt");
-        }}, "test.txt");
-        Scanner begin = new Scanner(new File("input/read.txt"));
-        Scanner end = new Scanner(new File("test.txt"));
-        while (begin.hasNext() || end.hasNext()) {
-            Assertions.assertEquals(begin.nextLine(), end.nextLine());
-        }
-        begin.close();
-        end.close();
-        new File("file0.txt").delete();
-        new File("file1.txt").delete();
-        new File("file2.txt").delete();
-        new File("test.txt").delete();
-    }
 }
