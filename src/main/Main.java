@@ -27,7 +27,6 @@ public class Main {
                     break;
             }
         }
-        System.out.println();
         Functions.printDirectory();
     }
 }

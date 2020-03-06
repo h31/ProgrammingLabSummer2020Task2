@@ -23,6 +23,7 @@ public class FileInformation {
         long size = 0;
         if (file.isDirectory()) {
             for (File element : Objects.requireNonNull(file.listFiles())) {
+                if (element.isDirectory()) size += getDirectorySize(element);
                 size += element.length();
             }
         }
@@ -32,13 +33,13 @@ public class FileInformation {
     private String transformSize(long size) {
         double result = size;
         StringBuilder sb = new StringBuilder();
-        String[] prefixArray = new String[]{"байт", "килобайт", "мегабайт", "гигабайт"};
+        String[] prefixArray = new String[]{"Б", "К", "М", "Г"};
         int counter = 0;
         while (result >= 1024) {
             result /= 1024;
             counter++;
         }
-        sb.append(String.format("%.1f", result)).append(" ").append(prefixArray[counter]);
+        sb.append(String.format("%.1f", result)).append(prefixArray[counter]);
         return sb.toString();
     }
 
