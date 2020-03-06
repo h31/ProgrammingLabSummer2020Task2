@@ -1,7 +1,7 @@
-import java.io.File;
+import java.io.IOException;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         if (args.length < 1) throw new IllegalArgumentException();
         for (int i = 0; i != args.length; i++) {
             switch (args[i]) {
@@ -27,5 +27,7 @@ public class Main {
                     break;
             }
         }
+        System.out.println();
+        Functions.printDirectory();
     }
 }
