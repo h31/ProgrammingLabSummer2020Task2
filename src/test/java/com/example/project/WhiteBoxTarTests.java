@@ -48,7 +48,7 @@ public class WhiteBoxTarTests {
         Assertions.assertNotEquals("789", test.nextLine());
         Assertions.assertEquals("789", test.nextLine());
         Assertions.assertEquals("", test.nextLine());
-        Assertions.assertEquals("input\\file2.txt", test.nextLine());
+        Assertions.assertNotEquals("*/<>", test.nextLine());
         test.close();
         new File("test.txt").delete();
         new File("file0.txt").delete();
