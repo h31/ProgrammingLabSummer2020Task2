@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MainTest {
     @Test
-    void mainTest() throws IOException {
+    void main() throws IOException {
         Flags flag = new Flags();
         flag.setDirectory(new File("testfolder/folder/inner-folder"));
         assertEquals("FileInformation.test\nFlags.test\nFunctions.test\nMain.test", Functions.printDirectory(flag));
