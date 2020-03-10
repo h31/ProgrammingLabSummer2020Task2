@@ -60,4 +60,20 @@ class FileInformation {
         else
             return Integer.toBinaryString(this.permissions) + " " + this.lastModified + " " + this.size + " " + this.name;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FileInformation that = (FileInformation) o;
+        return permissions == that.permissions &&
+                size == that.size &&
+                lastModified.equals(that.lastModified) &&
+                name.equals(that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(permissions, lastModified, size, name);
+    }
 }

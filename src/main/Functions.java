@@ -8,6 +8,7 @@ class Functions {
         if (flags.getDirectory().isFile()) {
             return new FileInformation(flags.getDirectory()).toString(flags.getHFlag());
         }
+        if (flags.getDirectory().listFiles() == null) return "Данного каталога не существует";
         StringBuilder sb = new StringBuilder();
         File[] filesArray = arrayPreparation(flags.getDirectory().listFiles(), flags.getRFlag());
         if (filesArray == null) return "";

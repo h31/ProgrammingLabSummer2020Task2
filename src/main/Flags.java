@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Objects;
 
 class Flags {
     static final byte canRead = 0b100;
@@ -26,16 +27,20 @@ class Flags {
                     setRFlag(true);
                     break;
                 case ("-o"):
-                    if (i + 1 != args.length - 1) {
+                    if (i + 1 < args.length - 1) {
                         setOutput(new FileWriter(args[i + 1]));
                         setOFlag(true);
                         i++;
+                        break;
                     }
-                    break;
+                    throw new IllegalArgumentException();
                 default:
-                    if (i == args.length - 1) setDirectory(new File(args[i]));
-                    else throw new IllegalArgumentException();
-                    break;
+                    if (i == args.length - 1) {
+                        setDirectory(new File(args[i]));
+                        break;
+                    }
+                    throw new IllegalArgumentException();
+
             }
         }
     }
@@ -44,7 +49,7 @@ class Flags {
         return lFlag;
     }
 
-    private void setLFlag(boolean lFlag) {
+    void setLFlag(boolean lFlag) {
         this.lFlag = lFlag;
     }
 
@@ -52,7 +57,7 @@ class Flags {
         return hFlag;
     }
 
-    private void setHFlag(boolean hFlag) {
+    void setHFlag(boolean hFlag) {
         this.hFlag = hFlag;
     }
 
@@ -60,7 +65,7 @@ class Flags {
         return rFlag;
     }
 
-    private void setRFlag(boolean rFlag) {
+    void setRFlag(boolean rFlag) {
         this.rFlag = rFlag;
     }
 
@@ -68,7 +73,7 @@ class Flags {
         return oFlag;
     }
 
-    private void setOFlag(boolean oFlag) {
+    void setOFlag(boolean oFlag) {
         this.oFlag = oFlag;
     }
 
@@ -76,7 +81,7 @@ class Flags {
         return output;
     }
 
-    private void setOutput(FileWriter output) {
+    void setOutput(FileWriter output) {
         this.output = output;
     }
 
@@ -84,7 +89,25 @@ class Flags {
         return directory;
     }
 
-    private void setDirectory(File directory) {
+    void setDirectory(File directory) {
         this.directory = directory;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Flags flags = (Flags) o;
+        return lFlag == flags.lFlag &&
+                hFlag == flags.hFlag &&
+                rFlag == flags.rFlag &&
+                oFlag == flags.oFlag &&
+                Objects.equals(getOutput(), flags.getOutput()) &&
+                getDirectory().equals(flags.getDirectory());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(lFlag, hFlag, rFlag, oFlag, getOutput(), getDirectory());
     }
 }
