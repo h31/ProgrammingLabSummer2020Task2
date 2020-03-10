@@ -3,7 +3,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
-public class FileInformation {
+class FileInformation {
     private byte permissions = 0b000;
     private final String lastModified;
     private long size;
@@ -54,9 +54,8 @@ public class FileInformation {
         return sb.toString();
     }
 
-    @Override
-    public String toString() {
-        if (Flags.hFlag)
+    String toString(boolean hFlag) {
+        if (hFlag)
             return transformPermission(this.permissions) + " " + this.lastModified + " " + transformSize(this.size) + " " + this.name;
         else
             return Integer.toBinaryString(this.permissions) + " " + this.lastModified + " " + this.size + " " + this.name;
