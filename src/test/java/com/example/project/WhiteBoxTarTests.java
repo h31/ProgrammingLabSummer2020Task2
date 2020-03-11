@@ -4,14 +4,14 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class WhiteBoxTarTests {
     //тесты для проверки содержимого разархивированных файлов
     @Test
-    void fileReaderTests() throws FileNotFoundException {
+    void fileReaderTests() throws IOException {
         Separator.fileReader("input/read.txt");
         Scanner file0 = new Scanner(new File("file0.txt"));
         Assertions.assertEquals("123", file0.nextLine());
@@ -35,10 +35,10 @@ public class WhiteBoxTarTests {
 
     //тесты для проверки соединения нескольких файлов и проверка содержимого
     @Test
-    void fileWriterTests() throws FileNotFoundException {
-        Compressor.fileWriter(new ArrayList<String>() {{
-            add("input/file1.txt");
-            add("input/file2.txt");
+    void fileWriterTests() throws IOException {
+        Compressor.fileWriter(new ArrayList<File>() {{
+            add(new File("input/part1.txt"));
+            add(new File("input/part2.txt"));
         }}, "test.txt");
         Assertions.assertTrue(new File("test.txt").exists());
         Scanner test = new Scanner(new File("test.txt"));
@@ -54,5 +54,27 @@ public class WhiteBoxTarTests {
         new File("file0.txt").delete();
         new File("file1.txt").delete();
         new File("file2.txt").delete();
+    }
+
+    //проверка правильности разархивирования файлов и обратной архивации
+    @Test
+    void separateAndCompress() throws IOException {
+        Separator.fileReader("input/read.txt");
+        Compressor.fileWriter(new ArrayList<File>() {{
+            add(new File("file0.txt"));
+            add(new File("file1.txt"));
+            add(new File("file2.txt"));
+        }}, "test.txt");
+        Scanner begin = new Scanner(new File("input/read.txt"));
+        Scanner end = new Scanner(new File("test.txt"));
+        while (begin.hasNext() || end.hasNext()) {
+            Assertions.assertEquals(begin.nextLine(), end.nextLine());
+        }
+        begin.close();
+        end.close();
+        new File("file0.txt").delete();
+        new File("file1.txt").delete();
+        new File("file2.txt").delete();
+        new File("test.txt").delete();
     }
 }
