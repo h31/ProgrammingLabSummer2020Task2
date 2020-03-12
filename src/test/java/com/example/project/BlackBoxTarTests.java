@@ -40,7 +40,7 @@ public class BlackBoxTarTests {
     void fileWriterTests() throws IOException {
         Compressor.fileWriter(new ArrayList<File>() {{
             add(new File("input/part1.txt"));
-            add(new File ("input/part2.txt"));
+            add(new File("input/part2.txt"));
         }}, "test1.txt");
         Assertions.assertTrue(new File("test1.txt").exists());
         Compressor.fileWriter(new ArrayList<File>() {{
