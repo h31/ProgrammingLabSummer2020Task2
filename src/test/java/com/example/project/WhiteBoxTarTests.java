@@ -37,19 +37,24 @@ public class WhiteBoxTarTests {
     @Test
     void fileWriterTests() throws IOException {
         Compressor.fileWriter(new ArrayList<File>() {{
+            add(new File("input/part0.txt"));
             add(new File("input/part1.txt"));
             add(new File("input/part2.txt"));
         }}, "test.txt");
-        Assertions.assertTrue(new File("test.txt").exists());
+        int k = 0;
+        Scanner check = new Scanner(new File("output/check.txt"));
         Scanner test = new Scanner(new File("test.txt"));
-        Assertions.assertNotEquals("*/<>", test.nextLine());
-        Assertions.assertEquals("3", test.nextLine());
-        Assertions.assertEquals("123", test.nextLine());
-        Assertions.assertNotEquals("789", test.nextLine());
-        Assertions.assertEquals("789", test.nextLine());
-        Assertions.assertEquals("", test.nextLine());
-        Assertions.assertNotEquals("*/<>", test.nextLine());
+        String str;
+        while (check.hasNext() || test.hasNext()) {
+            str = check.nextLine();
+            if (str.contains("input\\part")) {
+                //добавил эту проверку, потому что в разных системах разные правила на имена файлов.
+                Assertions.assertEquals(new File("input/part" + k + ".txt").toString(), test.nextLine());
+                k++;
+            } else Assertions.assertEquals(str, test.nextLine());
+        }
         test.close();
+        check.close();
         new File("test.txt").delete();
         new File("file0.txt").delete();
         new File("file1.txt").delete();
