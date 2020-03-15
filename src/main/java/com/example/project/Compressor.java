@@ -19,7 +19,7 @@ public class Compressor {
         for (File file : filesToArchive) {
             counterOfLines = 0;
             lineToWrite = new StringBuilder();
-            InputStreamReader reader = new InputStreamReader(new FileInputStream(file));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
             newArchive.write(file.toString() + "\n");
             int k;
             while ((k = reader.read()) != -1) {
