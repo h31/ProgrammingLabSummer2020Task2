@@ -1,9 +1,6 @@
 package com.example.project;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Scanner;
+import java.io.*;
 
 public class Separator {
     /**
@@ -13,18 +10,25 @@ public class Separator {
      * @throws IOException - исключение в случае если файл не найден
      */
     static void fileReader(String fileName) throws IOException {
-        Scanner lines = new Scanner(new File(fileName));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName)));
         FileWriter newFiles;
-        while (lines.hasNext()) {
-            newFiles = new FileWriter(lines.nextLine());
-            int k = lines.nextInt();
-            lines.nextLine();
-            for (int i = 0; i < k; i++) {
-                newFiles.write(lines.nextLine() + "\n");
+        String line = reader.readLine();
+        while (line != null) {
+            newFiles = new FileWriter(line);
+            int k = Integer.parseInt(reader.readLine());
+            while (k > 0) {
+                char add = (char) reader.read();
+                if (add == '\n') k--;
+                newFiles.write(add);
             }
-            if (lines.hasNext()) lines.nextLine();
+            char add = (char) reader.read();
+            if (add == '\r') {
+                newFiles.write(add);
+                reader.readLine();
+            }
+            line = reader.readLine();
             newFiles.close();
         }
-        lines.close();
+        reader.close();
     }
 }

@@ -1,10 +1,7 @@
 package com.example.project;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
-import java.util.Scanner;
 
 public class Compressor {
     /**
@@ -22,11 +19,12 @@ public class Compressor {
         for (File file : filesToArchive) {
             counterOfLines = 0;
             lineToWrite = new StringBuilder();
-            Scanner lines = new Scanner(file);
+            InputStreamReader reader = new InputStreamReader(new FileInputStream(file));
             newArchive.write(file.toString() + "\n");
-            while (lines.hasNext()) {
-                counterOfLines++;
-                lineToWrite.append(lines.nextLine()).append("\n");
+            int k;
+            while ((k = reader.read()) != -1) {
+                if ((char) k == '\n') counterOfLines++;
+                lineToWrite.append((char) k);
             }
             newArchive.write(counterOfLines + "\n");
             newArchive.write(lineToWrite.toString());
