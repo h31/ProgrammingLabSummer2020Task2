@@ -1,0 +1,17 @@
+test1.txt
+66
+input_part0.txt
+12
+123
+456
+789
+input_part1.txt
+12
+123
+456
+789
+input_part2.txt
+12
+123
+456
+789
