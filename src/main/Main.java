@@ -3,7 +3,6 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        if (args.length < 1) throw new IllegalArgumentException();
         Flags flags = new Flags();
         flags.checkArguments(args);
         String output = Functions.printDirectory(flags);

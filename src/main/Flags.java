@@ -15,6 +15,7 @@ class Flags {
     private File directory;
 
     void checkArguments(String[] args) throws IOException {
+        if (args.length < 1) throw new IllegalArgumentException();
         for (int i = 0; i != args.length; i++) {
             switch (args[i]) {
                 case ("-l"):

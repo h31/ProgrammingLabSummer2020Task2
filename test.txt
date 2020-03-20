@@ -1,4 +1,5 @@
-rwx 10.03.2020 15:19:53 601,0Б Main.test
-rwx 10.03.2020 15:30:39 1,5К Functions.test
-rwx 10.03.2020 15:25:07 2,2К Flags.test
-rwx 10.03.2020 14:18:39 2,3К FileInformation.test
+rwx 10.03.2020 16:34:41 43,0Б META-INF
+rwx 13.03.2020 20:45:55 533,0Б Main.java
+rwx 10.03.2020 15:30:39 1,5К Functions.java
+rwx 13.03.2020 20:45:58 3,0К Flags.java
+rwx 20.03.2020 13:23:55 2,8К FileInformation.java

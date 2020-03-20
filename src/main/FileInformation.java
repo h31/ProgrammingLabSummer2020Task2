@@ -21,11 +21,9 @@ class FileInformation {
 
     private long getDirectorySize(File file) {
         long size = 0;
-        if (file.isDirectory()) {
-            for (File element : Objects.requireNonNull(file.listFiles())) {
-                if (element.isDirectory()) size += getDirectorySize(element);
-                size += element.length();
-            }
+        for (File element : Objects.requireNonNull(file.listFiles())) {
+            if (element.isDirectory()) size += getDirectorySize(element);
+            size += element.length();
         }
         return size;
     }
