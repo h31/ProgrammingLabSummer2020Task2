@@ -23,7 +23,7 @@ public class Compressor {
                         if (i != 0) lineToWrite.append("_");
                         lineToWrite.append(partsOfName[i]);
                     }
-                    newArchive.write(lineToWrite.toString() + System.getProperty("line.separator"));
+                    newArchive.write(lineToWrite.toString() + "\n");
                     int k;
                     int counterOfChars = 0;
                     lineToWrite = new StringBuilder();
@@ -31,7 +31,7 @@ public class Compressor {
                         counterOfChars++;
                         lineToWrite.append((char) k);
                     }
-                    newArchive.write(counterOfChars + System.getProperty("line.separator"));
+                    newArchive.write(counterOfChars + "\n");
                     newArchive.write(lineToWrite.toString());
                 }
             }

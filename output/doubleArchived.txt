@@ -1,5 +1,5 @@
 test1.txt
-66
+62
 input_part0.txt
 12
 123
