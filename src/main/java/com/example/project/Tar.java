@@ -23,7 +23,7 @@ public class Tar {
                 else filesToArchive.add(new File(args[i]));
             }
             if (filesToArchive.isEmpty() || out.isEmpty()) throw new IllegalArgumentException();
-            Compressor.fileWriter(filesToArchive, out);
+            Compressor.fileWriter(filesToArchive, new File(out));
         }
     }
 }

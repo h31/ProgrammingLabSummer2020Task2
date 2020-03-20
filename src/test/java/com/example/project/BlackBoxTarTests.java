@@ -9,11 +9,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class BlackBoxTarTests {
-    //тесты для проверки правильности выбрасывания исключений
+    //тесты для проверки правильности выбрасывания исключений при неправильных аргументах командной строки
     @Test
     void illegalArguments() {
-        Assertions.assertThrows(FileNotFoundException.class, () -> Separator.fileReader("abc"));
-        Assertions.assertThrows(IllegalArgumentException.class, () -> Compressor.fileWriter(new ArrayList<>(), "test.txt"));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> Compressor.fileWriter(new ArrayList<>(), new File("test.txt")));
         Assertions.assertThrows(IllegalArgumentException.class, () -> Tar.main("file1.txt -out test.txt".split("\\s+")));
         Assertions.assertThrows(IllegalArgumentException.class, () -> Tar.main("tar -u -out test.txt".split("\\s+")));
         Assertions.assertThrows(IllegalArgumentException.class, () -> Tar.main("tar -u 123".split("\\s+")));
@@ -21,6 +20,14 @@ public class BlackBoxTarTests {
         Assertions.assertThrows(IllegalArgumentException.class, () -> Tar.main("tar -out 123.txt".split("\\s+")));
         Assertions.assertThrows(IllegalArgumentException.class, () -> Tar.main("tar 123.txt test1.txt".split("\\s+")));
         Assertions.assertThrows(IllegalArgumentException.class, () -> Tar.main("tar 123.txt test1.txt -out".split("\\s+")));
+    }
+
+    //тесты для проверки правильности выбрасывания исключений методами архивирования и разархивирования
+    @Test
+    void illegalArgumentsForMethods() {
+        Assertions.assertThrows(FileNotFoundException.class, () -> Separator.fileReader("abc"));
+        Assertions.assertThrows(FileNotFoundException.class, () -> Separator.fileReader("abc"));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> Compressor.fileWriter(new ArrayList<>(), new File("test.txt")));
     }
 
     //проверка правильности разархивирования файлов
@@ -41,11 +48,11 @@ public class BlackBoxTarTests {
         Compressor.fileWriter(new ArrayList<File>() {{
             add(new File("input/part1.txt"));
             add(new File("input/part2.txt"));
-        }}, "test1.txt");
+        }}, new File("test1.txt"));
         Assertions.assertTrue(new File("test1.txt").exists());
         Compressor.fileWriter(new ArrayList<File>() {{
             add(new File("input/part1.txt"));
-        }}, "test2.txt");
+        }}, new File("test2.txt"));
         Assertions.assertTrue(new File("test2.txt").exists());
         new File("test1.txt").delete();
         new File("test2.txt").delete();

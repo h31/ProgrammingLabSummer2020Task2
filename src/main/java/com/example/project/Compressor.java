@@ -8,28 +8,33 @@ public class Compressor {
      * метод, архивирующий несколько файлов в один.
      *
      * @param filesToArchive - файлы, которые будут заархивированы
-     * @param output         - название архива
+     * @param output         - созданный архив
      * @throws IOException - исключение в случае если файл не найден
      */
-    static void fileWriter(List<File> filesToArchive, String output) throws IOException {
+    static void fileWriter(List<File> filesToArchive, File output) throws IOException {
         StringBuilder lineToWrite;
-        int counterOfLines;
         if (filesToArchive.isEmpty()) throw new IllegalArgumentException();
-        FileWriter newArchive = new FileWriter(output);
-        for (File file : filesToArchive) {
-            counterOfLines = 0;
-            lineToWrite = new StringBuilder();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-            newArchive.write(file.toString() + "\n");
-            int k;
-            while ((k = reader.read()) != -1) {
-                if ((char) k == '\n') counterOfLines++;
-                lineToWrite.append((char) k);
+        try (BufferedWriter newArchive = new BufferedWriter(new FileWriter(output))) {
+            for (File file : filesToArchive) {
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)))) {
+                    lineToWrite = new StringBuilder();
+                    String[] partsOfName = file.toString().split("[/\\\\]");
+                    for (int i = 0; i < partsOfName.length; i++) {
+                        if (i != 0) lineToWrite.append("_");
+                        lineToWrite.append(partsOfName[i]);
+                    }
+                    newArchive.write(lineToWrite.toString() + System.getProperty("line.separator"));
+                    int k;
+                    int counterOfChars = 0;
+                    lineToWrite = new StringBuilder();
+                    while ((k = reader.read()) != -1) {
+                        counterOfChars++;
+                        lineToWrite.append((char) k);
+                    }
+                    newArchive.write(counterOfChars + System.getProperty("line.separator"));
+                    newArchive.write(lineToWrite.toString());
+                }
             }
-            newArchive.write(counterOfLines + "\n");
-            newArchive.write(lineToWrite.toString());
-            newArchive.write("\n");
         }
-        newArchive.close();
     }
 }

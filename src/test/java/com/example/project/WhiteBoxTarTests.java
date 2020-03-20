@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -12,6 +13,9 @@ public class WhiteBoxTarTests {
     //тесты для проверки содержимого разархивированных файлов
     @Test
     void fileReaderTests() throws IOException {
+        new File("file0.txt").delete();
+        new File("file1.txt").delete();
+        new File("file2.txt").delete();
         Separator.fileReader("input/read.txt");
         Scanner file0 = new Scanner(new File("file0.txt"));
         Assertions.assertEquals("123", file0.nextLine());
@@ -40,21 +44,8 @@ public class WhiteBoxTarTests {
             add(new File("input/part0.txt"));
             add(new File("input/part1.txt"));
             add(new File("input/part2.txt"));
-        }}, "test.txt");
-        int k = 0;
-        Scanner check = new Scanner(new File("output/check.txt"));
-        Scanner test = new Scanner(new File("test.txt"));
-        String str;
-        while (check.hasNext() || test.hasNext()) {
-            str = check.nextLine();
-            if (str.contains("input\\part")) {
-                //добавил эту проверку, потому что в разных системах разные правила на имена файлов.
-                Assertions.assertEquals(new File("input/part" + k + ".txt").toString(), test.nextLine());
-                k++;
-            } else Assertions.assertEquals(str, test.nextLine());
-        }
-        test.close();
-        check.close();
+        }}, new File("test.txt"));
+        equalsOfFiles(new File("output/check.txt"), new File("test.txt"));
         new File("test.txt").delete();
         new File("file0.txt").delete();
         new File("file1.txt").delete();
@@ -64,22 +55,56 @@ public class WhiteBoxTarTests {
     //проверка правильности разархивирования файлов и обратной архивации
     @Test
     void separateAndCompress() throws IOException {
+        new File("test1.txt").delete();
+        new File("test.txt").delete();
         Separator.fileReader("input/read.txt");
         Compressor.fileWriter(new ArrayList<File>() {{
             add(new File("file0.txt"));
             add(new File("file1.txt"));
             add(new File("file2.txt"));
-        }}, "test.txt");
-        Scanner begin = new Scanner(new File("input/read.txt"));
-        Scanner end = new Scanner(new File("test.txt"));
-        while (begin.hasNext() || end.hasNext()) {
-            Assertions.assertEquals(begin.nextLine(), end.nextLine());
-        }
-        begin.close();
-        end.close();
+        }}, new File("test.txt"));
+        equalsOfFiles(new File("input/read.txt"), new File("test.txt"));
         new File("file0.txt").delete();
         new File("file1.txt").delete();
         new File("file2.txt").delete();
         new File("test.txt").delete();
+    }
+
+
+    //упаковываем файлы в архив, потом этот архив запаковываем в другой архив, и разархивируем
+    @Test
+    void doubleCompressAndSeparateIt() throws IOException {
+        Compressor.fileWriter(new ArrayList<File>() {{
+            add(new File("input/part0.txt"));
+            add(new File("input/part1.txt"));
+        }}, new File("test1.txt"));
+        Compressor.fileWriter(new ArrayList<File>() {{
+            add(new File("test1.txt"));
+            add(new File("input/part2.txt"));
+        }}, new File("test2.txt"));
+        new File("test1.txt").delete();
+        equalsOfFiles(new File("output/doubleArchived.txt"), new File("test2.txt"));
+        Separator.fileReader("test2.txt");
+        equalsOfFiles(new File("input/part2.txt"), new File("input_part2.txt"));
+        Assertions.assertTrue(new File("test1.txt").exists());
+        Separator.fileReader("test1.txt");
+        equalsOfFiles(new File("input/part0.txt"), new File("input_part0.txt"));
+        equalsOfFiles(new File("input/part1.txt"), new File("input_part1.txt"));
+        new File("test1.txt").delete();
+        new File("test2.txt").delete();
+        new File("input_part0.txt").delete();
+        new File("input_part1.txt").delete();
+        new File("input_part2.txt").delete();
+    }
+
+    //проверка соответствия файлов
+    void equalsOfFiles(File file1, File file2) throws FileNotFoundException {
+        Scanner check = new Scanner(file1);
+        Scanner test = new Scanner(file2);
+        while (check.hasNext() || test.hasNext()) {
+            Assertions.assertEquals(check.nextLine(), test.nextLine());
+        }
+        check.close();
+        test.close();
     }
 }
