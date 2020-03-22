@@ -16,7 +16,7 @@ public class WhiteBoxTarTests {
         new File("file0.txt").delete();
         new File("file1.txt").delete();
         new File("file2.txt").delete();
-        Separator.fileReader("input/read.txt");
+        Separator.fileUnpack("input/read.txt");
         Scanner file0 = new Scanner(new File("file0.txt"));
         Assertions.assertEquals("123", file0.nextLine());
         Assertions.assertNotEquals("123", file0.nextLine());
@@ -40,7 +40,7 @@ public class WhiteBoxTarTests {
     //тесты для проверки соединения нескольких файлов и проверка содержимого
     @Test
     void fileWriterTests() throws IOException {
-        Compressor.fileWriter(new ArrayList<File>() {{
+        Packager.filePack(new ArrayList<File>() {{
             add(new File("input/part0.txt"));
             add(new File("input/part1.txt"));
             add(new File("input/part2.txt"));
@@ -57,8 +57,8 @@ public class WhiteBoxTarTests {
     void separateAndCompress() throws IOException {
         new File("test1.txt").delete();
         new File("test.txt").delete();
-        Separator.fileReader("input/read.txt");
-        Compressor.fileWriter(new ArrayList<File>() {{
+        Separator.fileUnpack("input/read.txt");
+        Packager.filePack(new ArrayList<File>() {{
             add(new File("file0.txt"));
             add(new File("file1.txt"));
             add(new File("file2.txt"));
@@ -74,20 +74,20 @@ public class WhiteBoxTarTests {
     //упаковываем файлы в архив, потом этот архив запаковываем в другой архив, и разархивируем
     @Test
     void doubleCompressAndSeparateIt() throws IOException {
-        Compressor.fileWriter(new ArrayList<File>() {{
+        Packager.filePack(new ArrayList<File>() {{
             add(new File("input/part0.txt"));
             add(new File("input/part1.txt"));
         }}, new File("test1.txt"));
-        Compressor.fileWriter(new ArrayList<File>() {{
+        Packager.filePack(new ArrayList<File>() {{
             add(new File("test1.txt"));
             add(new File("input/part2.txt"));
         }}, new File("test2.txt"));
         new File("test1.txt").delete();
         equalsOfFiles(new File("output/doubleArchived.txt"), new File("test2.txt"));
-        Separator.fileReader("test2.txt");
+        Separator.fileUnpack("test2.txt");
         equalsOfFiles(new File("input/part2.txt"), new File("input_part2.txt"));
         Assertions.assertTrue(new File("test1.txt").exists());
-        Separator.fileReader("test1.txt");
+        Separator.fileUnpack("test1.txt");
         equalsOfFiles(new File("input/part0.txt"), new File("input_part0.txt"));
         equalsOfFiles(new File("input/part1.txt"), new File("input_part1.txt"));
         new File("test1.txt").delete();

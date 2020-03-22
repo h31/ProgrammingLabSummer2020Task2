@@ -9,7 +9,7 @@ public class Separator {
      * @param fileName - файл, который надо разархивировать.
      * @throws IOException - исключение в случае если файл не найден
      */
-    static void fileReader(String fileName) throws IOException {
+    static void fileUnpack(String fileName) throws IOException {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName)))) {
             String line = reader.readLine();
             while (line != null) {

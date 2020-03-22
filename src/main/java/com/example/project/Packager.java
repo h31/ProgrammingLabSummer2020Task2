@@ -3,7 +3,7 @@ package com.example.project;
 import java.io.*;
 import java.util.List;
 
-public class Compressor {
+public class Packager {
     /**
      * метод, архивирующий несколько файлов в один.
      *
@@ -11,7 +11,7 @@ public class Compressor {
      * @param output         - созданный архив
      * @throws IOException - исключение в случае если файл не найден
      */
-    static void fileWriter(List<File> filesToArchive, File output) throws IOException {
+    static void filePack(List<File> filesToArchive, File output) throws IOException {
         StringBuilder lineToWrite;
         if (filesToArchive.isEmpty()) throw new IllegalArgumentException();
         try (BufferedWriter newArchive = new BufferedWriter(new FileWriter(output))) {
