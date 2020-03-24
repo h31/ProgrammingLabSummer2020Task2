@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.IOException;
 
 public class flagManager {
     public boolean method;
@@ -6,7 +7,7 @@ public class flagManager {
     public String pathIn;
     public String pathOut;
 
-    void checker (String[] args){
+    void checker (String[] args) throws IOException {
         String command = String.join(" ", args);
         System.out.println(command);
         if (!command.matches("((-c)|(-d)) [a-zA-Z0-9]+ [a-zA-Z/.]+(.[a-z]+)( -o [a-zA-Z/.]+(.[a-z]+))?"))
@@ -35,14 +36,16 @@ public class flagManager {
         pathIn = path;
     }
 
-    void setPathOut (String[] args) {
+    void setPathOut (String[] args) throws IOException {
         if (args.length > 3) {
             pathOut = args[4];
-            System.out.println(pathOut);
         }
         else {
             pathOut = args[2];
+            fileManager file = new fileManager();
+            pathOut = file.creator(method, pathOut);
         }
+        System.out.println("Destination " + pathOut);
     }
 
 }

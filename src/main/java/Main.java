@@ -6,7 +6,7 @@ public class Main {
         flagManager flag = new flagManager();
         flag.checker(args);
         fileManager file = new fileManager();
-        file.creator(flag);
+        //file.creator(flag);
         file.reader(flag);
     }
 }
