@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class fileManager {
@@ -30,13 +31,34 @@ public class fileManager {
 
     void reader (flagManager flag) throws IOException {
         crypto crypter = new crypto();
-        FileReader fileIn = new FileReader(flag.pathIn);
-        Scanner scan = new Scanner(fileIn);
-        while (scan.hasNextLine()) {
-            String crypt = crypter.coder(scan.nextLine(), flag.key);
-            writer(flag.pathOut, crypt);
+        if (flag.method) {
+            FileReader fileIn = new FileReader(flag.pathIn);
+            Scanner scan = new Scanner(fileIn);
+            while (scan.hasNextLine()) {
+                byte[] crypt = crypter.encode(scan.nextLine(), flag.key);
+                byteWriter(flag.pathOut, crypt);
+            }
+            fileIn.close();
         }
-        fileIn.close();
+        else {
+            FileInputStream fileInputStream = new FileInputStream(flag.pathIn);
+            byte[] data = fileInputStream.readAllBytes();
+            System.out.println(Arrays.toString(data));
+            String text = crypter.decode(data, flag.key);
+            writer(flag.pathOut, text);
+//            int i;
+//            byte[] result;
+//            while ((i = fileInputStream.read()) != -1){
+//                result += i;
+//            }
+
+        }
+    }
+
+    void byteWriter (String path, byte[] data) throws IOException {
+        FileOutputStream fos = new FileOutputStream(path, true);
+        fos.write(data, 0, data.length);
+        fos.close();
     }
 
     void writer (String path, String data) throws IOException {
