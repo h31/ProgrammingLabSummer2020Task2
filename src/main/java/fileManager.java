@@ -15,12 +15,16 @@ public class fileManager {
             }
             return fOut.getPath();
         }
-        else { //добавить расшифровщик (удаление расширения)
-            File fOut = new File(pathOut);
-            if (!fOut.createNewFile()) {
-                throw new IllegalArgumentException(pathOut);
+        else {
+            if (pathOut.matches("[a-zA-Z/.]+(.crp)")){
+                System.out.println(pathOut.substring(0, pathOut.lastIndexOf(".")));
+                File fOut = new File(pathOut.substring(0, pathOut.lastIndexOf(".")));
+                if (!fOut.createNewFile()) {
+                    throw new IllegalArgumentException(pathOut);
+                }
+                return fOut.getPath();
             }
-            return fOut.getPath();
+            throw new IllegalArgumentException(pathOut);
         }
     }
 
