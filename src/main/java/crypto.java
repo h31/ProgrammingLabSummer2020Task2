@@ -1,30 +1,21 @@
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Scanner;
-
 public class crypto {
-    byte[] encode(String pText, String pKey) {
-        System.out.println(pText);
-        byte[] txt = pText.getBytes();
-        byte[] key = pKey.getBytes();
-        byte[] res = new byte[txt.length];
-
-        for (int i = 0; i < txt.length; i++) {
-            res[i] = (byte) (txt[i] ^ key[i % key.length]);
+    byte[] encode(String text, String key) {
+        System.out.println(text);
+        byte[] byteText = text.getBytes();
+        byte[] byteKey = key.getBytes();
+        byte[] data = new byte[byteText.length];
+        for (int i = 0; i < byteText.length; i++) {
+            data[i] = (byte) (byteText[i] ^ byteKey[i % byteKey.length]);
         }
-
-        return res;
+        return data;
     }
 
-    String decode(byte[] pText, String pKey) {
-        byte[] res = new byte[pText.length];
-        byte[] key = pKey.getBytes();
-
-        for (int i = 0; i < pText.length; i++) {
-            res[i] = (byte) (pText[i] ^ key[i % key.length]);
+    String decode(byte[] data, String key) {
+        byte[] text = new byte[data.length];
+        byte[] byteKey = key.getBytes();
+        for (int i = 0; i < data.length; i++) {
+            text[i] = (byte) (data[i] ^ byteKey[i % byteKey.length]);
         }
-
-        return new String(res);
+        return new String(text);
     }
 }
