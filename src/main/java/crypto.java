@@ -4,30 +4,27 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class crypto {
-    byte[] encode(String data, String key) {
-        //return data + key;
-        byte[] dataByte = data.getBytes();
-        byte[] keyByte = key.getBytes();
-        System.out.println("data " + Arrays.toString(dataByte));
-        byte[] result = new byte[dataByte.length];
-        String res = "";
-        for(int i = 0; i < dataByte.length; i++) {
-            result[i] = (byte) (dataByte[i] ^ keyByte[i % keyByte.length]);
-            //res += result[i];
-        }
-        System.out.println("result " + result);
-        return result;
+    byte[] encode(String pText, String pKey) {
+        System.out.println(pText);
+        byte[] txt = pText.getBytes();
+        byte[] key = pKey.getBytes();
+        byte[] res = new byte[txt.length];
 
+        for (int i = 0; i < txt.length; i++) {
+            res[i] = (byte) (txt[i] ^ key[i % key.length]);
+        }
+
+        return res;
     }
 
-    String decode(byte[] data, String key) {
-        byte[] result = new byte[data.length];
-        byte[] bkey = key.getBytes();
+    String decode(byte[] pText, String pKey) {
+        byte[] res = new byte[pText.length];
+        byte[] key = pKey.getBytes();
 
-        for (int i = 0; i < data.length; i++) {
-            result[i] = (byte) (data[i] ^ bkey[i % bkey.length]);
+        for (int i = 0; i < pText.length; i++) {
+            res[i] = (byte) (pText[i] ^ key[i % key.length]);
         }
-        return new String(result);
 
+        return new String(res);
     }
 }
