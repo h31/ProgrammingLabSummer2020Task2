@@ -1,5 +1,5 @@
 import java.io.*;
-import java.util.Arrays;
+import java.nio.file.FileAlreadyExistsException;
 import java.util.Scanner;
 
 public class fileManager {
@@ -8,20 +8,18 @@ public class fileManager {
         if (method) {
             File fOut = new File(pathOut + ".crp");
             if (!fOut.createNewFile()) {
-                int i = 2;
-                while (!fOut.createNewFile()) {
-                    fOut = new File(pathOut + "-" + i + ".crp");
-                    i++;
-                }
+                System.out.println("A file with this name already exists in this directory. Please use the -o argument.");
+                throw new FileAlreadyExistsException(pathOut);
             }
             return fOut.getPath();
         }
         else {
-            if (pathOut.matches("[a-zA-Z/.]+(.crp)")){
-                System.out.println(pathOut.substring(0, pathOut.lastIndexOf(".")));
-                File fOut = new File(pathOut.substring(0, pathOut.lastIndexOf(".")));
-                if (!fOut.createNewFile())
-                    throw new IllegalArgumentException(pathOut);
+            if (pathOut.matches("[a-zA-Z0-9-/.]+(.crp)")){
+                File fOut = new File(pathOut.substring(0, pathOut.length() - 4));
+                if (!fOut.createNewFile()) {
+                    System.out.println("A file with this name already exists in this directory. Please use the -o argument.");
+                    throw new FileAlreadyExistsException(pathOut);
+                }
                 return fOut.getPath();
             }
             throw new IllegalArgumentException(pathOut);
@@ -38,13 +36,16 @@ public class fileManager {
                 byteWriter(flag.pathOut, crypt);
             }
             fileIn.close();
+            System.out.println("Encoding completed");
+
         }
         else {
-            FileInputStream fileInputStream = new FileInputStream(flag.pathIn);
-            byte[] data = fileInputStream.readAllBytes();
-            System.out.println(Arrays.toString(data));
+            FileInputStream fis = new FileInputStream(flag.pathIn);
+            byte[] data = fis.readAllBytes();
             String text = crypter.decode(data, flag.key);
             writer(flag.pathOut, text);
+            fis.close();
+            System.out.println("Decoding completed");
         }
     }
 

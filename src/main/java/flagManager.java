@@ -9,20 +9,25 @@ public class flagManager {
 
     void checker (String[] args) throws IOException {
         String command = String.join(" ", args);
-        System.out.println(command);
         if (args[0].equals("-h"))
             help(false);
-        if (!command.matches("((-c)|(-d)) [a-zA-Z0-9]+ [a-zA-Z/.]+(.[a-z]+)( -o [a-zA-Z/.]+(.[a-z]+))?"))
+        if (!command.matches("((-c)|(-d)) [a-zA-Z0-9]+ [a-zA-Z0-9/.-]+(.[a-z]+)( -o [a-zA-Z0-9/.]+(.[.a-z]+))?"))
             help(true);
         setMethod(args[0]);
-        key = Integer.parseInt (args[1], 16);
-        System.out.println(key);
+        setKey(args[1]);
         setPathIn(args[2]);
         setPathOut(args);
     }
 
     void setMethod (String mode) {
         method = mode.equals("-c");
+    }
+
+    void setKey (String inputKey) {
+        if (inputKey.matches("[0-9a-dA-D]+"))
+            key = Integer.parseInt (inputKey, 16);
+        else
+            throw new IllegalArgumentException(inputKey);
     }
 
     void setPathIn (String path) {
@@ -33,8 +38,10 @@ public class flagManager {
     }
 
     void setPathOut (String[] args) throws IOException {
-        if (args.length > 3)
-            pathOut = args[4];
+        if (args.length > 3) {
+            fileManager file = new fileManager();
+            pathOut = file.creator(method, args[4]);
+    }
         else {
             pathOut = args[2];
             fileManager file = new fileManager();
