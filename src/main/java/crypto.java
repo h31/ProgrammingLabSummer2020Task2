@@ -1,21 +1,18 @@
 public class crypto {
-    byte[] encode(String text, String key) {
-        System.out.println(text);
+    byte[] encode(String text, int key) {
         byte[] byteText = text.getBytes();
-        byte[] byteKey = key.getBytes();
+        byte byteKey = (byte)key;
         byte[] data = new byte[byteText.length];
-        for (int i = 0; i < byteText.length; i++) {
-            data[i] = (byte) (byteText[i] ^ byteKey[i % byteKey.length]);
-        }
+        for (int i = 0; i < byteText.length; i++)
+            data[i] = (byte) (byteText[i] ^ byteKey);
         return data;
     }
 
-    String decode(byte[] data, String key) {
+    String decode(byte[] data, int key) {
         byte[] text = new byte[data.length];
-        byte[] byteKey = key.getBytes();
-        for (int i = 0; i < data.length; i++) {
-            text[i] = (byte) (data[i] ^ byteKey[i % byteKey.length]);
-        }
+        byte byteKey = (byte)key;
+        for (int i = 0; i < data.length; i++)
+            text[i] = (byte) (data[i] ^ byteKey);
         return new String(text);
     }
 }

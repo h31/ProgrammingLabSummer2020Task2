@@ -1,35 +1,28 @@
 import java.io.File;
 import java.io.IOException;
-import java.text.Annotation;
 
 public class flagManager {
     public boolean method;
-    public String key;
+    public int key;
     public String pathIn;
     public String pathOut;
 
     void checker (String[] args) throws IOException {
         String command = String.join(" ", args);
         System.out.println(command);
-        if (args[0].equals("-h")){
+        if (args[0].equals("-h"))
             help(false);
-        }
         if (!command.matches("((-c)|(-d)) [a-zA-Z0-9]+ [a-zA-Z/.]+(.[a-z]+)( -o [a-zA-Z/.]+(.[a-z]+))?"))
             help(true);
         setMethod(args[0]);
-        key = args[1];
+        key = Integer.parseInt (args[1], 16);
+        System.out.println(key);
         setPathIn(args[2]);
         setPathOut(args);
     }
+
     void setMethod (String mode) {
-        if (mode.equals("-c")) {
-            System.out.println("Encryption mode");
-            method = true;
-        }
-        else {
-            System.out.println("Decryption mode");
-            method = false;
-        }
+        method = mode.equals("-c");
     }
 
     void setPathIn (String path) {
@@ -40,15 +33,13 @@ public class flagManager {
     }
 
     void setPathOut (String[] args) throws IOException {
-        if (args.length > 3) {
+        if (args.length > 3)
             pathOut = args[4];
-        }
         else {
             pathOut = args[2];
             fileManager file = new fileManager();
             pathOut = file.creator(method, pathOut);
         }
-        System.out.println("Destination " + pathOut);
     }
 
     void help (boolean code) {

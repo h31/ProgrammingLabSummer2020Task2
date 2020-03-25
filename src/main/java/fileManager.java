@@ -20,9 +20,8 @@ public class fileManager {
             if (pathOut.matches("[a-zA-Z/.]+(.crp)")){
                 System.out.println(pathOut.substring(0, pathOut.lastIndexOf(".")));
                 File fOut = new File(pathOut.substring(0, pathOut.lastIndexOf(".")));
-                if (!fOut.createNewFile()) {
+                if (!fOut.createNewFile())
                     throw new IllegalArgumentException(pathOut);
-                }
                 return fOut.getPath();
             }
             throw new IllegalArgumentException(pathOut);
@@ -46,12 +45,6 @@ public class fileManager {
             System.out.println(Arrays.toString(data));
             String text = crypter.decode(data, flag.key);
             writer(flag.pathOut, text);
-//            int i;
-//            byte[] result;
-//            while ((i = fileInputStream.read()) != -1){
-//                result += i;
-//            }
-
         }
     }
 
