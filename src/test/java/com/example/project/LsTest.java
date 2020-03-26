@@ -15,7 +15,12 @@ class LsTest {
         File tempfile = new File("src/test/resources/testfolder/randomText.txt");
         Ls.ProgramFile programFile = new Ls.ProgramFile(tempfile);
         str = programFile.getFilePermissions();
-        assertEquals("rwx", str);
+        if (System.getProperty("os.name").toLowerCase().contains("win")) {
+            assertEquals("rwx", str);
+        }else{
+            assertEquals("rw-", str);
+        }
+        System.out.println(str);
         str = programFile.getPermBitMask();
         assertEquals("111", str);
         str = programFile.humanReadableSize();
