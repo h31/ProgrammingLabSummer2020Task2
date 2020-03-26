@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -33,8 +35,11 @@ class LsTest {
             assertEquals("202 B", str);
         }
         File file = new File("src/test/resources/testfolder/CalculatorTest.txt");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         Ls.ProgramFile lastModifiedFile = new Ls.ProgramFile(file);
         str = lastModifiedFile.getLastModificate();
-        assertEquals("26.03.2020 15:47:06", lastModifiedFile.getLastModificate());
+        //assertEquals("26.03.2020 15:47:06", lastModifiedFile.getLastModificate());
+        assertEquals(sdf.format(new Date(file.lastModified())), lastModifiedFile.getLastModificate());
+
     }
 }
