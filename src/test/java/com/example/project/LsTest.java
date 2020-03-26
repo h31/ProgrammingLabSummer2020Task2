@@ -27,7 +27,11 @@ class LsTest {
             assertEquals("110", str);
         }
         str = programFile.humanReadableSize();
-        assertEquals("206 B", str);
+        if (System.getProperty("os.name").toLowerCase().contains("win")) {
+            assertEquals("206 B", str);
+        } else{
+            assertEquals("202 B", str);
+        }
         File file = new File("src/test/resources/testfolder/CalculatorTest.txt");
         Ls.ProgramFile lastModifiedFile = new Ls.ProgramFile(file);
         str = lastModifiedFile.getLastModificate();
