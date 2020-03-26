@@ -17,12 +17,15 @@ class LsTest {
         str = programFile.getFilePermissions();
         if (System.getProperty("os.name").toLowerCase().contains("win")) {
             assertEquals("rwx", str);
-        }else{
+        } else{
             assertEquals("rw-", str);
         }
-        System.out.println(str);
         str = programFile.getPermBitMask();
-        assertEquals("111", str);
+        if (System.getProperty("os.name").toLowerCase().contains("win")) {
+            assertEquals("111", str);
+        }else{
+            assertEquals("110", str);
+        }
         str = programFile.humanReadableSize();
         assertEquals("206 B", str);
         File file = new File("src/test/resources/testfolder/CalculatorTest.txt");
