@@ -2,39 +2,27 @@ package com.example.project;
 
 import org.junit.jupiter.api.Test;
 
-import java.io.*;
-import java.util.Scanner;
+import java.io.File;
+import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class LsTest {
 
     @Test
     void main() throws IOException {
         String str = "";
-        File tempfile = new File("d://example.txt");
-        BufferedWriter bw = new BufferedWriter(new FileWriter(tempfile));
-        bw.write("Nikita");
-        bw.flush();
-        bw.close();
+        File tempfile = new File("src/test/resources/testfolder/randomText.txt");
         Ls.ProgramFile programFile = new Ls.ProgramFile(tempfile);
-        //assertEquals("25.03.2020 22:43:57", str);
-        //BufferedReader br = new BufferedReader(new FileReader(tempfile));
-        /*Scanner scan = new Scanner(br);
-        while (scan.hasNext()) {
-            System.out.println(scan.nextLine());
-        }*/
         str = programFile.getFilePermissions();
         assertEquals("rwx", str);
         str = programFile.getPermBitMask();
-        //System.out.println(str);
         assertEquals("111", str);
         str = programFile.humanReadableSize();
-        assertEquals("6 B", str);
-        File file = new File("D:/CourseWorkOVT2.2");
+        assertEquals("206 B", str);
+        File file = new File("src/test/resources/testfolder/CalculatorTest.txt");
         Ls.ProgramFile lastModifiedFile = new Ls.ProgramFile(file);
         str = lastModifiedFile.getLastModificate();
-        System.out.println(lastModifiedFile.getLastModificate());
-        assertEquals("23.03.2020 11:35:09", lastModifiedFile.getLastModificate());
+        assertEquals("26.03.2020 15:47:06", lastModifiedFile.getLastModificate());
     }
 }

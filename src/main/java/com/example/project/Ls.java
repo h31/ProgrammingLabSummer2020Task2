@@ -58,19 +58,6 @@ public class Ls {
             return sb.toString();
         }
 
-        /*System.out.println(file.toPath());
-        final Set<PosixFilePermission> perms = Files.getPosixFilePermissions(file.toPath());
-            return //(file.isDirectory() ? "d" : "-") +
-                    (perms.contains(PosixFilePermission.OWNER_READ) ? 'r' : '-') +
-                    (perms.contains(PosixFilePermission.OWNER_WRITE) ? 'w' : '-') +
-                    (perms.contains(PosixFilePermission.OWNER_EXECUTE) ? 'x' : '-') +
-                    (perms.contains(PosixFilePermission.GROUP_READ) ? 'r' : '-') +
-                    (perms.contains(PosixFilePermission.GROUP_WRITE) ? 'w' : '-') +
-                    (perms.contains(PosixFilePermission.GROUP_EXECUTE) ? 'x' : '-') +
-                    (perms.contains(PosixFilePermission.OTHERS_READ) ? 'r' : '-') +
-                    (perms.contains(PosixFilePermission.OTHERS_WRITE) ? 'w' : '-') +
-                    (perms.contains(PosixFilePermission.OTHERS_EXECUTE) ? 'x' : '-') + "";
-    }*/
         protected String getPermBitMask() throws IOException {
             final byte canRead = 0b100;
             final byte canWrite = 0b010;
@@ -81,19 +68,6 @@ public class Ls {
             if (file.canExecute()) permissions = permissions | canExecute;
             return Integer.toBinaryString(permissions);
         }
-            /*final Set<PosixFilePermission> perms = Files.getPosixFilePermissions(file.toPath());
-            return //(file.isDirectory() ? "d" : "-") +
-                    ((perms.contains(PosixFilePermission.OWNER_READ) ? 1 : 0) +
-                            (perms.contains(PosixFilePermission.OWNER_WRITE) ? 2 : 0) +
-                            (perms.contains(PosixFilePermission.OWNER_EXECUTE) ? 4 : 0))
-                            * 100 +
-                            ((perms.contains(PosixFilePermission.GROUP_READ) ? 1 : 0) +
-                            (perms.contains(PosixFilePermission.GROUP_WRITE) ? 2 : 0) +
-                            (perms.contains(PosixFilePermission.GROUP_EXECUTE) ? 4 : 0)) * 10 +
-                            (perms.contains(PosixFilePermission.OTHERS_READ) ? 1 : 0) +
-                            (perms.contains(PosixFilePermission.OTHERS_WRITE) ? 2 : 4) +
-                            (perms.contains(PosixFilePermission.OTHERS_EXECUTE) ? 4 : 0) + "";
-        }*/
     }
 
     public static void main(String[] args) throws IOException {
@@ -136,15 +110,7 @@ public class Ls {
                     }
                 }
             }
-            /*if (flags.contains("-r")) {
-                treeMap = new TreeMap<String, String>(lst, Collections.reverseOrder()); //отсортировали по ключу
-            }*/
-            //else {
             treeMap = new TreeMap<String, String>(lst);
-            //}
-            //lst = new TreeMap<String, String>((flags.contains("-r")) ? Collections.reverseOrder() : Collections.sort());
-            //Collections.sort(lst);
-            //Collections.sort(lst, Collections.reverseOrder());
 
         } else {
             lst.put(directoryOrFile.getName(), directoryOrFile.getName());
@@ -175,7 +141,6 @@ public class Ls {
             }
             bw.flush();
             bw.close();
-            //System.out.println(tempFile);
         } else {
             if (flags.contains("-r")) {
                 for (String key : treeMap.descendingKeySet()) {
@@ -185,9 +150,6 @@ public class Ls {
                 for (Map.Entry<String, String> entry : treeMap.entrySet()) {
                     System.out.println(entry.getKey() + " " + entry.getValue());
                 }
-            /*for (Map.Entry<String, String > entry : treeMap.entrySet()) {
-                System.out.println(entry.getKey() + " " + entry.getValue());
-            }*/
             }
         }
     }
