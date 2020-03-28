@@ -5,7 +5,16 @@ import org.apache.log4j.Logger;
 
 public class fileManager {
     private static final Logger log = Logger.getLogger(fileManager.class);
-    String creator (boolean method, String pathOut) throws IOException {
+    String creator (boolean method, String pathOut, boolean manual) throws IOException {
+        if (manual){
+            File fOut = new File(pathOut);
+            if (!fOut.createNewFile()) {
+                System.err.println("A file with this name already exists in this directory. Please use the -o argument.");
+                log.error("File" + fOut + "already exists");
+                throw new FileAlreadyExistsException(pathOut);
+            }
+            return fOut.getPath();
+        }
         if (method) {
             File fOut = new File(pathOut + ".crp");
             if (!fOut.createNewFile()) {
@@ -16,8 +25,8 @@ public class fileManager {
             return fOut.getPath();
         }
         else {
-            if (!pathOut.matches("[a-zA-Z0-9-/.]+(.crp)")){
-                File fOut = new File(pathOut.substring(0, pathOut.length() - 4));
+            if (pathOut.matches("[a-zA-Z0-9-/.]+(.crp)")){
+                File fOut = new File(pathOut.substring(0, pathOut.lastIndexOf(".")));
                 if (!fOut.createNewFile()) {
                     System.err.println("A file with this name already exists in this directory. Please use the -o argument.");
                     log.error("File" + fOut + "already exists");
@@ -63,7 +72,7 @@ public class fileManager {
 
     void writer (String path, String data) throws IOException {
         FileWriter fileOut = new FileWriter(path, true);
-        fileOut.write(data + "\n");
+        fileOut.write(data);
         fileOut.close();
     }
 }

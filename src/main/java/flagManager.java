@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import org.apache.log4j.Logger;
 
@@ -14,7 +15,7 @@ public class flagManager {
         log.info("The program started with arguments: " + command);
         if (args[0].equals("-h"))
             help(false);
-        if (!command.matches("((-c)|(-d)) [a-zA-Z0-9]+ [a-zA-Z0-9/.-]+(.[a-z]+)( -o [a-zA-Z0-9/.]+(.[.a-z]+))?"))
+        if (!command.matches("((-c)|(-d)) [a-zA-Z0-9]+ [.\\-/a-zA-Z0-9]+(\\.[a-z]+)( -o [a-zA-Z0-9a-z./\\-]+)?"))
             help(true);
         setMethod(args[0]);
         setKey(args[1]);
@@ -27,7 +28,7 @@ public class flagManager {
     }
 
     void setKey (String inputKey) {
-        if (inputKey.matches("[0-9a-dA-D]+"))
+        if (inputKey.matches("[0-9a-fA-F]+"))
             key = Integer.parseInt (inputKey, 16);
         else {
             System.err.println("Incorrect cipher key. The key is set in hexadecimal format.");
@@ -36,11 +37,12 @@ public class flagManager {
         }
     }
 
-    void setPathIn (String path) {
+    void setPathIn (String path) throws FileNotFoundException {
         File fInput = new File(path);
         if (!fInput.exists() || !fInput.isFile()) {
             log.error("The input file does not exist");
-            throw new IllegalArgumentException(path);
+            System.err.println("The input file does not exist");
+            throw new FileNotFoundException(path);
         }
         pathIn = path;
     }
@@ -48,12 +50,12 @@ public class flagManager {
     void setPathOut (String[] args) throws IOException {
         if (args.length > 3) {
             fileManager file = new fileManager();
-            pathOut = file.creator(method, args[4]);
+            pathOut = file.creator(method, args[4], true);
     }
         else {
             pathOut = args[2];
             fileManager file = new fileManager();
-            pathOut = file.creator(method, pathOut);
+            pathOut = file.creator(method, pathOut, false);
         }
     }
 
@@ -71,7 +73,7 @@ public class flagManager {
                 "-h help");
         if (!error) {
             System.out.println("Implementation of ciphxor\n" +
-                    "Version 1\n" +
+                    "Version 1.0\n" +
                     "Mikhail Shomov, student of St. Petersburg Polytechnic University");
             log.info("Assistance requested");
             System.exit(0);
