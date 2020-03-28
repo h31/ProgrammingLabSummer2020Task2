@@ -16,7 +16,7 @@ public class fileManager {
             return fOut.getPath();
         }
         else {
-            if (pathOut.matches("[a-zA-Z0-9-/.]+(.crp)")){
+            if (!pathOut.matches("[a-zA-Z0-9-/.]+(.crp)")){
                 File fOut = new File(pathOut.substring(0, pathOut.length() - 4));
                 if (!fOut.createNewFile()) {
                     System.err.println("A file with this name already exists in this directory. Please use the -o argument.");
@@ -25,6 +25,7 @@ public class fileManager {
                 }
                 return fOut.getPath();
             }
+            System.err.println("The input file name is incorrect");
             log.error("The input file name is incorrect");
             throw new IllegalArgumentException(pathOut);
         }

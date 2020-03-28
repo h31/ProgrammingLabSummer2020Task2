@@ -38,7 +38,7 @@ public class flagManager {
 
     void setPathIn (String path) {
         File fInput = new File(path);
-        if (!fInput.exists() || fInput.isFile()) {
+        if (!fInput.exists() || !fInput.isFile()) {
             log.error("The input file does not exist");
             throw new IllegalArgumentException(path);
         }
