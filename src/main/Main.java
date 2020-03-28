@@ -1,17 +1,16 @@
-import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.PrintStream;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         Flags flags = new Flags();
-        flags.checkArguments(args);
-        String output = Functions.printDirectory(flags);
-        if (flags.getOFlag()) {
-            BufferedWriter writer = new BufferedWriter(flags.getOutput());
-            writer.write(output);
-            writer.close();
+        flags.handlingArguments(args);
+        PrintStream stream;
+        if (flags.isOutput()) {
+            stream = new PrintStream(flags.getOutputWriter());
         } else {
-            System.out.println(output);
+            stream = new PrintStream(System.out);
         }
+        Functions.printDirectory(flags, stream);
     }
 }

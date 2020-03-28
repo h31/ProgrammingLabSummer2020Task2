@@ -1,96 +1,93 @@
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Objects;
 
 class Flags {
-    static final byte canRead = 0b100;
-    static final byte canWrite = 0b010;
-    static final byte canExecute = 0b001;
-    private boolean lFlag = false;
-    private boolean hFlag = false;
-    private boolean rFlag = false;
-    private boolean oFlag = false;
-    private FileWriter output;
+    private boolean longType = false;
+    private boolean humanType = false;
+    private boolean reversedType = false;
+    private boolean output = false;
+    private FileOutputStream outputWriter;
     private File directory;
 
-    void checkArguments(String[] args) throws IOException {
+    void handlingArguments(String[] args) throws IOException {
         if (args.length < 1) throw new IllegalArgumentException();
         for (int i = 0; i != args.length; i++) {
             switch (args[i]) {
                 case ("-l"):
-                    setLFlag(true);
+                    setLongType(true);
                     break;
                 case ("-h"):
-                    setHFlag(true);
+                    setHumanType(true);
                     break;
                 case ("-r"):
-                    setRFlag(true);
+                    setReversedType(true);
                     break;
                 case ("-o"):
                     if (i + 1 < args.length - 1) {
-                        setOutput(new FileWriter(args[i + 1]));
-                        setOFlag(true);
+                        setOutputWriter(new FileOutputStream(args[i + 1]));
+                        setOutput(true);
                         i++;
                         break;
                     }
-                    throw new IllegalArgumentException();
+                    throw new IllegalArgumentException("Wrong arguments. Example: ls [-l] [-h] [-r] [-o output.file] directory_or_file"); // Локализация
                 default:
                     if (i == args.length - 1) {
                         setDirectory(new File(args[i]));
                         break;
                     }
-                    throw new IllegalArgumentException();
+                    throw new IllegalArgumentException("Wrong arguments. Example: ls [-l] [-h] [-r] [-o output.file] directory_or_file"); // Локализация
 
             }
         }
     }
 
-    boolean getLFlag() {
-        return lFlag;
+    public boolean isLongType() {
+        return longType;
     }
 
-    void setLFlag(boolean lFlag) {
-        this.lFlag = lFlag;
+    public void setLongType(boolean longType) {
+        this.longType = longType;
     }
 
-    boolean getHFlag() {
-        return hFlag;
+    public boolean isHumanType() {
+        return humanType;
     }
 
-    void setHFlag(boolean hFlag) {
-        this.hFlag = hFlag;
+    public void setHumanType(boolean humanType) {
+        this.humanType = humanType;
     }
 
-    boolean getRFlag() {
-        return rFlag;
+    public boolean isReversedType() {
+        return reversedType;
     }
 
-    void setRFlag(boolean rFlag) {
-        this.rFlag = rFlag;
+    public void setReversedType(boolean reversedType) {
+        this.reversedType = reversedType;
     }
 
-    boolean getOFlag() {
-        return oFlag;
-    }
-
-    void setOFlag(boolean oFlag) {
-        this.oFlag = oFlag;
-    }
-
-    FileWriter getOutput() {
+    public boolean isOutput() {
         return output;
     }
 
-    void setOutput(FileWriter output) {
+    public void setOutput(boolean output) {
         this.output = output;
     }
 
-    File getDirectory() {
+    public FileOutputStream getOutputWriter() {
+        return outputWriter;
+    }
+
+    public void setOutputWriter(FileOutputStream outputWriter) {
+        this.outputWriter = outputWriter;
+    }
+
+    public File getDirectory() {
         return directory;
     }
 
-    void setDirectory(File directory) {
+    public void setDirectory(File directory) {
         this.directory = directory;
     }
 
@@ -99,16 +96,28 @@ class Flags {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Flags flags = (Flags) o;
-        return lFlag == flags.lFlag &&
-                hFlag == flags.hFlag &&
-                rFlag == flags.rFlag &&
-                oFlag == flags.oFlag &&
-                Objects.equals(getOutput(), flags.getOutput()) &&
-                getDirectory().equals(flags.getDirectory());
+        return longType == flags.longType &&
+                humanType == flags.humanType &&
+                reversedType == flags.reversedType &&
+                output == flags.output &&
+                Objects.equals(outputWriter, flags.outputWriter) &&
+                directory.equals(flags.directory);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(lFlag, hFlag, rFlag, oFlag, getOutput(), getDirectory());
+        return Objects.hash(longType, humanType, reversedType, output, outputWriter, directory);
+    }
+
+    @Override
+    public String toString() {
+        return "Flags{" +
+                "longType=" + longType +
+                ", humanType=" + humanType +
+                ", reversedType=" + reversedType +
+                ", output=" + output +
+                ", outputWriter=" + outputWriter +
+                ", directory=" + directory +
+                '}';
     }
 }

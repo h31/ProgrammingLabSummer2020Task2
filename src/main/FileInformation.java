@@ -4,6 +4,9 @@ import java.util.Date;
 import java.util.Objects;
 
 class FileInformation {
+    private final byte canRead = 0b100;
+    private final byte canWrite = 0b010;
+    private final byte canExecute = 0b001;
     private byte permissions = 0b000;
     private final String lastModified;
     private long size;
@@ -14,9 +17,9 @@ class FileInformation {
         this.size = file.isDirectory() ? getDirectorySize(file) : file.length();
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         this.lastModified = sdf.format(new Date(file.lastModified()));
-        if (file.canExecute()) this.permissions |= Flags.canExecute;
-        if (file.canWrite()) this.permissions |= Flags.canWrite;
-        if (file.canRead()) this.permissions |= Flags.canRead;
+        if (file.canExecute()) this.permissions |= canExecute;
+        if (file.canWrite()) this.permissions |= canWrite;
+        if (file.canRead()) this.permissions |= canRead;
     }
 
     private long getDirectorySize(File file) {
@@ -43,11 +46,11 @@ class FileInformation {
 
     private String transformPermission(byte permissions) {
         StringBuilder sb = new StringBuilder();
-        if ((permissions & Flags.canRead) != 0) sb.append("r");
+        if ((permissions & canRead) != 0) sb.append("r");
         else sb.append("-");
-        if ((permissions & Flags.canWrite) != 0) sb.append("w");
+        if ((permissions & canWrite) != 0) sb.append("w");
         else sb.append("-");
-        if ((permissions & Flags.canExecute) != 0) sb.append("x");
+        if ((permissions & canExecute) != 0) sb.append("x");
         else sb.append("-");
         return sb.toString();
     }

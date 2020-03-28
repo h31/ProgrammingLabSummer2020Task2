@@ -1,36 +1,33 @@
-import java.io.File;
+import java.io.*;
+import java.nio.file.NoSuchFileException;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Objects;
 
 class Functions {
-    static String printDirectory(Flags flags) {
+    static OutputStream printDirectory(Flags flags, OutputStream stream) throws IOException {
         if (flags.getDirectory().isFile()) {
-            return new FileInformation(flags.getDirectory()).toString(flags.getHFlag());
+            stream.write(new FileInformation(flags.getDirectory()).toString(flags.isHumanType()).getBytes());
+            return stream;
         }
-        if (flags.getDirectory().listFiles() == null) return "Данного каталога не существует";
-        StringBuilder sb = new StringBuilder();
-        File[] filesArray = arrayPreparation(flags.getDirectory().listFiles(), flags.getRFlag());
-        if (filesArray == null) return "";
-        if (flags.getLFlag()) {
+        File[] filesArray = arrayPreparation(flags.getDirectory().listFiles(), flags.isReversedType());
+        if (flags.isLongType()) {
             for (int i = 0; i != filesArray.length; i++) {
-                sb.append(new FileInformation(filesArray[i]).toString(flags.getHFlag()));
-                if (i != filesArray.length - 1) sb.append("\n");
+                stream.write(new FileInformation(filesArray[i]).toString(flags.isHumanType()).getBytes());
+                if (i != filesArray.length - 1) stream.write("\n".getBytes());
             }
         } else {
             for (int i = 0; i != filesArray.length; i++) {
-                sb.append(filesArray[i].getName());
-                if (i != filesArray.length - 1) sb.append("\n");
+                stream.write(filesArray[i].getName().getBytes());
+                if (i != filesArray.length - 1) stream.write("\n".getBytes());
             }
         }
-        return sb.toString();
+        return stream;
     }
 
-    private static File[] arrayPreparation(File[] filesArray, boolean rFlag) { // Обработка массива в зависимости от наличия флага -r
-        if (Objects.requireNonNull(filesArray).length != 0) {
-            Arrays.sort(filesArray);
-            if (rFlag) Collections.reverse(Arrays.asList(filesArray));
-        }
+    private static File[] arrayPreparation(File[] filesArray, boolean rFlag) throws NoSuchFileException { // Обработка массива в зависимости от наличия флага -r
+        if (filesArray == null) throw new NoSuchFileException("Directory has not been found."); // Локализация будет тут
+        Arrays.sort(filesArray);
+        if (rFlag) Collections.reverse(Arrays.asList(filesArray));
         return filesArray;
     }
 }
