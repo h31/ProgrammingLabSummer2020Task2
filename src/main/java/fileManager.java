@@ -25,7 +25,7 @@ public class fileManager {
             return fOut.getPath();
         }
         else {
-            if (pathOut.matches("[a-zA-Z0-9-/.]+(.crp)")){
+            if (pathOut.matches("[a-zA-Zа-яёА-ЯЁ0-9-/.]+(.crp)")){
                 File fOut = new File(pathOut.substring(0, pathOut.lastIndexOf(".")));
                 if (!fOut.createNewFile()) {
                     System.err.println("A file with this name already exists in this directory. Please use the -o argument.");

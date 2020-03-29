@@ -15,7 +15,7 @@ public class flagManager {
         log.info("The program started with arguments: " + command);
         if (args[0].equals("-h"))
             help(false);
-        if (!command.matches("((-c)|(-d)) [a-zA-Z0-9]+ [.\\-/a-zA-Z0-9]+(\\.[a-z]+)( -o [a-zA-Z0-9a-z./\\-]+)?"))
+        if (!command.matches("((-c)|(-d)) [a-zA-Z0-9]+ [.\\-/a-zA-Zа-яёА-ЯЁ0-9]+(\\.[a-z]+)( -o [a-zA-Z0-9а-яёА-ЯЁ./\\-]+)?"))
             help(true);
         setMethod(args[0]);
         setKey(args[1]);
