@@ -1,3 +1,4 @@
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedWriter;
@@ -8,60 +9,81 @@ import java.util.List;
 
 import static java.nio.file.Files.*;
 import static java.nio.file.StandardOpenOption.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
 public class TestTar {
-    @Test
-    public void test() {
-        try {
-            BufferedWriter f1 = newBufferedWriter(Paths.get("file1.txt"), TRUNCATE_EXISTING, WRITE, CREATE);
-            BufferedWriter f2 = newBufferedWriter(Paths.get("file2.txt"), TRUNCATE_EXISTING, CREATE, WRITE);
-            BufferedWriter f3 = newBufferedWriter(Paths.get("file3.txt"), TRUNCATE_EXISTING, CREATE, WRITE);
-            BufferedWriter f4 = newBufferedWriter(Paths.get("file4.txt"), TRUNCATE_EXISTING, CREATE, WRITE);
-            f1.write("aaa aaa\nbbbbbb\n \ngo\n");
-            f2.write("test");
-            f3.write("123////\n////");
-            f4.write("endtest");
-            f1.close();
-            f2.close();
-            f3.close();
-            f4.close();
-            List<String> out = new ArrayList<>(List.of("4", "file1.txt 4", "file2.txt 1", "file3.txt 2", "file4.txt 1",
-                    "aaa aaa", "bbbbbb", " ", "go", "test", "123////", "////", "endtest"));
-            String[] args = {"file1.txt", "file2.txt", "file3.txt", "file4.txt", "-out", "output.txt"};
-            Tar.main(args);
-            assertEquals(out, readAllLines(Paths.get("output.txt")));
-            out.add("j");
-            assertNotEquals(out, readAllLines(Paths.get("output.txt")));
-            BufferedWriter f4new = newBufferedWriter(Paths.get("file4.txt"), TRUNCATE_EXISTING, CREATE, WRITE);
-            f4new.write("not end");
-            f4new.close();
-            BufferedWriter f5 = newBufferedWriter(Paths.get("file5.txt"), TRUNCATE_EXISTING, CREATE, WRITE);
-            f5.write("end");
-            f5.close();
-            out.remove(out.size() - 1);
-            out.set(out.size() - 1, "not end");
-            out.add("end");
-            args = new String[]{"file1.txt", "file2.txt", "file3.txt", "file4.txt", "file5.txt", "-out", "output.txt"};
-            Tar.main(args);
-            out.set(0, "5");
-            out.add(5, "file5.txt 1");
-            assertEquals(out, readAllLines(Paths.get("output.txt")));
-            delete(Paths.get("file1.txt"));
-            delete(Paths.get("file2.txt"));
-            delete(Paths.get("file3.txt"));
-            delete(Paths.get("file4.txt"));
-            delete(Paths.get("file5.txt"));
-            args = new String[]{"-u", "output.txt"};
-            Tar.main(args);
-            args = new String[]{"file1.txt", "file2.txt", "file3.txt", "file4.txt", "file5.txt", "-out", "outputnew.txt"};
-            Tar.main(args);
-            assertEquals(readAllLines(Paths.get("output.txt")), readAllLines(Paths.get("outputnew.txt")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    List<String> ft1 = new ArrayList<>(List.of("start test", "", "double n", "text text text", "rn scape test"));
+    List<String> ft2 = new ArrayList<>(List.of("aaaaaaaaaaa"));
+    List<String> ft3 = new ArrayList<>(List.of("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tristique imperdiet tortor, nec cursus neque placerat sed.",
+            "In maximus justo ex, nec finibus justo lobortis ut."));
+    List<String> ft4 = new ArrayList<>(List.of("end"));
+    List<String> out = new ArrayList<>(List.of("start test", "", "double n", "text text text", "rn scape test",
+            "aaaaaaaaaaa", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tristique imperdiet tortor, nec cursus neque placerat sed.",
+            "In maximus justo ex, nec finibus justo lobortis ut.", "end", "file1.text 5", "file2.text 1", "file3.text 2", "file4.text 1", "4"));
 
+    @Test
+    public void testout() throws IOException {
+        BufferedWriter f1 = newBufferedWriter(Paths.get("file1.text"), WRITE, CREATE, TRUNCATE_EXISTING);
+        BufferedWriter f2 = newBufferedWriter(Paths.get("file2.text"), WRITE, CREATE, TRUNCATE_EXISTING);
+        BufferedWriter f3 = newBufferedWriter(Paths.get("file3.text"), WRITE, CREATE, TRUNCATE_EXISTING);
+        BufferedWriter f4 = newBufferedWriter(Paths.get("file4.text"), WRITE, CREATE, TRUNCATE_EXISTING);
+        f1.write("start test\n\ndouble n\ntext text text\r\nrn scape test");
+        f1.close();
+        f2.write("aaaaaaaaaaa");
+        f2.close();
+        f3.write("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tristique imperdiet tortor, nec cursus neque placerat sed.\n" +
+                "In maximus justo ex, nec finibus justo lobortis ut.");
+        f3.close();
+        f4.write("end");
+        f4.close();
+        Parse.main(new String[]{"file1.text", "file2.text", "file3.text", "file4.text", "-out", "output.txt"});
+        Assertions.assertEquals(out, readAllLines(Paths.get("output.txt")));
+    }
+
+
+    @Test
+    public void testu() throws IOException {
+        delete(Paths.get("file1.text"));
+        delete(Paths.get("file2.text"));
+        delete(Paths.get("file3.text"));
+        delete(Paths.get("file4.text"));
+        Parse.main(new String[]{"-u", "output.txt"});
+        Assertions.assertEquals(ft1, readAllLines(Paths.get("file1.text")));
+        Assertions.assertEquals(ft2, readAllLines(Paths.get("file2.text")));
+        Assertions.assertEquals(ft3, readAllLines(Paths.get("file3.text")));
+        Assertions.assertEquals(ft4, readAllLines(Paths.get("file4.text")));
+    }
+
+    @Test
+    public void testparse() throws IOException {
+        delete(Paths.get("file1.text"));
+        delete(Paths.get("file2.text"));
+        delete(Paths.get("file3.text"));
+        delete(Paths.get("file4.text"));
+        Parse.main(new String[]{"output.txt", "-u"});
+        Assertions.assertEquals(ft1, readAllLines(Paths.get("file1.text")));
+        Assertions.assertEquals(ft2, readAllLines(Paths.get("file2.text")));
+        Assertions.assertEquals(ft3, readAllLines(Paths.get("file3.text")));
+        Assertions.assertEquals(ft4, readAllLines(Paths.get("file4.text")));
+    }
+
+    @Test
+    public void testErrorOut() {
+        Throwable thrown = Assertions.assertThrows(Exception.class, () -> {
+            Parse.main(new String[]{"file555.text", "file2.text", "file3.text", "file4.text", "-out", "output.txt"});
+        });
+        assertNotNull(thrown.getMessage());
+    }
+
+    @Test
+    public void testErrorU() throws IOException {
+        Throwable thrown = Assertions.assertThrows(Exception.class, () -> Parse.main(new String[]{"-u", "outputttt.txt"}));
+        assertNotNull(thrown.getMessage());
+        BufferedWriter out = newBufferedWriter(Paths.get("output.txt"), WRITE, CREATE, TRUNCATE_EXISTING);
+        out.write("20");
+        out.close();
+        thrown = Assertions.assertThrows(Exception.class, () -> Parse.main(new String[]{"-u", "output.txt"}));
+        assertNotNull(thrown.getMessage());
     }
 }
