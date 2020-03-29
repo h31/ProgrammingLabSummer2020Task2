@@ -1,5 +1,7 @@
 import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -24,6 +26,9 @@ class Parse {
             if (arg.equals("-u")) {
                 newargs.remove("-u");
                 Path out = Paths.get(newargs.get(newargs.size() - 1));
+                if (Files.notExists(out)) {
+                    throw new FileNotFoundException("File " + newargs.get(newargs.size() - 1) + " not exist");
+                }
                 Tar.u(out);
                 break;
             }
@@ -35,6 +40,10 @@ class Parse {
 public class Tar {
     public static void out(ArrayList<String> args, Path out) throws IOException {
         try (BufferedWriter fin = newBufferedWriter(out, WRITE, CREATE, TRUNCATE_EXISTING)) {
+            for (int i = 0; i < args.size() - 1; i++) {
+                if (Files.notExists(Paths.get(args.get(i))))
+                    throw new FileNotFoundException("File " + args.get(i) + " not exist");
+            }
             int[] a = new int[args.size() - 1];
             for (int i = 0; i < args.size() - 1; i++) {
                 for (String line : readAllLines(Paths.get(args.get(i)))) {
@@ -51,17 +60,31 @@ public class Tar {
 
     public static void u(Path out) throws IOException {
         List<String> fin = readAllLines(out);
+        if (!fin.get(fin.size() - 1).matches("[0-9]+")) {
+            throw new IllegalArgumentException("Number of files is absent");
+        }
         int j = Integer.parseInt(fin.get(fin.size() - 1));
+        int size = fin.size() - j - 1;
         int start = 0;
         for (int i = j; i >= 1; i--) {
+            if (!fin.get(fin.size() - 1 - i).matches("[^<>|\\\\/:*?\";.]+\\.te?xt [0-9]+?")) {
+                throw new IllegalArgumentException("Format of filename and row's number is wrong in row " + (fin.size() - 1 - i) + ": " + fin.get(fin.size() - 1 - i));
+            }
             String[] a = fin.get(fin.size() - 1 - i).split(" ");
+            int parse = Integer.parseInt(a[1]);
+            if (size < parse) {
+                throw new ArrayIndexOutOfBoundsException("Wrong rows' number in some file");
+            } else {
+                size -= parse;
+            }
             try (BufferedWriter f = newBufferedWriter(Paths.get(a[0]), WRITE, CREATE, TRUNCATE_EXISTING);) {
-                int parse = Integer.parseInt(a[1]);
+
                 for (int l = start; l <= start + parse - 1; l++) {
                     f.write(fin.get(l) + "\n");
                 }
                 start += Integer.parseInt(a[1]);
             }
         }
+        if (size>0) {System.out.println("Warning! Not all rows were processed. Check the number of rows.");}
     }
 }
