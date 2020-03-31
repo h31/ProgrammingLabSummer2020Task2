@@ -108,7 +108,6 @@ public class Unique {
         inputFileData();
 
         HashSet<String> set = new HashSet<>();
-
         StringBuilder firstWord = new StringBuilder(allLines.get(0));
 
         for (int i = 1; i < allLines.size(); i++) {

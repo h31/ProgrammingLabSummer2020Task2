@@ -1,7 +1,6 @@
-приПривет
-преПривет
-праПривет
-gggХорошо
-asdХорошо
-aseХорошо
-sssНормально
+ghgHello
+ffgHello
+asdHello
+qweGO
+qwwGO
+eqaWalk

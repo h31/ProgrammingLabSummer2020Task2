@@ -3,7 +3,6 @@ hello world
 hello
 i am a text
 i am a text
-i am a text
 go
 next
 hello

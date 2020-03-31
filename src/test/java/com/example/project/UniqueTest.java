@@ -21,10 +21,11 @@ class UniqueTest {
     @Test
     void equalsIgnoreCase() throws IOException {
         Unique.main(new String[]{"-i", "-o", "output.txt", "inputForIgnoreCase.txt"});
-
         readOutputFile();
 
-        assertEquals("Как делаКАК ДЕЛА\n" + "ПриветприВет\n" + "Хорошо\n",
+        assertEquals("how are youHOW ARE YOU\n" +
+                        "HelloHello\n" +
+                        "Good\n",
                 stringBuilderTest.toString());
 
     }
@@ -35,8 +36,9 @@ class UniqueTest {
 
         readOutputFile();
 
-        assertEquals("Привет\n" +
-                "Хорошо\n" + "Нормально\n", stringBuilderTest.toString());
+        assertEquals("Hello\n" +
+                "GO\n" +
+                "Walk\n", stringBuilderTest.toString());
 
     }
 
@@ -58,7 +60,7 @@ class UniqueTest {
         readOutputFile();
 
         assertEquals("2 hello world\n" +
-                "hello\n" + "3 i am a text\n" + "go\n", stringBuilderTest.toString());
+                "hello\n" + "2 i am a text\n" + "go\n", stringBuilderTest.toString());
     }
 
     @Test
