@@ -96,7 +96,7 @@ class UniqueTest {
 
         assertEquals("2 hello world\n" +
                 "hello\n" +
-                "3 i am a text\n" +
+                "2 i am a text\n" +
                 "go\n", outContent.toString());
         outContent.close();
     }
@@ -113,9 +113,9 @@ class UniqueTest {
     public void outputConsoleIgnoreSomeChars() throws IOException {
         Unique.main(new String[]{"-s", "3", "inputForIgnoreSomeChars.txt"});
 
-        assertEquals("Привет\n" +
-                        "Хорошо\n" +
-                        "Нормально"
+        assertEquals("Hello\n" +
+                        "GO\n" +
+                        "Walk"
                 , outContent.toString());
     }
 
@@ -123,9 +123,9 @@ class UniqueTest {
     public void outputConsoleIgnoreCase() throws IOException {
         Unique.main(new String[]{"-i", "inputForIgnoreCase.txt"});
 
-        assertEquals("Как делаКАК ДЕЛА\n" +
-                        "ПриветприВет\n" +
-                        "Хорошо\n"
+        assertEquals("how are youHOW ARE YOU\n" +
+                        "HelloHello\n" +
+                        "Good\n"
                 , outContent.toString());
     }
 
@@ -181,6 +181,9 @@ class UniqueTest {
                 "World\n", stringBuilderTest.toString());
     }
 
+    /**
+     * Возвращение исходных потоков
+     */
     @AfterAll
     static void restoreStreamsInput() {
         System.setIn(System.in);
