@@ -1,7 +1,9 @@
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Objects;
+import java.io.OutputStream;
+import java.nio.file.NoSuchFileException;
+import java.util.*;
 
 class Flags {
     private boolean longType = false;
@@ -10,9 +12,10 @@ class Flags {
     private boolean output = false;
     private FileOutputStream outputWriter;
     private File directory;
+    private ResourceBundle resource = ResourceBundle.getBundle("resources", Locale.getDefault());
 
     void handlingArguments(String[] args) throws IOException {
-        if (args.length < 1) throw new IllegalArgumentException();
+        if (args.length < 1) throw new IllegalArgumentException(resource.getString("args_error"));
         for (int i = 0; i != args.length; i++) {
             switch (args[i]) {
                 case ("-l"):
@@ -31,16 +34,43 @@ class Flags {
                         i++;
                         break;
                     }
-                    throw new IllegalArgumentException("Wrong arguments. Example: ls [-l] [-h] [-r] [-o output.file] directory_or_file"); // Локализация
+                    throw new IllegalArgumentException(resource.getString("args_error"));
                 default:
                     if (i == args.length - 1) {
                         setDirectory(new File(args[i]));
                         break;
                     }
-                    throw new IllegalArgumentException("Wrong arguments. Example: ls [-l] [-h] [-r] [-o output.file] directory_or_file"); // Локализация
+                    throw new IllegalArgumentException(resource.getString("args_error")); // Локализация
 
             }
         }
+    }
+
+    OutputStream printDirectory(Flags flags, OutputStream stream) throws IOException {
+        if (flags.getDirectory().isFile()) {
+            stream.write(new FileInformation(flags.getDirectory()).toString(flags.isHumanType()).getBytes());
+            return stream;
+        }
+        File[] filesArray = arrayPreparation(flags.getDirectory().listFiles(), flags.isReversedType());
+        if (flags.isLongType()) {
+            for (int i = 0; i != filesArray.length; i++) {
+                stream.write(new FileInformation(filesArray[i]).toString(flags.isHumanType()).getBytes());
+                if (i != filesArray.length - 1) stream.write("\n".getBytes());
+            }
+        } else {
+            for (int i = 0; i != filesArray.length; i++) {
+                stream.write(filesArray[i].getName().getBytes());
+                if (i != filesArray.length - 1) stream.write("\n".getBytes());
+            }
+        }
+        return stream;
+    }
+
+    private File[] arrayPreparation(File[] filesArray, boolean rFlag) throws NoSuchFileException { // Обработка массива в зависимости от наличия флага -r
+        if (filesArray == null) throw new NoSuchFileException(resource.getString("dir_error"));
+        Arrays.sort(filesArray);
+        if (rFlag) Collections.reverse(Arrays.asList(filesArray));
+        return filesArray;
     }
 
     public boolean isLongType() {
@@ -91,22 +121,31 @@ class Flags {
         this.directory = directory;
     }
 
+    public ResourceBundle getResource() {
+        return resource;
+    }
+
+    public void setResource(ResourceBundle resource) {
+        this.resource = resource;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Flags flags = (Flags) o;
-        return longType == flags.longType &&
-                humanType == flags.humanType &&
-                reversedType == flags.reversedType &&
-                output == flags.output &&
-                Objects.equals(outputWriter, flags.outputWriter) &&
-                directory.equals(flags.directory);
+        return isLongType() == flags.isLongType() &&
+                isHumanType() == flags.isHumanType() &&
+                isReversedType() == flags.isReversedType() &&
+                isOutput() == flags.isOutput() &&
+                Objects.equals(getOutputWriter(), flags.getOutputWriter()) &&
+                getDirectory().equals(flags.getDirectory()) &&
+                getResource().equals(flags.getResource());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(longType, humanType, reversedType, output, outputWriter, directory);
+        return Objects.hash(isLongType(), isHumanType(), isReversedType(), isOutput(), getOutputWriter(), getDirectory(), getResource());
     }
 
     @Override
@@ -118,6 +157,7 @@ class Flags {
                 ", output=" + output +
                 ", outputWriter=" + outputWriter +
                 ", directory=" + directory +
+                ", resource=" + resource +
                 '}';
     }
 }
