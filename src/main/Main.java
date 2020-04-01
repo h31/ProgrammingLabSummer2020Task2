@@ -11,6 +11,6 @@ public class Main {
         } else {
             stream = new PrintStream(System.out);
         }
-        flags.printDirectory(flags, stream);
+        flags.printDirectory(stream);
     }
 }

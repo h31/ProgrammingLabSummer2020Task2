@@ -1,7 +1,4 @@
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.file.NoSuchFileException;
 import java.util.*;
 
@@ -14,7 +11,7 @@ class Flags {
     private File directory;
     private ResourceBundle resource = ResourceBundle.getBundle("resources", Locale.getDefault());
 
-    void handlingArguments(String[] args) throws IOException {
+    void handlingArguments(String[] args) throws FileNotFoundException {
         if (args.length < 1) throw new IllegalArgumentException(resource.getString("args_error"));
         for (int i = 0; i != args.length; i++) {
             switch (args[i]) {
@@ -45,16 +42,21 @@ class Flags {
             }
         }
     }
-
-    OutputStream printDirectory(Flags flags, OutputStream stream) throws IOException {
-        if (flags.getDirectory().isFile()) {
-            stream.write(new FileInformation(flags.getDirectory()).toString(flags.isHumanType()).getBytes());
+    /**
+     * Метод заполнябщий поток информацией о файле/каталоге
+     *
+     * @param stream - любой поток наследуемый от OutputStream
+     * @throws IOException - при отсутствии файла/каталога
+     */
+    OutputStream printDirectory(OutputStream stream) throws IOException {
+        if (getDirectory().isFile()) {
+            stream.write(new FileInformation(getDirectory()).toString(isHumanType()).getBytes());
             return stream;
         }
-        File[] filesArray = arrayPreparation(flags.getDirectory().listFiles(), flags.isReversedType());
-        if (flags.isLongType()) {
+        File[] filesArray = arrayPreparation(getDirectory().listFiles(), isReversedType());
+        if (isLongType()) {
             for (int i = 0; i != filesArray.length; i++) {
-                stream.write(new FileInformation(filesArray[i]).toString(flags.isHumanType()).getBytes());
+                stream.write(new FileInformation(filesArray[i]).toString(isHumanType()).getBytes());
                 if (i != filesArray.length - 1) stream.write("\n".getBytes());
             }
         } else {
@@ -65,8 +67,7 @@ class Flags {
         }
         return stream;
     }
-
-    private File[] arrayPreparation(File[] filesArray, boolean rFlag) throws NoSuchFileException { // Обработка массива в зависимости от наличия флага -r
+    private File[] arrayPreparation(File[] filesArray, boolean rFlag) throws NoSuchFileException {
         if (filesArray == null) throw new NoSuchFileException(resource.getString("dir_error"));
         Arrays.sort(filesArray);
         if (rFlag) Collections.reverse(Arrays.asList(filesArray));
