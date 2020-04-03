@@ -15,7 +15,7 @@ class SplitTest {
     @Test
     void readerTest() throws IOException {
         List<String> test = Arrays.asList("1","2","3","а","б","в","a","b","c");
-        String input = "input\\readerTest.txt";
+        String input = "input/readerTest.txt";
         List<String> res = Split.reader(input);
         assertEquals(test, res);
     }
@@ -75,20 +75,20 @@ class SplitTest {
 
     @Test
     void mainTest() throws IOException {
-        String[] args = new String[]{"file", "input\\testFile.txt", "-l", "2", "-o", "qwerty"};
+        String[] args = new String[]{"file", "input/testFile.txt", "-l", "2", "-o", "qwerty"};
         ArrayList<String> outputFiles = new ArrayList<>();
         outputFiles.add("qwertyaa.txt");
         outputFiles.add("qwertyab.txt");
         List<String> exp1 = Arrays.asList("1a", "2b");
         List<String> exp2 = Arrays.asList("3c");
         Split.main(args);
-        String dir = "output\\";
+        String dir = "output/";
         ArrayList<String> res1 = Split.reader(dir + outputFiles.get(0));
         ArrayList<String> res2 = Split.reader(dir + outputFiles.get(1));
         delAll(outputFiles);
         assertEquals(exp1, res1);
         assertEquals(exp2, res2);
-        args = new String[]{"file", "input\\testFile.txt", "-n", "2","-d"};
+        args = new String[]{"file", "input/testFile.txt", "-n", "2","-d"};
         outputFiles.clear();
         outputFiles.add("x1.txt");
         outputFiles.add("x2.txt");
@@ -98,7 +98,7 @@ class SplitTest {
         delAll(outputFiles);
         assertEquals(exp1, res1);
         assertEquals(exp2, res2);
-        args = new String[]{"file", "input\\testFile.txt", "-c", "4", "-o","-","-d"};
+        args = new String[]{"file", "input/testFile.txt", "-c", "4", "-o","-","-d"};
         outputFiles.clear();
         outputFiles.add("testFile1.txt");
         outputFiles.add("testFile2.txt");
@@ -114,12 +114,12 @@ class SplitTest {
     @Test
     void Errors() {
         assertThrows(IllegalArgumentException.class, () -> Split.main(new String[]{"-c", "4", "-o","-","-d"}));
-        assertThrows(IllegalArgumentException.class, () -> Split.main(new String[]{"file", "input\\testFile.txt", "-c", "4", "-n","3","-d"}));
-        assertThrows(ArrayIndexOutOfBoundsException.class, () -> Split.main(new String[]{"file", "input\\testFile.txt", "-n","677",}));
+        assertThrows(IllegalArgumentException.class, () -> Split.main(new String[]{"file", "input/testFile.txt", "-c", "4", "-n","3","-d"}));
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> Split.main(new String[]{"file", "input/testFile.txt", "-n","677",}));
     }
 
     private ArrayList<String> readAll(ArrayList<String> outputFiles) throws IOException {
-        String dir = "output\\";
+        String dir = "output/";
         ArrayList<String> res = new ArrayList<>();
         for (String outputFile : outputFiles) {
             res.addAll(Split.reader(dir + outputFile));
@@ -128,7 +128,7 @@ class SplitTest {
         return res;
     }
     private void delAll(ArrayList<String> outputFiles) {
-        String dir = "output\\";
+        String dir = "output/";
         for (String outputFile : outputFiles) {
             File file = new File(dir + outputFile);
             file.delete();

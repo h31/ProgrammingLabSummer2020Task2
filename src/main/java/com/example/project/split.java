@@ -58,7 +58,7 @@ class Split {
             name = args[flagO + 1];
         }
         if (name.equals("-")) {
-            int index = input.lastIndexOf("\\");
+            int index = input.lastIndexOf("/");
             name = input.substring(index + 1);
             index = name.lastIndexOf(".");
             if (index == 0)
@@ -128,7 +128,7 @@ class Split {
                     countSize++;
                     File filePath = new File("output");
                     filePath.mkdir();
-                    File file = new File(filePath + "\\" + outputFiles.get(count));
+                    File file = new File(filePath + "/" + outputFiles.get(count));
                     try {
                         BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
                         String lineSeparator = System.getProperty("line.separator");
@@ -156,7 +156,7 @@ class Split {
                 countSize++;
                 File filePath = new File("output");
                 filePath.mkdir();
-                File file = new File(filePath + "\\" + outputFiles.get(count));
+                File file = new File(filePath + "/" + outputFiles.get(count));
                 try {
                     BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
                     String lineSeparator = System.getProperty("line.separator");
