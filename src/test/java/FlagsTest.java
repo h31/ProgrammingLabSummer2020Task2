@@ -73,14 +73,14 @@ class FlagsTest {
     String hepler() {
         Flags flag = new Flags();
         ArrayList<File> example = new ArrayList<>();
-        example.add(new File("C:\\Users\\Admin\\ProgrammingLabSummer2020Task2\\src\\test\\resources"));
+        example.add(new File("src\\test\\resources"));
         flag.setFile(example);
         return flag.getLisOfFiles().toString();
     }
 
     @Test
     void setFile() {
-        assertEquals("[C:\\Users\\Admin\\ProgrammingLabSummer2020Task2\\src\\test\\resources]",
+        assertEquals("[src\\test\\resources]",
                 hepler());
 
     }

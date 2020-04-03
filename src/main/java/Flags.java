@@ -67,7 +67,7 @@ public class Flags {
         static private long size;
 
         Data1(File file) {
-            this.name = file.getAbsolutePath();
+            this.name = file.getPath();
             this.size = file.isDirectory() ? getDirectorySize(file) : file.length();
         }
 
