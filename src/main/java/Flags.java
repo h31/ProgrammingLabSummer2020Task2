@@ -1,5 +1,6 @@
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Objects;
 
 public class Flags {
@@ -93,9 +94,9 @@ public class Flags {
                 return output.append(necessarySize(res)).toString();
             }
             if (flag.getSi()) {
-                return output.append(String.format("%.1f", res / 1000)).append("K").toString();
+                return output.append(String.format(Locale.US,"%.1f", res / 1000)).append("K").toString();
             }
-            return output.append(String.format("%.1f", res / 1024)).append("K").toString();
+            return output.append(String.format( Locale.US,"%.1f", res / 1024)).append("K").toString();
         }
 
         static private String necessarySize(double size) {
@@ -107,7 +108,7 @@ public class Flags {
                 newSize /= 1024;
                 count++;
             }
-            return string.append(String.format("%.1f", newSize)).append(firstChar[count]).toString();
+            return string.append(String.format(Locale.US,"%.1f", newSize)).append(firstChar[count]).toString();
         }
 
         static private String siFlagSize(double size) {
@@ -119,7 +120,7 @@ public class Flags {
                 newSize /= 1000;
                 count++;
             }
-            return string.append(String.format("%.1f", newSize)).append(firstChar[count]).toString();
+            return string.append(String.format(Locale.US,"%.1f", newSize)).append(firstChar[count]).toString();
         }
 
         String toStringOutput(Flags flag) {//вывожу строки размер + имя файлов,каталогов
@@ -132,9 +133,9 @@ public class Flags {
             }
             double newSize = size;
             if (flag.getSi()) {
-                return output.append(String.format("%.1f", newSize / 1000)).append("K ").append(name).toString();
+                return output.append(String.format(Locale.US,"%.1f", newSize / 1000)).append("K ").append(name).toString();
             }
-            return output.append(String.format("%.1f", newSize / 1024)).append("K ").append(name).toString();
+            return output.append(String.format(Locale.US,"%.1f", newSize / 1024)).append("K ").append(name).toString();
         }
             return "Данного файла или каталога не существует";
         }
