@@ -124,7 +124,7 @@ public class Flags {
 
         String toStringOutput(Flags flag) {//вывожу строки размер + имя файлов,каталогов
             File file = new File(name);
-            if(file.isFile() || file.isDirectory()) {
+            if(file.exists()) {
             StringBuilder output = new StringBuilder();
             if (flag.getH()) {
                 if (flag.getSi()) return output.append(siFlagSize(size)).append(" ").append(name).toString();
