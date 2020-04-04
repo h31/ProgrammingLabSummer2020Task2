@@ -6,14 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ArgumentsTest {
     Arguments createArguments() throws IOException {
-        try {
-            return  new Arguments(new String[]{"du", "-h", "test.txt", "-c","file.txt"});
-        } catch (IOException e){
-            System.exit(1);
-        } finally {
-            return new Arguments(new String[]{"du", "-h", "test.txt", "-c", "file.txt"});
-        }
-
+        return new Arguments(new String[]{"-h","-c", "test.txt", "file.txt"});
     }
 
     @Test
