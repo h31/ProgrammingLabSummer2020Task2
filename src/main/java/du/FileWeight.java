@@ -1,6 +1,7 @@
 package du;
 
 import java.math.*;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.*;
@@ -13,18 +14,33 @@ class FileWeight {
             for (int i = 0; i != args.getFiles().size(); i++) {
                 if (!new File(args.getFiles().get(i)).exists()) throw new IOException();
                 File file = new File(args.getFiles().get(i));
-                weights.add(new BigDecimal(file.length()).setScale(1, RoundingMode.HALF_UP));
+                if (file.isDirectory()) weights.add(dirSum(file));
+                else weights.add(new BigDecimal(file.length()).setScale(1, RoundingMode.HALF_UP));
             }
-        } catch (Exception e) {
-            System.exit(1);
+        } catch (IOException e) {
+            System.exit(2);
         }
         flags = args.getFlags();
+    }
+    private BigDecimal dirSum(File dir) throws IOException {
+        File[] elements = dir.listFiles();
+        BigDecimal sum = new BigDecimal(0).setScale(1, RoundingMode.HALF_UP);
+        for (int j = 0; j!= elements.length; j++){
+            File file = elements[j];
+            if (file.isDirectory()) {
+                sum = sum.add(dirSum(file));
+            }else {
+                BigDecimal test = new BigDecimal(file.length()).setScale(1,RoundingMode.HALF_UP);
+                sum = sum.add(new BigDecimal(file.length()).setScale(1,RoundingMode.HALF_UP));
+            }
+        }
+        return sum;
     }
 
     private BigDecimal sum(){
         BigDecimal sum = new BigDecimal(0.0).setScale(1,RoundingMode.HALF_UP);
         for (int i = 0; i != weights.size(); i++){
-            sum.add(weights.get(i));
+            sum = sum.add(weights.get(i));
         }
         return sum;
     }
@@ -38,12 +54,12 @@ class FileWeight {
             if (flags.hFlag()){
                 int i = 0;
                 while (sum.compareTo(bdDivisor)>0 && i != degrees.length - 1){
-                    sum.divide(bdDivisor);
+                    sum = sum.divide(bdDivisor, RoundingMode.HALF_UP);
                     i++; //Протестировать
                 }
                 return sum.toString()+degrees[i];
             } else {
-                return sum.divide(bdDivisor).toString();
+                return sum.divide(bdDivisor, RoundingMode.HALF_UP).toString();
             }
         } else {
             StringBuilder str = new StringBuilder();
@@ -51,7 +67,7 @@ class FileWeight {
                 for (int j = 0; j != weights.size(); j++){
                     int i = 0;
                     while (weights.get(j).compareTo(bdDivisor)>0 && i != degrees.length - 1){
-                        weights.set(j, weights.get(j).divide(bdDivisor));
+                        weights.set(j, weights.get(j).divide(bdDivisor, RoundingMode.HALF_UP));
                         i++;
                     }
                     str.append(weights.get(j).toString()).append(degrees[i]).append(" ");
@@ -59,10 +75,13 @@ class FileWeight {
                 return str.toString();
             } else {
                 for (int j = 0; j != weights.size(); j++){
-                    str.append(weights.get(j).toString()).append(" ");
+
+                    str.append(weights.get(j).divide(bdDivisor, RoundingMode.HALF_UP).toString()).append(" ");
                 }
                 return str.toString();
             }
         }
      }
+
+
 }

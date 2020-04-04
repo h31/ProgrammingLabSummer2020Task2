@@ -20,15 +20,21 @@ public class Flags {
     boolean siFlag(){return siFlag;}
 
     boolean setHFlag(boolean newHFlag){
-        return !(hFlag == newHFlag);
+        boolean change = !(hFlag == newHFlag);
+        hFlag = newHFlag;
+        return change;
     }
 
     boolean setCFlag(boolean newCFlag){
-        return !(cFlag == newCFlag);
+        boolean change = !(cFlag == newCFlag);
+        cFlag = newCFlag;
+        return change;
     }
 
     boolean setSiFlag(boolean newSiFlag){
-        return !(siFlag == newSiFlag);
+        boolean change = !(siFlag == newSiFlag);
+        siFlag = newSiFlag;
+        return change;
     }
 
     @Override

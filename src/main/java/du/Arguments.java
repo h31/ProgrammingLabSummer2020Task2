@@ -22,15 +22,16 @@ class Arguments{
     Arguments(String[] args) throws IOException {
         for (int i = 0; i != args.length; i++){
             switch (args[i]){
-                case ("du"):
-                    break;
                 case ("-h"):
+                    if (files.size() != 0) System.exit(160);
                     flags.setHFlag(true);
                     break;
                 case ("-c"):
+                    if (files.size() != 0) System.exit(160);
                     flags.setCFlag(true);
                     break;
                 case ("-si"):
+                    if (files.size() != 0) System.exit(160);
                     flags.setSiFlag(true);
                     break;
                 default:
@@ -38,7 +39,7 @@ class Arguments{
                     break;
             }
         }
-
+        if (files.isEmpty()) System.exit(160);
     }
 
     Flags getFlags(){
@@ -65,9 +66,7 @@ class Arguments{
 
     @Override
     public String toString() {
-        return "Arguments{" +
-                "flags=" + flags +
-                ", files=" + files +
-                '}';
+        return "flags=" + flags + ", files=" + files;
+
     }
 }
