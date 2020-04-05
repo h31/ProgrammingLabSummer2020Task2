@@ -55,7 +55,7 @@ class FileWeight {
                 int i = 0;
                 while (sum.compareTo(bdDivisor)>0 && i != degrees.length - 1){
                     sum = sum.divide(bdDivisor, RoundingMode.HALF_UP);
-                    i++; //Протестировать
+                    i++;
                 }
                 return sum.toString()+degrees[i];
             } else {
