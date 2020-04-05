@@ -43,11 +43,11 @@ public class FileWeightTest {
 
     @Test
     void c() throws IOException {
-        assertEquals("41376.1", createFileWeight(new String[]{"-c", "files/test.txt", "files/testDir/test1.txt", "files/test3.txt", "files/test4.txt"}));
+        assertEquals("41376.1", createFileWeight(new String[]{"-c", "files/test.txt", "files/testDir/test1.txt", "files/test3.txt", "files/test2.txt"}));
     }
 
     @Test
     void hCSi() throws IOException {
-        assertEquals("42.4MB", createFileWeight(new String[]{"-si", "-h", "-c", "files/test.txt", "files/testDir/test1.txt", "files/test3.txt", "files/test4.txt"}));
+        assertEquals("42.4MB", createFileWeight(new String[]{"-si", "-h", "-c", "files/test.txt", "files/testDir/test1.txt", "files/test3.txt", "files/test2.txt"}));
         }
 }
