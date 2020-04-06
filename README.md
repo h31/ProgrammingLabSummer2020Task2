@@ -1,5 +1,4 @@
 # ciphxor  
-![Java CI with Maven](https://github.com/shomov/ProgrammingLabSummer2020Task2/workflows/Java%20CI%20with%20Maven/badge.svg)
 
 
 Данная программа представляет собой реализацию консольного приложения, реализующее шифрование посредством алгоритма "исключающее или", иными словами "xor".
