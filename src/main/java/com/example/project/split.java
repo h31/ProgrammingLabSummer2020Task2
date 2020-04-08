@@ -127,6 +127,7 @@ class Split {
                     }
                     countSize++;
                     File filePath = new File("output");
+                    filePath.mkdir();
                     File file = new File(filePath + "/" + outputFiles.get(count));
                     try {
                         BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
@@ -154,6 +155,7 @@ class Split {
                 }
                 countSize++;
                 File filePath = new File("output");
+                filePath.mkdir();
                 File file = new File(filePath + "/" + outputFiles.get(count));
                 try {
                     BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
