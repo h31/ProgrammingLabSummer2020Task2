@@ -4,7 +4,7 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ArgumentsTest {
+class ArgumentsTest {
     Arguments createArguments() throws IOException {
         return new Arguments(new String[]{"-h","-c", "test.txt", "file.txt"});
     }

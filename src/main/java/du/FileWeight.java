@@ -22,7 +22,7 @@ class FileWeight {
         }
         flags = args.getFlags();
     }
-    private BigDecimal dirSum(File dir) throws IOException {
+    private BigDecimal dirSum(File dir){
         File[] elements = dir.listFiles();
         BigDecimal sum = new BigDecimal(0).setScale(1, RoundingMode.HALF_UP);
         for (int j = 0; j!= elements.length; j++){
@@ -83,5 +83,11 @@ class FileWeight {
         }
      }
 
-
+    @Override
+    public String toString() {
+        return "FileWeight{" +
+                "weights=" + weights +
+                ", flags=" + flags +
+                '}';
+    }
 }
