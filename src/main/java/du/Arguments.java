@@ -23,15 +23,15 @@ class Arguments{
         for (int i = 0; i != args.length; i++){
             switch (args[i]){
                 case ("-h"):
-                    if (files.size() != 0) System.exit(160);
+                    if (files.size() != 0) System.exit(1);
                     flags.setHFlag(true);
                     break;
                 case ("-c"):
-                    if (files.size() != 0) System.exit(160);
+                    if (files.size() != 0) System.exit(1);
                     flags.setCFlag(true);
                     break;
                 case ("-si"):
-                    if (files.size() != 0) System.exit(160);
+                    if (files.size() != 0) System.exit(1);
                     flags.setSiFlag(true);
                     break;
                 default:
@@ -39,7 +39,7 @@ class Arguments{
                     break;
             }
         }
-        if (files.isEmpty()) System.exit(160);
+        if (files.isEmpty()) System.exit(1);
     }
 
     Flags getFlags(){
