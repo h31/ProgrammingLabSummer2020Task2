@@ -9,12 +9,16 @@ import java.io.*;
 class FileWeight {
     private List<BigDecimal> weights = new ArrayList<>();
     private Flags flags;
-    FileWeight(Arguments args) throws IOException {
-        for (int i = 0; i != args.getFiles().size(); i++) {
-            if (!new File(args.getFiles().get(i)).exists()) throw new IOException();
-            File file = new File(args.getFiles().get(i));
-            if (file.isDirectory()) weights.add(dirSum(file));
-            else weights.add(new BigDecimal(file.length()).setScale(1, RoundingMode.HALF_UP));
+    FileWeight(Arguments args){
+        try {
+            for (int i = 0; i != args.getFiles().size(); i++) {
+                if (!new File(args.getFiles().get(i)).exists()) throw new IOException();
+                File file = new File(args.getFiles().get(i));
+                if (file.isDirectory()) weights.add(dirSum(file));
+                else weights.add(new BigDecimal(file.length()).setScale(1, RoundingMode.HALF_UP));
+            }
+        }catch (IOException e){
+            System.exit(2);
         }
 
         flags = args.getFlags();
