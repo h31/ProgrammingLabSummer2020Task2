@@ -21,7 +21,14 @@ public class flagManager {
         setApproach(args[0]);
         setKey(args[1]);
         setPathIn(args[2]);
-        setPathOut(args);
+        boolean custom = false;
+        if (args.length > 3) {
+            pathOut = args[4];
+            custom = true;
+        }
+        else
+            pathOut = args[2];
+        setPathOut(custom);
     }
 
     void setApproach(String mode) {
@@ -48,16 +55,9 @@ public class flagManager {
         pathIn = path;
     }
 
-    void setPathOut (String[] args) throws IOException {
-        if (args.length > 3) {
-            fileManager file = new fileManager();
-            pathOut = file.creator(approach, args[4], true);
-    }
-        else {
-            pathOut = args[2];
-            fileManager file = new fileManager();
-            pathOut = file.creator(approach, pathOut, false);
-        }
+    void setPathOut (boolean custom) throws IOException {
+        fileManager file = new fileManager();
+        pathOut = file.creator(approach, pathOut, custom);
     }
 
     void help (boolean error) {
