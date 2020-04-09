@@ -1,6 +1,8 @@
-import java.io.File;
+import java.nio.file.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Path;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -46,8 +48,8 @@ public class flagManager {
     }
 
     void setPathIn (String path) throws FileNotFoundException {
-        File fInput = new File(path);
-        if (!fInput.exists() || !fInput.isFile()) {
+        Path fInput = Paths.get(path);
+        if (Files.notExists(fInput) || !Files.isRegularFile(fInput)) {
             log.error("The input file does not exist");
             System.err.println("The input file does not exist");
             throw new FileNotFoundException(path);

@@ -35,10 +35,8 @@ class MainTest {
 
             assertThrows(IllegalArgumentException.class, () -> Main.main(new String[]{"-c", key2, file.getAbsolutePath()}));
             assertThrows(FileNotFoundException.class, () -> Main.main(new String[]{"-c", key1, "testDirectory/test-fail.txt"}));
-            assertThrows(IllegalArgumentException.class, () -> Main.main(new String[]{"-d", key1, "testDirectory/test.txt"}));
             assertThrows(FileAlreadyExistsException.class, () -> Main.main(new String[]{"-c", key1, "testDirectory/test.txt"}));
             assertThrows(AccessDeniedException.class, () -> Main.main(new String[]{"-c", key1, "/run/systemd/generator/mnt-sda1.mount"}));
-            assertThrows(IllegalArgumentException.class, () -> Main.main(new String[]{"-d", key1, "testDirectory/test.txt"}));
             assertThrows(FileAlreadyExistsException.class, () -> Main.main(new String[]{"-c", key1, "testDirectory/test.txt", "-o", "testDirectory/test.txt"}));
         }
 
