@@ -5,27 +5,27 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class flagManager {
-    public boolean method;
+    public boolean approach;
     public int key;
     public String pathIn;
     public String pathOut;
     Logger log = LogManager.getLogger(flagManager.class.getName());
 
-    void checker (String[] args) throws IOException {
+    void parsing(String[] args) throws IOException {
         String command = String.join(" ", args);
         log.info("The program started with arguments: " + command);
         if (args[0].equals("-h"))
             help(false);
         if (!command.matches("((-c)|(-d)) [a-zA-Z0-9]+ [.\\-/a-zA-Zа-яёА-ЯЁ0-9]+(\\.[a-z]+)( -o [a-zA-Z0-9а-яёА-ЯЁ./\\-]+)?"))
             help(true);
-        setMethod(args[0]);
+        setApproach(args[0]);
         setKey(args[1]);
         setPathIn(args[2]);
         setPathOut(args);
     }
 
-    void setMethod (String mode) {
-        method = mode.equals("-c");
+    void setApproach(String mode) {
+        approach = mode.equals("-c");
     }
 
     void setKey (String inputKey) {
@@ -51,12 +51,12 @@ public class flagManager {
     void setPathOut (String[] args) throws IOException {
         if (args.length > 3) {
             fileManager file = new fileManager();
-            pathOut = file.creator(method, args[4], true);
+            pathOut = file.creator(approach, args[4], true);
     }
         else {
             pathOut = args[2];
             fileManager file = new fileManager();
-            pathOut = file.creator(method, pathOut, false);
+            pathOut = file.creator(approach, pathOut, false);
         }
     }
 

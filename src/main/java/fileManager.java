@@ -6,8 +6,8 @@ import org.apache.logging.log4j.Logger;
 
 public class fileManager {
     Logger log = LogManager.getLogger(flagManager.class.getName());
-    String creator (boolean method, String pathOut, boolean manual) throws IOException {
-        if (manual){
+    String creator (boolean method, String pathOut, boolean custom) throws IOException {
+        if (custom){
             File fOut = new File(pathOut);
             if (!fOut.createNewFile()) {
                 System.err.println("A file with this name already exists in this directory. Please use the -o argument.");
@@ -42,8 +42,8 @@ public class fileManager {
     }
 
     void reader (flagManager flag) throws IOException {
-        crypto crypter = new crypto();
-        if (flag.method) {
+        Crypto crypter = new Crypto();
+        if (flag.approach) {
             FileReader fileIn = new FileReader(flag.pathIn);
             Scanner scan = new Scanner(fileIn);
             while (scan.hasNextLine()) {

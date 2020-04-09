@@ -1,4 +1,4 @@
-public class crypto {
+public class Crypto {
     byte[] encode(String text, int key) {
         byte[] byteText = text.getBytes();
         byte byteKey = (byte)key;

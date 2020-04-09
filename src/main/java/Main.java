@@ -3,7 +3,7 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) throws IOException {
         flagManager flag = new flagManager();
-        flag.checker(args);
+        flag.parsing(args);
         fileManager file = new fileManager();
         file.reader(flag);
     }
