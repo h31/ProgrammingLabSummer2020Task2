@@ -1,6 +1,7 @@
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
+import java.nio.file.AccessDeniedException;
 import java.nio.file.FileAlreadyExistsException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,6 +27,7 @@ class MainTest {
 
         {
             assertTrue(textEquals(file, fileEncode));
+            assertFalse(textEquals(file, fileDecode));
             assertTrue(textEquals(fileDecode, fileEncodeDecode));
             assertFalse(textEquals(fileEncodeDecode, fileEDE));
             assertFalse(textEquals(fileEncode, fileEDED));
@@ -35,6 +37,7 @@ class MainTest {
             assertThrows(FileNotFoundException.class, () -> Main.main(new String[]{"-c", key1, "testDirectory/test-fail.txt"}));
             assertThrows(IllegalArgumentException.class, () -> Main.main(new String[]{"-d", key1, "testDirectory/test.txt"}));
             assertThrows(FileAlreadyExistsException.class, () -> Main.main(new String[]{"-c", key1, "testDirectory/test.txt"}));
+            assertThrows(AccessDeniedException.class, () -> Main.main(new String[]{"-c", key1, "/run/systemd/generator/mnt-sda1.mount"}));
             assertThrows(IllegalArgumentException.class, () -> Main.main(new String[]{"-d", key1, "testDirectory/test.txt"}));
             assertThrows(FileAlreadyExistsException.class, () -> Main.main(new String[]{"-c", key1, "testDirectory/test.txt", "-o", "testDirectory/test.txt"}));
         }
