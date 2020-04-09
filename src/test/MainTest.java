@@ -1,29 +1,26 @@
 import org.junit.jupiter.api.Test;
-
 import java.io.*;
-import java.nio.file.AccessDeniedException;
-import java.nio.file.FileAlreadyExistsException;
-
+import java.nio.file.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MainTest {
     @Test
     void main() throws IOException {
-        File file = new File("testDirectory/test.txt");
+        Path file = Paths.get("testDirectory/test.txt");
         String key1 = "123ABC";
         String key2 = "HHFLE7";
         String key3 = "FE54A4D";
-        File fileEncode = new File("testDirectory/test-encode.txt");
-        File fileDecode = new File("testDirectory/test.txt.crp");
-        File fileEDE = new File("testDirectory/test-encode-2.txt.crp");
-        File fileEDED = new File("testDirectory/test-encode-2.txt");
+        Path fileEncode = Paths.get("testDirectory/test-encode.txt");
+        Path fileDecode = Paths.get("testDirectory/test.txt.crp");
+        Path fileEDE = Paths.get("testDirectory/test-encode-2.txt.crp");
+        Path fileEDED = Paths.get("testDirectory/test-encode-2.txt");
 
-        Main.main(new String[]{"-c", key1, file.getAbsolutePath()});
-        Main.main(new String[]{"-d", key1, fileDecode.getAbsolutePath(), "-o", fileEncode.getAbsolutePath()});
-        Main.main(new String[]{"-c", key1, fileEncode.getAbsolutePath()});
-        Main.main(new String[]{"-c", key3, fileEncode.getAbsolutePath(), "-o", fileEDE.getAbsolutePath()});
-        Main.main(new String[]{"-d", key1, fileEDE.getAbsolutePath()});
-        File fileEncodeDecode = new File("testDirectory/test-encode.txt.crp");
+        Main.main(new String[]{"-c", key1, file.toString()});
+        Main.main(new String[]{"-d", key1, fileDecode.toString(), "-o", fileEncode.toString()});
+        Main.main(new String[]{"-c", key1, fileEncode.toString()});
+        Main.main(new String[]{"-c", key3, fileEncode.toString(), "-o", fileEDE.toString()});
+        Main.main(new String[]{"-d", key1, fileEDE.toString()});
+        Path fileEncodeDecode = Paths.get("testDirectory/test-encode.txt.crp");
 
         {
             assertTrue(textEquals(file, fileEncode));
@@ -33,23 +30,23 @@ class MainTest {
             assertFalse(textEquals(fileEncode, fileEDED));
             assertFalse(textEquals(file, fileEDED));
 
-            assertThrows(IllegalArgumentException.class, () -> Main.main(new String[]{"-c", key2, file.getAbsolutePath()}));
+            assertThrows(IllegalArgumentException.class, () -> Main.main(new String[]{"-c", key2, file.toString()}));
             assertThrows(FileNotFoundException.class, () -> Main.main(new String[]{"-c", key1, "testDirectory/test-fail.txt"}));
             assertThrows(FileAlreadyExistsException.class, () -> Main.main(new String[]{"-c", key1, "testDirectory/test.txt"}));
             assertThrows(AccessDeniedException.class, () -> Main.main(new String[]{"-c", key1, "/run/systemd/generator/mnt-sda1.mount"}));
             assertThrows(FileAlreadyExistsException.class, () -> Main.main(new String[]{"-c", key1, "testDirectory/test.txt", "-o", "testDirectory/test.txt"}));
         }
 
-        fileDecode.delete();
-        fileEncode.delete();
-        fileEncodeDecode.delete();
-        fileEDE.delete();
-        fileEDED.delete();
+        Files.delete(fileDecode);
+        Files.delete(fileEncode);
+        Files.delete(fileEncodeDecode);
+        Files.delete(fileEDE);
+        Files.delete(fileEDED);
     }
 
-    boolean textEquals (File file1, File file2) throws IOException {
-        FileReader fR1 = new FileReader(file1);
-        FileReader fR2 = new FileReader(file2);
+    boolean textEquals (Path file1, Path file2) throws IOException {
+        FileReader fR1 = new FileReader(file1.toString());
+        FileReader fR2 = new FileReader(file2.toString());
         BufferedReader reader1 = new BufferedReader(fR1);
         BufferedReader reader2 = new BufferedReader(fR2);
         String line1;
