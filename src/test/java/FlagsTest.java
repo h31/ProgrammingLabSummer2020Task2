@@ -6,12 +6,11 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FlagsTest {
-    String[] args = {"-h", "-si", "-c", "src\\test\\resources"};
+    Flags simple = new Flags();
 
     @Test
     void setH() {
         assertTrue(() -> {
-            Flags simple = new Flags();
             simple.setH(true);
             return simple.getH();
         });
@@ -19,16 +18,12 @@ class FlagsTest {
 
     @Test
     void getH() {
-        assertFalse(() -> {
-            Flags simple = new Flags();
-            return simple.getH();
-        });
+        assertFalse(() -> simple.getH());
     }
 
     @Test
     void setC() {
         assertTrue(() -> {
-            Flags simple = new Flags();
             simple.setC(true);
             return simple.getC();
         });
@@ -36,16 +31,12 @@ class FlagsTest {
 
     @Test
     void getC() {
-        assertFalse(() -> {
-            Flags simple = new Flags();
-            return simple.getC();
-        });
+        assertFalse(() -> simple.getC());
     }
 
     @Test
     void setSi() {
         assertTrue(() -> {
-            Flags simple = new Flags();
             simple.setSi(true);
             return simple.getSi();
         });
@@ -53,16 +44,13 @@ class FlagsTest {
 
     @Test
     void getSi() {
-        assertFalse(() -> {
-            Flags simple = new Flags();
-            return simple.getSi();
-        });
+        assertFalse(() -> simple.getSi());
     }
 
     Flags simple() {
-        Flags flag = new Flags();
-        flag.checkFlags(args);
-        return flag;
+        String[] args = {"-h", "--si", "-c", "src\\test\\resources"};
+        simple.checkFlags(args);
+        return simple;
     }
 
     @Test
@@ -71,11 +59,10 @@ class FlagsTest {
     }
 
     String hepler() {
-        Flags flag = new Flags();
         ArrayList<File> example = new ArrayList<>();
         example.add(new File("src\\test\\resources"));
-        flag.setFile(example);
-        return flag.getLisOfFiles().toString();
+        simple.setFile(example);
+        return simple.getLisOfFiles().toString();
     }
 
     @Test
