@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 
 public class fileManager {
     Logger log = LogManager.getLogger(flagManager.class.getName());
-    String creator (boolean method, String pathOut, boolean custom) throws IOException {
+    String creator (boolean approach, String pathOut, boolean custom) throws IOException {
         if (custom){
             File fOut = new File(pathOut);
             if (!fOut.createNewFile()) {
@@ -16,7 +16,7 @@ public class fileManager {
             }
             return fOut.getPath();
         }
-        if (method) {
+        if (approach) {
             File fOut = new File(pathOut + ".crp");
             if (!fOut.createNewFile()) {
                 System.err.println("A file with this name already exists in this directory. Please use the -o argument.");

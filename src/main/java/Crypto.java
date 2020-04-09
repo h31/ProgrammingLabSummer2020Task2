@@ -1,5 +1,5 @@
 public class Crypto {
-    byte[] encode(String text, int key) {
+    byte[] encode(String text, long key) {
         byte[] byteText = text.getBytes();
         byte byteKey = (byte)key;
         byte[] data = new byte[byteText.length];
@@ -8,7 +8,7 @@ public class Crypto {
         return data;
     }
 
-    String decode(byte[] data, int key) {
+    String decode(byte[] data, long key) {
         byte[] text = new byte[data.length];
         byte byteKey = (byte)key;
         for (int i = 0; i < data.length; i++)

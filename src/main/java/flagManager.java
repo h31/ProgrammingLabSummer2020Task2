@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 
 public class flagManager {
     public boolean approach;
-    public int key;
+    public long key;
     public String pathIn;
     public String pathOut;
     Logger log = LogManager.getLogger(flagManager.class.getName());
