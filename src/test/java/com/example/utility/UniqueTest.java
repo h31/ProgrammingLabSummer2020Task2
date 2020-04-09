@@ -1,4 +1,4 @@
-package com.example.project;
+package com.example.utility;
 
 import org.junit.jupiter.api.*;
 
@@ -19,43 +19,40 @@ class UniqueTest {
     }
 
     @Test
-    void equalsIgnoreCase() throws IOException {
-        Unique.main(new String[]{"-i", "-o", "output.txt", "inputForIgnoreCase.txt"});
+    void equalsIgnoreCaseString() throws IOException {
+        UniqueLauncher.main(new String[]{"-i", "-o", "output.txt", "inputForIgnoreCase.txt"});
         readOutputFile();
 
         assertEquals("how are youHOW ARE YOU\n" +
-                        "HelloHello\n" +
+                        "HelloHELLO\n" +
                         "Good\n",
                 stringBuilderTest.toString());
-
     }
 
     @Test
     void equalsIgnoreSomeCharsString() throws IOException {
-        Unique.main(new String[]{"-s", "3", "-o", "output.txt", "inputForIgnoreSomeChars.txt"});
+        UniqueLauncher.main(new String[]{"-s", "3", "-o", "output.txt", "inputForIgnoreSomeChars.txt"});
 
         readOutputFile();
 
         assertEquals("Hello\n" +
                 "GO\n" +
                 "Walk\n", stringBuilderTest.toString());
-
     }
 
     @Test
     void equalsUniqueString() throws IOException {
-        Unique.main(new String[]{"-u", "-o", "output.txt", "inputForEqualsUnique.txt"});
+        UniqueLauncher.main(new String[]{"-u", "-o", "output.txt", "inputForEqualsUnique.txt"});
 
         readOutputFile();
 
         assertEquals("go\n" +
                 "next\n", stringBuilderTest.toString());
-
     }
 
     @Test
     void equalsWithCountString() throws IOException {
-        Unique.main(new String[]{"-c", "-o", "output.txt", "inputForCountString.txt"});
+        UniqueLauncher.main(new String[]{"-c", "-o", "output.txt", "inputForCountString.txt"});
 
         readOutputFile();
 
@@ -65,17 +62,17 @@ class UniqueTest {
 
     @Test
     void exceptionInput() {
-        assertThrows(FileNotFoundException.class, () -> Unique.main(new String[]{"-c", "-o", "output.txt", "input.txt"}));
+        assertThrows(FileNotFoundException.class, () -> UniqueLauncher.main(new String[]{"-c", "-o", "output.txt", "input.txt"}));
     }
 
     @Test
     void exceptionOutput() {
-        assertThrows(FileNotFoundException.class, () -> Unique.main(new String[]{"-c", "-o", "outpu123t.txt", "inputForCountString.txt"}));
+        assertThrows(FileNotFoundException.class, () -> UniqueLauncher.main(new String[]{"-c", "-o", "outpu123t.txt", "inputForCountString.txt"}));
     }
 
     @Test
     void exceptionKeysNotExist() {
-        assertThrows(IllegalArgumentException.class, () -> Unique.main(new String[]{"-o", "output.txt", "inputForCountString.txt"}));
+        assertThrows(IllegalArgumentException.class, () -> UniqueLauncher.main(new String[]{"-o", "output.txt", "inputForCountString.txt"}));
     }
 
 
@@ -92,7 +89,7 @@ class UniqueTest {
 
     @Test
     public void outputConsoleCountString() throws IOException {
-        Unique.main(new String[]{"-c", "inputForCountString.txt"});
+        UniqueLauncher.main(new String[]{"-c", "inputForCountString.txt"});
 
         assertEquals("2 hello world\n" +
                 "hello\n" +
@@ -103,7 +100,7 @@ class UniqueTest {
 
     @Test
     public void outputConsoleUnique() throws IOException {
-        Unique.main(new String[]{"-u", "inputForEqualsUnique.txt"});
+        UniqueLauncher.main(new String[]{"-u", "inputForEqualsUnique.txt"});
 
         assertEquals("go\n" + "next\n"
                 , outContent.toString());
@@ -111,7 +108,7 @@ class UniqueTest {
 
     @Test
     public void outputConsoleIgnoreSomeChars() throws IOException {
-        Unique.main(new String[]{"-s", "3", "inputForIgnoreSomeChars.txt"});
+        UniqueLauncher.main(new String[]{"-s", "3", "inputForIgnoreSomeChars.txt"});
 
         assertEquals("Hello\n" +
                         "GO\n" +
@@ -121,10 +118,10 @@ class UniqueTest {
 
     @Test
     public void outputConsoleIgnoreCase() throws IOException {
-        Unique.main(new String[]{"-i", "inputForIgnoreCase.txt"});
+        UniqueLauncher.main(new String[]{"-i", "inputForIgnoreCase.txt"});
 
         assertEquals("how are youHOW ARE YOU\n" +
-                        "HelloHello\n" +
+                        "HelloHELLO\n" +
                         "Good\n"
                 , outContent.toString());
     }
@@ -141,7 +138,7 @@ class UniqueTest {
     void inputConsoleIgnoreCase() throws IOException {
         System.setIn(inputContentIgnoreCase);
 
-        Unique.main(new String[]{"-i", "-o", "output.txt"});
+        UniqueLauncher.main(new String[]{"-i", "-o", "output.txt"});
         readOutputFile();
 
         assertEquals("HelloHELLO\n", stringBuilderTest.toString());
@@ -152,7 +149,7 @@ class UniqueTest {
     void inputConsoleUniqueString() throws IOException {
         System.setIn(inputContentUniqueString);
 
-        Unique.main(new String[]{"-u", "-o", "output.txt"});
+        UniqueLauncher.main(new String[]{"-u", "-o", "output.txt"});
         readOutputFile();
 
         assertEquals("go\n", stringBuilderTest.toString());
@@ -162,7 +159,7 @@ class UniqueTest {
     void inputConsoleCountString() throws IOException {
         System.setIn(inputContentCountString);
 
-        Unique.main(new String[]{"-c", "-o", "output.txt"});
+        UniqueLauncher.main(new String[]{"-c", "-o", "output.txt"});
         readOutputFile();
 
         assertEquals("2 helloWorld\n" +
@@ -174,7 +171,7 @@ class UniqueTest {
     void inputConsoleIgnoreSomeChars() throws IOException {
         System.setIn(inputContentIgnoreSomeChars);
 
-        Unique.main(new String[]{"-s", "3", "-o", "output.txt"});
+        UniqueLauncher.main(new String[]{"-s", "3", "-o", "output.txt"});
         readOutputFile();
 
         assertEquals("Hello\n" +
