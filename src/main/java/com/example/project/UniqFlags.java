@@ -34,5 +34,4 @@ public class UniqFlags {
             parser.printUsage(System.out);
         }
     }
-
 }

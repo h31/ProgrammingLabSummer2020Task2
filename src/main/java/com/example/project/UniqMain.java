@@ -1,9 +1,11 @@
 package com.example.project;
 
+import java.io.IOException;
+
 public class UniqMain {
-    public static void main(String[] args) {
-        UniqFlags flags = new UniqFlags(args);
-        Uniq uniq = new Uniq(flags);
-        uniq.launch();
+    public static void main(String[] args) throws IOException {
+        new Uniq(
+                new UniqFlags(args)
+        ).launch();
     }
 }

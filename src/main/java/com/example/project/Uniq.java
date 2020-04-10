@@ -13,57 +13,85 @@ public class Uniq {
         setFlags(flags);
     }
 
-    public void launch() {
+    public void launch() throws IOException {
 
-        if (flags.inputName != null && flags.outputName != null) try {
+        if (flags.inputName != null && flags.outputName != null) {
             BufferedReader input = new BufferedReader(new FileReader(flags.inputName));
             BufferedWriter output = new BufferedWriter(new FileWriter(flags.outputName));
-            makeUnique(input, output);
-        } catch (IOException ioEx) {
-            System.out.println(ioEx.getMessage());
+            if (flags.unique || flags.count) makeUniqueWithFlag(input, output);
+            else makeUnique(input, output);
+            input.close();
+            output.close();
         }
 
-        if (flags.outputName == null && flags.inputName == null) try {
+        if (flags.outputName == null && flags.inputName == null) {
             BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
             BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out));
-            makeUnique(input, output);
-        } catch (IOException ioEx) {
-            System.out.println(ioEx.getMessage());
+            if (flags.unique || flags.count) makeUniqueWithFlag(input, output);
+            else makeUnique(input, output);
+            input.close();
+            output.close();
+        } else if (flags.inputName == null) {
+            BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+            BufferedWriter output = new BufferedWriter(new FileWriter(flags.outputName));
+            if (flags.unique || flags.count) makeUniqueWithFlag(input, output);
+            else makeUnique(input, output);
+            input.close();
+            output.close();
         } else {
-            if (flags.inputName == null) try {
-                BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-                BufferedWriter output = new BufferedWriter(new FileWriter(flags.outputName));
-                makeUnique(input, output);
-            } catch (IOException ioEx) {
-                System.out.println(ioEx.getMessage());
-            }
-
-            if (flags.outputName == null) try {
-                BufferedReader input = new BufferedReader(new FileReader(flags.inputName));
-                BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out));
-                makeUnique(input, output);
-            } catch (IOException ioEx) {
-                System.out.println(ioEx.getMessage());
-            }
+            BufferedReader input = new BufferedReader(new FileReader(flags.inputName));
+            BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out));
+            if (flags.unique || flags.count) makeUniqueWithFlag(input, output);
+            else makeUnique(input, output);
+            input.close();
+            output.close();
         }
+
     }
 
     private void makeUnique(BufferedReader input, BufferedWriter output) throws IOException {
         String prevLine = "";
         String line;
-        boolean prevUnique = false;
         while ((line = input.readLine()) != null) {
-            if (flags.unique && prevUnique) output.write(prevLine + "\n");
-            if (
-                    !line.substring(flags.num).equals(prevLine.substring(flags.num))
-                            || (flags.ignoreCase && !line.substring(flags.num).toLowerCase().equals(prevLine.substring(flags.num).toLowerCase()))
+            if (!line
+                    .substring(flags.num)
+                    .equals(prevLine.substring(flags.num)) || (flags.ignoreCase && !line
+                    .substring(flags.num)
+                    .toLowerCase()
+                    .equals(prevLine.substring(flags.num).toLowerCase()))
             ) {
-                if (!flags.unique) output.write(line + "\n");
-                else prevUnique = true;
+                output.write(line + "\n");
             }
             prevLine = line;
         }
-        input.close();
-        output.close();
+    }
+
+    private void makeUniqueWithFlag(BufferedReader input, BufferedWriter output) throws IOException {
+        String prevLine = "";
+        String line;
+        boolean skip = false;
+        int times = 1;
+        while ((line = input.readLine()) != null) {
+            if ((!line
+                    .substring(flags.num)
+                    .equals(prevLine.substring(flags.num)) || (flags.ignoreCase && !line
+                    .substring(flags.num)
+                    .toLowerCase()
+                    .equals(prevLine.substring(flags.num).toLowerCase()))) && !prevLine.equals("")
+            ) {
+                if (!skip) {
+                    if (flags.count) output.write(times + " ");
+                    output.write(prevLine + "\n");
+                    times = 1;
+                } else {
+                    skip = false;
+                }
+            } else {
+                if (flags.count) times++;
+                if (flags.unique) skip = true;
+            }
+            prevLine = line;
+            if (input.readLine() == null && !skip) output.write(line);
+        }
     }
 }
