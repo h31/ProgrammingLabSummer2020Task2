@@ -8,11 +8,14 @@ public class fileManager {
     Logger log = LogManager.getLogger(flagManager.class.getName());
     String creator (boolean approach, String pathOut, boolean custom) throws IOException {
         Path fOut = Paths.get(pathOut);
+        System.out.println("out " + pathOut);
         if (custom)
             fOut = Paths.get(pathOut);
         else
-            if (approach)
-                fOut = Paths.get(pathOut + ".crp");
+            if (approach) {
+                fOut = Paths.get(fOut.toString() + ".crp");
+
+            }
             else {
                 if (fOut.getFileName().toString().matches("[a-zA-Zа-яёА-ЯЁ0-9-.]+(.crp)"))
                     fOut = Paths.get(pathOut.substring(0, pathOut.lastIndexOf(".")));

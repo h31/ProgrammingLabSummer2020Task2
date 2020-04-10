@@ -14,55 +14,34 @@ public class flagManager {
     Logger log = LogManager.getLogger(flagManager.class.getName());
 
     void parsing(String[] args) throws IOException {
-        boolean stack = false;
-        String buffer = "";
-        boolean custum = false;
-        for (int i = 0; i < args.length; i++) {
-            if (i == 0 && args[i].matches("((-c)|(-d))"))
-                setApproach(args[i]);
-            else if (i == 0 && args[i].matches("(-h)"))
-                help(false);
-            else if (i == 0 && !args[i].matches("((-c)|(-d))"))
-                help(true);
-            if (i == 1 && args[i].matches("[a-zA-Z0-9]+"))
-                setKey(args[i]);
-            else if (i > 1 && !args[i].startsWith("'") && !stack && pathIn == null)
-                setPathIn(args[i]);
-            else if (i > 1 && args[i].startsWith("'") && !stack && pathIn == null) {
-                stack = true;
-                buffer = args[i];
+        int mark = args.length;
+        boolean custom = false;
+        if (args[0].matches("((-c)|(-d))"))
+            setApproach(args[0]);
+        else
+            help(!args[0].matches("(-h)"));
+        if (args[1].matches("[a-zA-Z0-9]+"))
+            setKey(args[1]);
+        for (int i = 2; i < args.length; i++)
+            if (args[i].equals("-o")) {
+                mark = i;
+                custom = true;
             }
-            else if (!args[i].endsWith("'") && stack && pathIn == null)
-                buffer += " " + args[i];
-            else if (i > 1 && args[i].endsWith("'") && stack) {
-                stack = false;
-                buffer += " " + args[i];
-                setPathIn(buffer.substring(1, buffer.length() - 1));
-                buffer = "";
-            }
-            else if (args[i].equals("-o") && !custum && i != args.length - 1)
-                custum = true;
-            else if (custum && !args[i].startsWith("'")) {
-                pathOut = args[i];
-                setPathOut(true);
-            }
-            else if (custum && args[i].startsWith("'")){
-                stack = true;
-                buffer = args[i];
-            }
-            else if (!args[i].endsWith("'") && custum && stack && pathIn == null)
-                buffer += " " + args[i];
-            else if (custum && args[i].endsWith("'")){
-                stack = false;
-                buffer += " " + args[i];
-                pathOut = buffer;
-                setPathOut(true);
-            }
-            if (!custum && i == args.length - 1){
-                pathOut = pathIn;
-                setPathOut(false);
-            }
+        String path = "";
+        for (int i = 2; i < mark; i++)
+            path += args[i] + " ";
+        setPathIn(path.trim());
+        System.out.println("in " + pathIn);
+        path = "";
+        if (custom) {
+            for (int i = mark + 1; i < args.length; i++)
+                path += args[i] + " ";
+            pathOut = path.trim();
         }
+        else
+            pathOut = pathIn;
+        System.out.println("out " + pathOut);
+        setPathOut(custom);
     }
 
     void setApproach(String mode) {
@@ -81,7 +60,7 @@ public class flagManager {
 
     void setPathIn (String path) throws FileNotFoundException {
         Path fInput = Paths.get(path);
-        if (Files.notExists(fInput) || !Files.isRegularFile(fInput)) {
+        if (Files.notExists(fInput.toAbsolutePath()) || !Files.isRegularFile(fInput.toAbsolutePath())) {
             log.error("The input file does not exist");
             System.err.println("The input file does not exist");
             throw new FileNotFoundException(path);
