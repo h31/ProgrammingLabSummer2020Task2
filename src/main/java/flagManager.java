@@ -14,23 +14,55 @@ public class flagManager {
     Logger log = LogManager.getLogger(flagManager.class.getName());
 
     void parsing(String[] args) throws IOException {
-        String command = String.join(" ", args);
-        log.info("The program started with arguments: " + command);
-        if (args[0].equals("-h"))
-            help(false);
-        if (!command.matches("((-c)|(-d)) [a-zA-Z0-9]+ [.\\-/a-zA-Zа-яёА-ЯЁ0-9]+(\\.[a-z]+)( -o [a-zA-Z0-9а-яёА-ЯЁ./\\-]+)?"))
-            help(true);
-        setApproach(args[0]);
-        setKey(args[1]);
-        setPathIn(args[2]);
-        boolean custom = false;
-        if (args.length > 3) {
-            pathOut = args[4];
-            custom = true;
+        boolean stack = false;
+        String buffer = "";
+        boolean custum = false;
+        for (int i = 0; i < args.length; i++) {
+            if (i == 0 && args[i].matches("((-c)|(-d))"))
+                setApproach(args[i]);
+            else if (i == 0 && args[i].matches("(-h)"))
+                help(false);
+            else if (i == 0 && !args[i].matches("((-c)|(-d))"))
+                help(true);
+            if (i == 1 && args[i].matches("[a-zA-Z0-9]+"))
+                setKey(args[i]);
+            else if (i > 1 && !args[i].startsWith("'") && !stack && pathIn == null)
+                setPathIn(args[i]);
+            else if (i > 1 && args[i].startsWith("'") && !stack && pathIn == null) {
+                stack = true;
+                buffer = args[i];
+            }
+            else if (!args[i].endsWith("'") && stack && pathIn == null)
+                buffer += " " + args[i];
+            else if (i > 1 && args[i].endsWith("'") && stack) {
+                stack = false;
+                buffer += " " + args[i];
+                setPathIn(buffer.substring(1, buffer.length() - 1));
+                buffer = "";
+            }
+            else if (args[i].equals("-o") && !custum && i != args.length - 1)
+                custum = true;
+            else if (custum && !args[i].startsWith("'")) {
+                pathOut = args[i];
+                setPathOut(true);
+            }
+            else if (custum && args[i].startsWith("'")){
+                stack = true;
+                buffer = args[i];
+            }
+            else if (!args[i].endsWith("'") && custum && stack && pathIn == null)
+                buffer += " " + args[i];
+            else if (custum && args[i].endsWith("'")){
+                stack = false;
+                buffer += " " + args[i];
+                pathOut = buffer;
+                setPathOut(true);
+            }
+            if (!custum && i == args.length - 1){
+                pathOut = pathIn;
+                setPathOut(false);
+            }
         }
-        else
-            pathOut = args[2];
-        setPathOut(custom);
     }
 
     void setApproach(String mode) {

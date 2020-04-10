@@ -8,24 +8,25 @@ import static org.junit.jupiter.api.Assertions.*;
 class MainTest {
     @Test
     void main() throws IOException {
-        Files.createDirectory(Paths.get("testDirectory/folder"));
+        String dir = "testDirectory/test folder/";
+        Files.createDirectory(Paths.get(dir));
         Path file = Paths.get("testDirectory/test.txt");
-        Files.copy(file, Paths.get("testDirectory/folder/test.txt"));
-        file = Paths.get("testDirectory/folder/test.txt");
+        Files.copy(file, Paths.get(dir + "test.txt"));
+        file = Paths.get(dir + "test.txt");
         String key1 = "123ABC";
         String key2 = "HHFLE7";
         String key3 = "FE54A4D";
-        Path fileEncode = Paths.get("testDirectory/folder/test-encode.txt");
-        Path fileDecode = Paths.get("testDirectory/folder/test.txt.crp");
-        Path fileEDE = Paths.get("testDirectory/folder/test-encode-2.txt.crp");
-        Path fileEDED = Paths.get("testDirectory/folder/test-encode-2.txt");
+        Path fileEncode = Paths.get(dir + "test-encode.txt");
+        Path fileDecode = Paths.get(dir + "test.txt.crp");
+        Path fileEDE = Paths.get(dir + "test-encode-2.txt.crp");
+        Path fileEDED = Paths.get(dir + "test-encode-2.txt");
 
         Main.main(new String[]{"-c", key1, file.toString()});
         Main.main(new String[]{"-d", key1, fileDecode.toString(), "-o", fileEncode.toString()});
         Main.main(new String[]{"-c", key1, fileEncode.toString()});
         Main.main(new String[]{"-c", key3, fileEncode.toString(), "-o", fileEDE.toString()});
         Main.main(new String[]{"-d", key1, fileEDE.toString()});
-        Path fileEncodeDecode = Paths.get("testDirectory/folder/test-encode.txt.crp");
+        Path fileEncodeDecode = Paths.get(dir + "test-encode.txt.crp");
 
         {
             assertTrue(textEquals(file, fileEncode));
@@ -37,10 +38,10 @@ class MainTest {
 
             Path finalFile = file;
             assertThrows(IllegalArgumentException.class, () -> Main.main(new String[]{"-c", key2, finalFile.toString()}));
-            assertThrows(FileNotFoundException.class, () -> Main.main(new String[]{"-c", key1, "testDirectory/folder/test-fail.txt"}));
-            assertThrows(FileAlreadyExistsException.class, () -> Main.main(new String[]{"-c", key1, "testDirectory/folder/test.txt"}));
+            assertThrows(FileNotFoundException.class, () -> Main.main(new String[]{"-c", key1, dir + "test-fail.txt"}));
+            assertThrows(FileAlreadyExistsException.class, () -> Main.main(new String[]{"-c", key1, dir + "test.txt"}));
             assertThrows(AccessDeniedException.class, () -> Main.main(new String[]{"-c", key1, "/run/systemd/generator/mnt-sda1.mount"}));
-            assertThrows(FileAlreadyExistsException.class, () -> Main.main(new String[]{"-c", key1, "testDirectory/folder/test.txt", "-o", "testDirectory/folder/test.txt"}));
+            assertThrows(FileAlreadyExistsException.class, () -> Main.main(new String[]{"-c", key1, dir + "test.txt", "-o", dir + "test.txt"}));
         }
 
     }
@@ -63,7 +64,7 @@ class MainTest {
 
     @Test
     void deleteFolderAndItsContent() throws IOException {
-        Path folder = Paths.get("testDirectory/folder");
+        Path folder = Paths.get("testDirectory/test folder");
         Files.walkFileTree(folder, new SimpleFileVisitor<>() {
             public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                 Files.delete(file);
