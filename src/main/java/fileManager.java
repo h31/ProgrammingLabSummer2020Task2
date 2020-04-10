@@ -4,8 +4,9 @@ import java.util.Scanner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class fileManager {
+class fileManager {
     Logger log = LogManager.getLogger(flagManager.class.getName());
+
     String creator (boolean approach, String pathOut, boolean custom) throws IOException {
         Path fOut = Paths.get(pathOut);
         System.out.println("out " + pathOut);
@@ -14,13 +15,15 @@ public class fileManager {
         else
             if (approach) {
                 fOut = Paths.get(fOut.toString() + ".crp");
-
             }
             else {
-                if (fOut.getFileName().toString().matches("[a-zA-Zа-яёА-ЯЁ0-9-.]+(.crp)"))
+                if (fOut.getFileName().toString().contains(".crp"))
                     fOut = Paths.get(pathOut.substring(0, pathOut.lastIndexOf(".")));
-                else
+                else {
                     fOut = Paths.get(pathOut + ".txt");
+                    System.out.println("Attention! You are trying to decrypt a file without the .crp extension. Possible failure.");
+                    log.warn("Attempt to decrypt non .crp " + fOut);
+                }
             }
         try {
             Files.createFile(fOut);
@@ -45,7 +48,7 @@ public class fileManager {
             Scanner scan = new Scanner(fileIn);
             while (scan.hasNextLine()) {
                 byte[] crypt = crypter.encode(scan.nextLine() + "\n", flag.key);
-                byteWriter(flag.pathOut, crypt);
+               writer(flag.pathOut, null, crypt);
             }
             fileIn.close();
             System.out.println("Encoding completed");
@@ -55,22 +58,23 @@ public class fileManager {
             FileInputStream fis = new FileInputStream(flag.pathIn);
             byte[] data = fis.readAllBytes();
             String text = crypter.decode(data, flag.key);
-            writer(flag.pathOut, text);
+            writer(flag.pathOut, text, null);
             fis.close();
             System.out.println("Decoding completed");
             log.info("Decoding completed");
         }
     }
 
-    void byteWriter (String path, byte[] data) throws IOException {
-        FileOutputStream fos = new FileOutputStream(path, true);
-        fos.write(data, 0, data.length);
-        fos.close();
-    }
-
-    void writer (String path, String data) throws IOException {
-        FileWriter fileOut = new FileWriter(path, true);
-        fileOut.write(data);
-        fileOut.close();
+    void writer (String path, String dataString,  byte[] dataByte) throws IOException {
+        if (dataByte == null) {
+            FileWriter fileOut = new FileWriter(path, true);
+            fileOut.write(dataString);
+            fileOut.close();
+        }
+        else {
+            FileOutputStream fos = new FileOutputStream(path, true);
+            fos.write(dataByte, 0, dataByte.length);
+            fos.close();
+        }
     }
 }

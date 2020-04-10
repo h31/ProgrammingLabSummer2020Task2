@@ -31,7 +31,6 @@ public class flagManager {
         for (int i = 2; i < mark; i++)
             path += args[i] + " ";
         setPathIn(path.trim());
-        System.out.println("in " + pathIn);
         path = "";
         if (custom) {
             for (int i = mark + 1; i < args.length; i++)
@@ -40,7 +39,6 @@ public class flagManager {
         }
         else
             pathOut = pathIn;
-        System.out.println("out " + pathOut);
         setPathOut(custom);
     }
 

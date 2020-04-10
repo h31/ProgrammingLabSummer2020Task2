@@ -1,3 +1,6 @@
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import java.io.*;
 import java.nio.file.*;
@@ -7,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MainTest {
     @Test
-    void main() throws IOException {
+    public void main() throws IOException {
         String dir = "testDirectory/test folder/";
         Files.createDirectory(Paths.get(dir));
         Path file = Paths.get("testDirectory/test.txt");
@@ -26,11 +29,13 @@ class MainTest {
         Main.main(new String[]{"-c", key1, fileEncode.toString()});
         Main.main(new String[]{"-c", key3, fileEncode.toString(), "-o", fileEDE.toString()});
         Main.main(new String[]{"-d", key1, fileEDE.toString()});
+        Main.main(new String[]{"-c", key3, file.toString(), "-o", dir + "test.noncrp"});
+        Main.main(new String[]{"-d", key3, dir + "test.noncrp"});
         Path fileEncodeDecode = Paths.get(dir + "test-encode.txt.crp");
 
         {
             assertTrue(textEquals(file, fileEncode));
-            assertFalse(textEquals(file, fileDecode));
+            assertFalse(textEquals(file, fileDecode)); //checking whether the original file matches the encrypted one
             assertTrue(textEquals(fileDecode, fileEncodeDecode));
             assertFalse(textEquals(fileEncodeDecode, fileEDE));
             assertFalse(textEquals(fileEncode, fileEDED));
@@ -63,7 +68,7 @@ class MainTest {
     }
 
     @Test
-    void deleteFolderAndItsContent() throws IOException {
+    public void deleteFolderAndItsContent() throws IOException {
         Path folder = Paths.get("testDirectory/test folder");
         Files.walkFileTree(folder, new SimpleFileVisitor<>() {
             public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
@@ -78,6 +83,7 @@ class MainTest {
                 return FileVisitResult.CONTINUE;
             }
         });
+        assertTrue(Files.notExists(folder));
     }
     //The idea is borrowed from https://stackoverflow.com/questions/20281835/how-to-delete-a-folder-with-files-using-java
 }
