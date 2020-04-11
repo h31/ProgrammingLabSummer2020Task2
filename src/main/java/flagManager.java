@@ -27,15 +27,15 @@ public class flagManager {
                 mark = i;
                 custom = true;
             }
-        String path = "";
+        StringBuilder path = new StringBuilder();
         for (int i = 2; i < mark; i++)
-            path += args[i] + " ";
-        setPathIn(path.trim());
-        path = "";
+            path.append(args[i]).append(" ");
+        setPathIn(path.toString().trim());
+        path = new StringBuilder();
         if (custom) {
             for (int i = mark + 1; i < args.length; i++)
-                path += args[i] + " ";
-            pathOut = path.trim();
+                path.append(args[i]).append(" ");
+            pathOut = path.toString().trim();
         }
         else
             pathOut = pathIn;
@@ -92,6 +92,5 @@ public class flagManager {
         }
         else
             throw new IllegalArgumentException();
-
     }
 }

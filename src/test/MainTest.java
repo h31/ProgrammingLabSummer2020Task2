@@ -1,6 +1,3 @@
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import java.io.*;
 import java.nio.file.*;
@@ -35,7 +32,7 @@ class MainTest {
 
         {
             assertTrue(textEquals(file, fileEncode));
-            assertFalse(textEquals(file, fileDecode)); //checking whether the original file matches the encrypted one
+            assertFalse(textEquals(file, fileDecode)); //проверка соотвествия оригинального файла и зашифрованного
             assertTrue(textEquals(fileDecode, fileEncodeDecode));
             assertFalse(textEquals(fileEncodeDecode, fileEDE));
             assertFalse(textEquals(fileEncode, fileEDED));

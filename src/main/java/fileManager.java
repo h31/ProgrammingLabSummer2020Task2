@@ -1,6 +1,5 @@
 import java.io.*;
 import java.nio.file.*;
-import java.util.Scanner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -42,13 +41,14 @@ class fileManager {
     void reader (flagManager flag) throws IOException {
         Crypto crypter = new Crypto();
         if (flag.approach) {
-            FileReader fileIn = new FileReader(flag.pathIn);
-            Scanner scan = new Scanner(fileIn);
-            while (scan.hasNextLine()) {
-                byte[] crypt = crypter.encode(scan.nextLine() + "\n", flag.key);
+            Path path = Paths.get(flag.pathIn);
+            BufferedReader br = Files.newBufferedReader(path);
+            String line;
+            while((line = br.readLine()) != null){
+                byte[] crypt = crypter.encode(line + "\n", flag.key);
                 writer(flag.pathOut, null, crypt);
             }
-            fileIn.close();
+            br.close();
             System.out.println("Encoding completed");
             log.info("Encoding completed");
         }
