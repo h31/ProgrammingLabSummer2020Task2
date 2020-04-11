@@ -9,13 +9,11 @@ class fileManager {
 
     String creator (boolean approach, String pathOut, boolean custom) throws IOException {
         Path fOut = Paths.get(pathOut);
-        System.out.println("out " + pathOut);
         if (custom)
             fOut = Paths.get(pathOut);
         else
-            if (approach) {
+            if (approach)
                 fOut = Paths.get(fOut.toString() + ".crp");
-            }
             else {
                 if (fOut.getFileName().toString().contains(".crp"))
                     fOut = Paths.get(pathOut.substring(0, pathOut.lastIndexOf(".")));
@@ -48,7 +46,7 @@ class fileManager {
             Scanner scan = new Scanner(fileIn);
             while (scan.hasNextLine()) {
                 byte[] crypt = crypter.encode(scan.nextLine() + "\n", flag.key);
-               writer(flag.pathOut, null, crypt);
+                writer(flag.pathOut, null, crypt);
             }
             fileIn.close();
             System.out.println("Encoding completed");
