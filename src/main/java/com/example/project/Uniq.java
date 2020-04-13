@@ -3,21 +3,23 @@ package com.example.project;
 import java.io.*;
 
 public class Uniq {
-    private UniqFlags flags;
+    private UniqOptions flags;
 
-    private void setFlags(UniqFlags flags) {
+    private void setFlags(UniqOptions flags) {
         this.flags = flags;
     }
 
-    public Uniq(UniqFlags flags) {
+    public Uniq(UniqOptions flags) {
         setFlags(flags);
     }
 
     public void launch() throws IOException {
+        BufferedReader input;
+        BufferedWriter output;
 
         if (flags.inputName != null && flags.outputName != null) {
-            BufferedReader input = new BufferedReader(new FileReader(flags.inputName));
-            BufferedWriter output = new BufferedWriter(new FileWriter(flags.outputName));
+            input = new BufferedReader(new FileReader(flags.inputName));
+            output = new BufferedWriter(new FileWriter(flags.outputName));
             if (flags.unique || flags.count) makeUniqueWithFlag(input, output);
             else makeUnique(input, output);
             input.close();
@@ -25,22 +27,22 @@ public class Uniq {
         }
 
         if (flags.outputName == null && flags.inputName == null) {
-            BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-            BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out));
+            input = new BufferedReader(new InputStreamReader(System.in));
+            output = new BufferedWriter(new OutputStreamWriter(System.out));
             if (flags.unique || flags.count) makeUniqueWithFlag(input, output);
             else makeUnique(input, output);
             input.close();
             output.close();
         } else if (flags.inputName == null) {
-            BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-            BufferedWriter output = new BufferedWriter(new FileWriter(flags.outputName));
+            input = new BufferedReader(new InputStreamReader(System.in));
+            output = new BufferedWriter(new FileWriter(flags.outputName));
             if (flags.unique || flags.count) makeUniqueWithFlag(input, output);
             else makeUnique(input, output);
             input.close();
             output.close();
         } else {
-            BufferedReader input = new BufferedReader(new FileReader(flags.inputName));
-            BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out));
+            input = new BufferedReader(new FileReader(flags.inputName));
+            output = new BufferedWriter(new OutputStreamWriter(System.out));
             if (flags.unique || flags.count) makeUniqueWithFlag(input, output);
             else makeUnique(input, output);
             input.close();

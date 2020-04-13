@@ -5,9 +5,12 @@ import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
-public class UniqFlags {
+public class UniqOptions {
     @Argument(usage = "input file name", metaVar = "INPUT")
     public String inputName;
+
+    @Option(name = "--help")
+    public boolean help;
 
     @Option(name = "-o", usage = "output file name", metaVar = "OUTPUT")
     public String outputName;
@@ -24,14 +27,19 @@ public class UniqFlags {
     @Option(name = "-c", usage = "outputs number of duplicates before string")
     public boolean count;
 
-    public UniqFlags(String[] args) {
+    public UniqOptions(String[] args) {
         final CmdLineParser parser = new CmdLineParser(this);
 
         try {
             parser.parseArgument(args);
         } catch (CmdLineException e) {
-            System.out.println("Unable to parse command-line options:" + e);
+            System.out.println("Unable to parse command-line options: " + e.getMessage());
+            System.out.println("Try --help");
+        }
+
+        if (help) {
             parser.printUsage(System.out);
+            System.exit(0);
         }
     }
 }
