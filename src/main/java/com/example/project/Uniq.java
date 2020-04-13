@@ -40,7 +40,7 @@ public class Uniq {
             else makeUnique(input, output);
             input.close();
             output.close();
-        } else {
+        } else if (flags.outputName == null) {
             input = new BufferedReader(new FileReader(flags.inputName));
             output = new BufferedWriter(new OutputStreamWriter(System.out));
             if (flags.unique || flags.count) makeUniqueWithFlag(input, output);
@@ -55,14 +55,27 @@ public class Uniq {
         String prevLine = "";
         String line;
         while ((line = input.readLine()) != null) {
-            if (!line
-                    .substring(flags.num)
-                    .equals(prevLine.substring(flags.num)) || (flags.ignoreCase && !line
-                    .substring(flags.num)
-                    .toLowerCase()
-                    .equals(prevLine.substring(flags.num).toLowerCase()))
+            if (prevLine.length() >= flags.num && line.length() >= flags.num) {
+                if (flags.ignoreCase && !line
+                                .substring(flags.num)
+                                .toLowerCase()
+                                .equals(prevLine.substring(flags.num).toLowerCase())
+                                || !flags.ignoreCase && !line
+                                .substring(flags.num)
+                                .equals(prevLine.substring(flags.num))
+                ) {
+                    if (!prevLine.equals("")) output.write("\n");
+                    output.write(line);
+                }
+            }
+            if (prevLine.length() < flags.num
+                    && line.length() >= flags.num
+                    || prevLine.length() >= flags.num
+                    && line.length() < flags.num
+                    || prevLine.equals("")
             ) {
-                output.write(line + "\n");
+                if (!prevLine.equals("")) output.write("\n");
+                output.write(line);
             }
             prevLine = line;
         }
@@ -74,12 +87,12 @@ public class Uniq {
         boolean skip = false;
         int times = 1;
         while ((line = input.readLine()) != null) {
-            if ((!line
+            if ((!flags.ignoreCase && !line
                     .substring(flags.num)
-                    .equals(prevLine.substring(flags.num)) || (flags.ignoreCase && !line
+                    .equals(prevLine.substring(flags.num)) || flags.ignoreCase && !line
                     .substring(flags.num)
                     .toLowerCase()
-                    .equals(prevLine.substring(flags.num).toLowerCase()))) && !prevLine.equals("")
+                    .equals(prevLine.substring(flags.num).toLowerCase())) && !prevLine.equals("")
             ) {
                 if (!skip) {
                     if (flags.count) output.write(times + " ");
@@ -88,12 +101,12 @@ public class Uniq {
                 } else {
                     skip = false;
                 }
-            } else {
+            } else if (!prevLine.equals("")) {
                 if (flags.count) times++;
                 if (flags.unique) skip = true;
             }
             prevLine = line;
-            if (input.readLine() == null && !skip) output.write(line);
         }
+        if (!skip) output.write(prevLine);
     }
 }
