@@ -3,6 +3,8 @@ package com.example.project;
 import com.sun.tools.javac.comp.Todo;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 @SuppressWarnings("WeakerAccess")
 
@@ -17,24 +19,41 @@ public class Tailer {
         this.lastStrings = lastStrings;
     }
 
-    public int tail(InputStream in, OutputStream out) throws IOException {
-        if (lastSymbols != null) {
-            return 0;
-        } else if (lastStrings != null) {
-            return 0;
+    public int tail(BufferedReader reader, BufferedWriter writer) throws IOException {
+        if (lastStrings != null) {
+            //TODO
+        } else if (lastSymbols != null) {
+            //TODO
         } else {
-            return 0;
+            //TODO
         }
+        return 0; //temporary
     }
 
     public int tail(String[] inputNames, String outputName) throws IOException {
-        /*
-          Учесть факт того, что файлов м. б. несколько, или не быть вовсе
-         */
-        try (FileInputStream inputStream = new FileInputStream(inputNames[0])) {
-            try (FileOutputStream outputStream = new FileOutputStream(outputName)) {
-                return tail(inputStream, outputStream);
-            }
+        BufferedWriter writer;
+        if (outputName == null) {
+            writer = new BufferedWriter(new OutputStreamWriter(System.out));
+        } else {
+            writer = Files.newBufferedWriter(Paths.get(outputName));
         }
+
+        BufferedReader reader;
+        if (inputNames.length > 1) {
+            for (String inputName : inputNames) {
+                reader = Files.newBufferedReader(Paths.get(inputName));
+                writer.write(new File(inputName).getName());
+                writer.newLine();
+                return tail(reader, writer);
+            }
+        } else if (inputNames.length == 1) {
+            reader = Files.newBufferedReader(Paths.get(inputNames[0]));
+            return tail(reader, writer);
+        } else {
+            // Когда считывать с консоли
+            //TODO
+        }
+
+        return 0; //temporary
     }
 }
