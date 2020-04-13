@@ -1,105 +1,115 @@
 package com.example.utility;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import java.io.*;
-import java.util.Scanner;
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UniqueTest {
-    StringBuilder stringBuilderTest = new StringBuilder();
-    File file = new File("output.txt");
+    void assertFileContent(String expected) throws IOException {
+        StringBuilder stringBuilder = new StringBuilder();
+        BufferedReader bufferedReader = new BufferedReader(new FileReader("output.txt"));
+        String line;
 
-    void readOutputFile() throws FileNotFoundException {
-        Scanner fileInput = new Scanner(file);
-        while (fileInput.hasNextLine()) {
-            stringBuilderTest.append(fileInput.nextLine()).append("\n");
+        while ((line = bufferedReader.readLine()) != null) {
+            stringBuilder.append(line).append("\n");
         }
+        bufferedReader.close();
+
+        assertEquals(expected, stringBuilder.toString());
     }
 
+    /**
+     * Тестирование методов с входными и выходными файлами
+     */
     @Test
     void equalsIgnoreCaseString() throws IOException {
         UniqueLauncher.main(new String[]{"-i", "-o", "output.txt", "inputForIgnoreCase.txt"});
-        readOutputFile();
 
-        assertEquals("how are youHOW ARE YOU\n" +
-                        "HelloHELLO\n" +
-                        "Good\n",
-                stringBuilderTest.toString());
+        assertFileContent("how are you\n" + "Hello\n" + "Good\n");
     }
 
     @Test
     void equalsIgnoreSomeCharsString() throws IOException {
         UniqueLauncher.main(new String[]{"-s", "3", "-o", "output.txt", "inputForIgnoreSomeChars.txt"});
 
-        readOutputFile();
-
-        assertEquals("Hello\n" +
-                "GO\n" +
-                "Walk\n", stringBuilderTest.toString());
+        assertFileContent("aaaHello\n" + "hhhLets\n" + "zzzGO\n" + "tttWalk\n");
     }
 
     @Test
     void equalsUniqueString() throws IOException {
         UniqueLauncher.main(new String[]{"-u", "-o", "output.txt", "inputForEqualsUnique.txt"});
 
-        readOutputFile();
-
-        assertEquals("go\n" +
-                "next\n", stringBuilderTest.toString());
+        assertFileContent("go\n" + "next\n");
     }
 
     @Test
     void equalsWithCountString() throws IOException {
         UniqueLauncher.main(new String[]{"-c", "-o", "output.txt", "inputForCountString.txt"});
 
-        readOutputFile();
-
-        assertEquals("2 hello world\n" +
-                "hello\n" + "2 i am a text\n" + "go\n", stringBuilderTest.toString());
+        assertFileContent("2 hello world\n" + "1 hello\n" + "2 i am a text\n" + "1 go\n");
     }
-
-    @Test
-    void exceptionInput() {
-        assertThrows(FileNotFoundException.class, () -> UniqueLauncher.main(new String[]{"-c", "-o", "output.txt", "input.txt"}));
-    }
-
-    @Test
-    void exceptionOutput() {
-        assertThrows(FileNotFoundException.class, () -> UniqueLauncher.main(new String[]{"-c", "-o", "outpu123t.txt", "inputForCountString.txt"}));
-    }
-
-    @Test
-    void exceptionKeysNotExist() {
-        assertThrows(IllegalArgumentException.class, () -> UniqueLauncher.main(new String[]{"-o", "output.txt", "inputForCountString.txt"}));
-    }
-
 
     /**
-     * Тестирование вывода в консоль с перенаправлением потока
+     * Тестирование случаев неправильного использования
      */
+    private ByteArrayOutputStream outException = new ByteArrayOutputStream();
+
     private ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 
+    private final ByteArrayInputStream inputContentIgnoreCase = new ByteArrayInputStream(("Hello\\\\nHELLO\\\\nHow are you\\\\nhow are you").getBytes());
+    private final ByteArrayInputStream inputContentUniqueString = new ByteArrayInputStream("hello\\\\nhello\\\\ngo\\\\nman\\\\nman".getBytes());
+    private final ByteArrayInputStream inputContentCountString = new ByteArrayInputStream(("helloWorld\\\\nhelloWorld\\\\ngo\\\\nnext\\\\nnext").getBytes());
+    private final ByteArrayInputStream inputContentIgnoreSomeChars = new ByteArrayInputStream("aaaHello\\\\nbbbHello\\\\ncccHello\\\\ndddWorld".getBytes());
+
     @BeforeEach
-    void setUpStreamsOutput() {
-        outContent = new ByteArrayOutputStream();//обновление потока вывода для каждого теста
+    void setUp() {
+        System.setErr(new PrintStream(outException));
         System.setOut(new PrintStream(outContent));
     }
 
     @Test
-    public void outputConsoleCountString() throws IOException {
-        UniqueLauncher.main(new String[]{"-c", "inputForCountString.txt"});
+    void exceptionInput() throws IOException {
+        UniqueLauncher.main(new String[]{"-c", "-o", "output.txt", "input.txt"});
 
-        assertEquals("2 hello world\n" +
-                "hello\n" +
-                "2 i am a text\n" +
-                "go\n", outContent.toString());
-        outContent.close();
+        assertEquals("File not found: input.txt", outException.toString());
     }
 
     @Test
-    public void outputConsoleUnique() throws IOException {
+    void exceptionFlags() throws IOException {
+        UniqueLauncher.main(new String[]{"-o", "output.txt", "inputForCountString.txt"});
+
+        assertEquals("No flags was found or invalid argument", outException.toString());
+    }
+
+    @Test
+    void exceptionOutput() throws IOException {
+        UniqueLauncher.main(new String[]{"-c", "-o", "outpu123t.txt", "inputForCountString.txt"});
+
+        assertEquals("File not found: outpu123t.txt", outException.toString());
+    }
+
+    /**
+     * Тестирование с входными или выходными данными из консоли
+     */
+
+    @Test
+    void inputConsoleUniqueString() throws IOException {
+        System.setIn(inputContentUniqueString);
+        UniqueLauncher.main(new String[]{"-u", "-o", "output.txt"});
+
+        assertFileContent("go\n");
+    }
+
+    @Test
+    void outputConsoleUniqueString() throws IOException {
         UniqueLauncher.main(new String[]{"-u", "inputForEqualsUnique.txt"});
 
         assertEquals("go\n" + "next\n"
@@ -107,88 +117,60 @@ class UniqueTest {
     }
 
     @Test
-    public void outputConsoleIgnoreSomeChars() throws IOException {
-        UniqueLauncher.main(new String[]{"-s", "3", "inputForIgnoreSomeChars.txt"});
+    void inputConsoleCountString() throws IOException {
+        System.setIn(inputContentCountString);
+        UniqueLauncher.main(new String[]{"-c", "-o", "output.txt"});
 
-        assertEquals("Hello\n" +
-                        "GO\n" +
-                        "Walk"
-                , outContent.toString());
+        assertFileContent("2 helloWorld\n" +
+                "1 go\n" +
+                "2 next\n");
     }
 
     @Test
-    public void outputConsoleIgnoreCase() throws IOException {
-        UniqueLauncher.main(new String[]{"-i", "inputForIgnoreCase.txt"});
+    void outputConsoleCountString() throws IOException {
+        UniqueLauncher.main(new String[]{"-c", "inputForCountString.txt"});
 
-        assertEquals("how are youHOW ARE YOU\n" +
-                        "HelloHELLO\n" +
-                        "Good\n"
-                , outContent.toString());
+        assertEquals("2 hello world\n" +
+                "1 hello\n" +
+                "2 i am a text\n" +
+                "1 go\n", outContent.toString());
     }
-
-    /**
-     * Тестирование ввода в консоль
-     */
-    private ByteArrayInputStream inputContentIgnoreCase = new ByteArrayInputStream(("Hello HELLO").getBytes());
-    private ByteArrayInputStream inputContentUniqueString = new ByteArrayInputStream("hello hello go man man".getBytes());
-    private ByteArrayInputStream inputContentCountString = new ByteArrayInputStream("helloWorld helloWorld go next next".getBytes());
-    private ByteArrayInputStream inputContentIgnoreSomeChars = new ByteArrayInputStream("qweHello qrtHello qedHello qqeWorld".getBytes());
 
     @Test
     void inputConsoleIgnoreCase() throws IOException {
         System.setIn(inputContentIgnoreCase);
-
         UniqueLauncher.main(new String[]{"-i", "-o", "output.txt"});
-        readOutputFile();
 
-        assertEquals("HelloHELLO\n", stringBuilderTest.toString());
-
+        assertFileContent("Hello\n" + "How are you\n");
     }
 
     @Test
-    void inputConsoleUniqueString() throws IOException {
-        System.setIn(inputContentUniqueString);
+    void outputConsoleIgnoreCase() throws IOException {
+        UniqueLauncher.main(new String[]{"-i", "inputForIgnoreCase.txt"});
 
-        UniqueLauncher.main(new String[]{"-u", "-o", "output.txt"});
-        readOutputFile();
-
-        assertEquals("go\n", stringBuilderTest.toString());
-    }
-
-    @Test
-    void inputConsoleCountString() throws IOException {
-        System.setIn(inputContentCountString);
-
-        UniqueLauncher.main(new String[]{"-c", "-o", "output.txt"});
-        readOutputFile();
-
-        assertEquals("2 helloWorld\n" +
-                "go\n" +
-                "2 next\n", stringBuilderTest.toString());
+        assertEquals("how are you\n" +
+                        "Hello\n" +
+                        "Good"
+                , outContent.toString());
     }
 
     @Test
     void inputConsoleIgnoreSomeChars() throws IOException {
         System.setIn(inputContentIgnoreSomeChars);
-
         UniqueLauncher.main(new String[]{"-s", "3", "-o", "output.txt"});
-        readOutputFile();
 
-        assertEquals("Hello\n" +
-                "World\n", stringBuilderTest.toString());
+        assertFileContent("aaaHello\n" +
+                "dddWorld\n");
     }
 
-    /**
-     * Возвращение исходных потоков
-     */
-    @AfterAll
-    static void restoreStreamsInput() {
-        System.setIn(System.in);
-    }
+    @Test
+    void outputConsoleIgnoreSomeChars() throws IOException {
+        UniqueLauncher.main(new String[]{"-s", "3", "inputForIgnoreSomeChars.txt"});
 
-    @AfterEach
-    void restoreStreamsOutput() {
-        System.setOut(System.out);
+        assertEquals("aaaHello\n" + "hhhLets\n" +
+                        "zzzGO\n" +
+                        "tttWalk"
+                , outContent.toString());
     }
 
 }

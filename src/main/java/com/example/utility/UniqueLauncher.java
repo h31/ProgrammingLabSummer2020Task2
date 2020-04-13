@@ -1,13 +1,12 @@
 package com.example.utility;
 
-//библиотека args4j для обработки командной строки
+//библиотека args4j для обработки аргументов командной строки
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Objects;
 
 public class UniqueLauncher {
@@ -19,7 +18,7 @@ public class UniqueLauncher {
     private String nameOfOutput;
 
     @Option(name = "-s", metaVar = "IgnoreNumString", usage = "Ignore begin 'num' string")
-    private int num;
+    private int num = -1;
 
     @Option(name = "-c", metaVar = "CountString", usage = "Write counted string")
     private boolean flagCisSet;
@@ -50,23 +49,29 @@ public class UniqueLauncher {
 
         Unique unique = new Unique();
 
-        unique.inputFileData(nameOfInput);
-        //проверка ключенй на существование
-        if (flagCisSet) {
-            unique.equalsWithCountString();
-        } else if (flagUisSet) {
-            unique.equalsUnique();
-        } else if (flagIisSet) {
-            unique.equalsIgnoreCase();
+        if (nameOfInput == null)
+            unique.inputFileDataConsole();
+        else
+            unique.inputFileData(nameOfInput);
+
+        if (!unique.getAllLines().isEmpty()) {
+            if (flagCisSet) {
+                unique.equalsWithCountString();
+            } else if (flagUisSet) {
+                unique.equalsUnique();
+            } else if (flagIisSet) {
+                unique.equalsIgnoreSomeChars(0);
+            } else if (num > 0) {
+                unique.equalsIgnoreSomeChars(num);
+            } else {
+                System.err.print("No flags was found or invalid argument");
+            }
+
+            if (nameOfOutput == null)
+                System.out.write(unique.getDataForOutFile().toString().getBytes());
+            else
+                unique.outputFileData(nameOfOutput);
         }
-        else if (Arrays.asList(args).contains("-s")) { //опция -s имеет параметр типа int,поэтому проверка на существование в виде листа
-            unique.equalsIgnoreSomeChars(num);
-        }
-        else {
-            System.out.println("No key was found");
-            throw new IllegalArgumentException();
-        }
-        unique.outputFileData(nameOfOutput);
     }
 
     @Override
@@ -80,7 +85,6 @@ public class UniqueLauncher {
                 flagUisSet == that.flagUisSet &&
                 Objects.equals(nameOfOutput, that.nameOfOutput) &&
                 Objects.equals(nameOfInput, that.nameOfInput);
-
     }
 
     @Override

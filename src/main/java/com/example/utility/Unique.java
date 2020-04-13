@@ -1,106 +1,92 @@
 package com.example.utility;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.PrintStream;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Arrays;
-import java.util.Objects;
+import java.util.*;
 
+//изменить имена в тестах
 
 public class Unique {
-    private StringBuilder dataForOutFile = new StringBuilder();//строки для помещения в файл
-    private ArrayList<String> allLines = new ArrayList<>();//список для считаывания строк из файла
+    private final StringBuilder dataForOutFile = new StringBuilder();//строки для помещения в файл
+    private final ArrayList<String> allLines = new ArrayList<>();//список для считаывания строк из файла
+    private final HashSet<String> uniqueWords = new HashSet<>();//сет для обьединения одинаковых строк
+
+    public StringBuilder getDataForOutFile() {
+        return dataForOutFile;
+    }
+
+    public ArrayList<String> getAllLines() {
+        return allLines;
+    }
 
     /**
-     * Отдельный метод реализующий ввод данных из файла или из консоли
+     * Отдельный метод реализующий ввод данных из консоли
      */
-    public void inputFileData(String input) throws FileNotFoundException {
-        try {
-            //добавление всех строк файла в массив для последующего сравнения
-            Scanner fileInput = new Scanner(new File(input));
-            while (fileInput.hasNextLine()) {
-                allLines.add(fileInput.nextLine());
-            }
-        } catch (NullPointerException ex) {//ввод с консоли если файл не сущетсвует
-            Scanner scanner = new Scanner(System.in);
-            String inputData = scanner.nextLine();
-            allLines.addAll(Arrays.asList(inputData.split(" ")));
+    public void inputFileDataConsole() {
+        Scanner scanner = new Scanner(System.in);
+        String inputData = scanner.nextLine();
 
-        } catch (FileNotFoundException ex) {//исключение, если в названии файла допущена ошибка
-            System.out.println("There is an error in the file name or it is located in a different directory");
-            throw new FileNotFoundException();
+        allLines.addAll(Arrays.asList(inputData.split("\\\\\\\\n")));
+    }
+
+    /**
+     * Отдельный метод реализующий ввод данных из файла
+     */
+    public void inputFileData(String input) throws IOException {
+        File file = new File(input);
+        if (!file.exists()) {
+            System.err.print("File not found" + ": " + input);
+        } else {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                allLines.add(line);
+            }
+            bufferedReader.close();
         }
     }
 
     /**
-     * Отдельный метод реализующий вывод данных в файл или в консоль
+     * Отдельный метод реализующий вывод данных в файл
      */
     public void outputFileData(String output) throws IOException {
-        try {
-            File file = new File(output);//проверка существования файла без создания нового
-            if (!file.exists()) {
-                System.out.println("There is an error in the file name or it is located in a different directory");
-                throw new FileNotFoundException();
-            }
-            FileOutputStream fileOutputStream = new FileOutputStream(output);
-            fileOutputStream.write(dataForOutFile.toString().getBytes());
-
-        } catch (NullPointerException ex) {//вывод в консоль если названия файла нет
-            System.out.print(dataForOutFile);
+        File file = new File(output);
+        if (file.exists()) {//Проверка существованмя файла
+            System.setOut(new PrintStream(output));
+            System.out.write(dataForOutFile.toString().getBytes());
+        } else {
+            System.err.print("File not found" + ": " + output);
         }
     }
 
     /**
-     * Сравнение игнорируя регистр
-     */
-    public void equalsIgnoreCase() {
-        StringBuilder firstWord = new StringBuilder(allLines.get(0));
-        for (int i = 1; i < allLines.size(); i++) {
-            if (firstWord.toString().equalsIgnoreCase(allLines.get(i))) {
-                firstWord.append(allLines.get(i));
-            } else if (allLines.get(i).equalsIgnoreCase(allLines.get(i - 1))) {
-                firstWord.append(allLines.get(i));
-            } else {
-                dataForOutFile.append(firstWord).append("\n");
-                firstWord.setLength(0);
-                firstWord.append(allLines.get(i));
-            }
-        }
-        dataForOutFile.append(firstWord).append("\n");//добавление последнего слова
-    }
-
-    /**
-     * Сравнение игнорируя первые несколько символов каждой строки
+     * Сравнение игнорируя первые несколько символов каждой строки или регистр
      */
     public void equalsIgnoreSomeChars(int countIgnore) {
-        HashSet<String> set = new HashSet<>();
-        StringBuilder firstWord = new StringBuilder(allLines.get(0));
+        StringBuilder firstString = new StringBuilder(allLines.get(0));
 
         for (int i = 1; i < allLines.size(); i++) {
-            String wordWithIgnore = firstWord.substring(countIgnore, allLines.get(i - 1).length());//выделение подстроки
-            if (wordWithIgnore.equals(allLines.get(i).substring(countIgnore))) {
-                set.add(wordWithIgnore);
-                firstWord.setLength(0);
-                firstWord.append(allLines.get(i));
-            } else if (allLines.get(i).equals(allLines.get(i - 1))) {
-                firstWord.append(allLines.get(i));
+            String wordWithIgnore = firstString.substring(countIgnore, allLines.get(i - 1).length());//выделение подстроки
+
+            if (wordWithIgnore.equals(allLines.get(i).substring(countIgnore)) || wordWithIgnore.equalsIgnoreCase(allLines.get(i).substring(countIgnore))) {
+                uniqueWords.add(firstString.toString());
             } else {
-                if (!set.isEmpty()) {
-                    dataForOutFile.append(set.iterator().next()).append("\n");
-                    set.clear();
-                } else {
-                    dataForOutFile.append(firstWord).append("\n");
-                }
-                firstWord.setLength(0);
-                firstWord.append(allLines.get(i));
+                if (uniqueWords.isEmpty())
+                    dataForOutFile.append(firstString.append("\n"));
+                else
+                    dataForOutFile.append(uniqueWords.iterator().next()).append("\n");
+
+                firstString.setLength(0);
+                firstString.append(allLines.get(i));
+                uniqueWords.clear();
             }
         }
-        dataForOutFile.append(allLines.get(allLines.size() - 1).substring(countIgnore));
+
+        dataForOutFile.append(firstString);
     }
 
     /**
@@ -108,6 +94,7 @@ public class Unique {
      */
     public void equalsUnique() {
         int countWord = 0;
+
         for (int i = 0; i < allLines.size(); i++) {
             for (int j = 0; j < allLines.size(); j++) {
                 if (allLines.get(i).equals(allLines.get(j)) && i != j) {
@@ -125,22 +112,21 @@ public class Unique {
      * Метод добавляющий количество замененных строк
      */
     public void equalsWithCountString() {
-        HashSet<String> set = new HashSet<>();
         int count = 1;
         for (int i = 0; i < allLines.size(); i++) {
             for (int j = i + 1; j < allLines.size(); j++) {
                 if (allLines.get(i).equals(allLines.get(j))) {
-                    set.add(allLines.get(j));
+                    uniqueWords.add(allLines.get(j));
                     count++;
                 }
             }
-            if (!set.isEmpty()) {
-                dataForOutFile.append(count).append(" ").append(allLines.get(i)).append("\n");
+            dataForOutFile.append(count).append(" ").append(allLines.get(i)).append("\n");
+
+            if (!uniqueWords.isEmpty()) {
                 i += count - 1;
                 count = 1;
-                set.clear();
-            } else
-                dataForOutFile.append(allLines.get(i)).append("\n");
+                uniqueWords.clear();
+            }
         }
 
     }
@@ -151,12 +137,14 @@ public class Unique {
         if (o == null || getClass() != o.getClass()) return false;
         Unique unique = (Unique) o;
         return Objects.equals(dataForOutFile, unique.dataForOutFile) &&
-                Objects.equals(allLines, unique.allLines);
+                Objects.equals(allLines, unique.allLines) &&
+                Objects.equals(uniqueWords, unique.uniqueWords);
+
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(dataForOutFile, allLines);
+        return Objects.hash(dataForOutFile, allLines, uniqueWords);
     }
 
     @Override
@@ -164,6 +152,7 @@ public class Unique {
         return "Unique{" +
                 "dataForOutFile=" + dataForOutFile +
                 ", allLines=" + allLines +
+                ", uniqueWords=" + uniqueWords +
                 '}';
     }
 }
