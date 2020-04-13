@@ -55,24 +55,21 @@ public class Uniq {
         String prevLine = "";
         String line;
         while ((line = input.readLine()) != null) {
-            if (prevLine.length() >= flags.num && line.length() >= flags.num) {
-                if (flags.ignoreCase && !line
-                                .substring(flags.num)
-                                .toLowerCase()
-                                .equals(prevLine.substring(flags.num).toLowerCase())
-                                || !flags.ignoreCase && !line
-                                .substring(flags.num)
-                                .equals(prevLine.substring(flags.num))
-                ) {
-                    if (!prevLine.equals("")) output.write("\n");
-                    output.write(line);
-                }
-            }
-            if (prevLine.length() < flags.num
-                    && line.length() >= flags.num
-                    || prevLine.length() >= flags.num
-                    && line.length() < flags.num
-                    || prevLine.equals("")
+            if (
+                    (prevLine.length() >= flags.num && line.length() >= flags.num) && (
+                            flags.ignoreCase && !line
+                                    .substring(flags.num)
+                                    .toLowerCase()
+                                    .equals(prevLine.substring(flags.num).toLowerCase())
+                                    || !flags.ignoreCase && !line
+                                    .substring(flags.num)
+                                    .equals(prevLine.substring(flags.num))
+                    ) || !(prevLine.length() >= flags.num && line.length() >= flags.num) && (
+                            prevLine.length() < flags.num
+                                    && line.length() >= flags.num
+                                    || prevLine.length() >= flags.num
+                                    || prevLine.equals("")
+                    )
             ) {
                 if (!prevLine.equals("")) output.write("\n");
                 output.write(line);
@@ -83,30 +80,47 @@ public class Uniq {
 
     private void makeUniqueWithFlag(BufferedReader input, BufferedWriter output) throws IOException {
         String prevLine = "";
+        String firstRepeated = "";
         String line;
         boolean skip = false;
         int times = 1;
         while ((line = input.readLine()) != null) {
-            if ((!flags.ignoreCase && !line
-                    .substring(flags.num)
-                    .equals(prevLine.substring(flags.num)) || flags.ignoreCase && !line
-                    .substring(flags.num)
-                    .toLowerCase()
-                    .equals(prevLine.substring(flags.num).toLowerCase())) && !prevLine.equals("")
+            if (
+                    (prevLine.length() >= flags.num && line.length() >= flags.num) && (
+                            flags.ignoreCase && !line
+                                    .substring(flags.num)
+                                    .toLowerCase()
+                                    .equals(prevLine.substring(flags.num).toLowerCase())
+                                    || !flags.ignoreCase && !line
+                                    .substring(flags.num)
+                                    .equals(prevLine.substring(flags.num))
+                    ) || !(prevLine.length() >= flags.num && line.length() >= flags.num) && (
+                            prevLine.length() < flags.num
+                                    && line.length() >= flags.num
+                                    || prevLine.length() >= flags.num
+                                    || prevLine.equals("")
+                    )
             ) {
-                if (!skip) {
+                if (!skip && !prevLine.equals("")) {
                     if (flags.count) output.write(times + " ");
-                    output.write(prevLine + "\n");
+                    if (times > 1) output.write(firstRepeated + "\n");
+                    else output.write(prevLine + "\n");
                     times = 1;
                 } else {
                     skip = false;
                 }
             } else if (!prevLine.equals("")) {
-                if (flags.count) times++;
+                if (flags.count) {
+                    if (times == 1) firstRepeated = prevLine;
+                    times++;
+                }
                 if (flags.unique) skip = true;
             }
             prevLine = line;
         }
-        if (!skip) output.write(prevLine);
+        if (!skip) {
+            if (flags.count) output.write(times + " ");
+            output.write(prevLine);
+        }
     }
 }

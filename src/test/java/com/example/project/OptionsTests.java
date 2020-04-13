@@ -45,10 +45,10 @@ public class OptionsTests {
         final PrintStream original = System.out;
         System.setOut(new PrintStream(outActual));
 
-        final String outExpected1 = "Unable to parse command-line options: Option \"-s\" takes an operand\r\nTry --help\r\n";
+        final String outExpected = "Unable to parse command-line options: Option \"-s\" takes an operand\r\nTry --help\r\n";
 
         UniqOptions options = new UniqOptions(new String[] {"-s"});
-        assertEquals(outExpected1, outActual.toString());
+        assertEquals(outExpected, outActual.toString());
 
         System.setOut(original);
     }
