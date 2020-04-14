@@ -7,7 +7,7 @@ import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class OptionsTests {
+class OptionsTests {
 
     @Test
     void voidFlags() {

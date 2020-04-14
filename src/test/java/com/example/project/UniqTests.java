@@ -10,8 +10,8 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class UniqTests {
-    private void assertFileContent(String name, String expected) throws IOException {
+class UniqTests {
+    static void assertFileContent(String name, String expected) throws IOException {
         StringBuilder sb = new StringBuilder();
         BufferedReader reader = new BufferedReader(new FileReader(name));
 
