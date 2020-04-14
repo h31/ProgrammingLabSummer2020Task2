@@ -35,8 +35,7 @@ public class UniqOptions {
         try {
             parser.parseArgument(args);
         } catch (CmdLineException e) {
-            System.out.println("Unable to parse command-line options: " + e.getMessage());
-            System.out.println("Try --help");
+            System.out.print("Unable to parse command-line options: " + e.getMessage() + "\nTry --help\n");
         }
 
         if (help) {

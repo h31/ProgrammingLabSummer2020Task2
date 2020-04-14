@@ -31,7 +31,7 @@ class OptionsTests {
         final PrintStream original = System.out;
         System.setOut(new PrintStream(outActual));
 
-        final String outExpected = "Unable to parse command-line options: \"output\" is not a valid value for \"-s\"\r\nTry --help\r\n";
+        final String outExpected = "Unable to parse command-line options: \"output\" is not a valid value for \"-s\"\nTry --help\n";
 
         UniqOptions options = new UniqOptions(new String[] {"-s", "output"});
         assertEquals(outExpected, outActual.toString());
@@ -45,7 +45,7 @@ class OptionsTests {
         final PrintStream original = System.out;
         System.setOut(new PrintStream(outActual));
 
-        final String outExpected = "Unable to parse command-line options: Option \"-s\" takes an operand\r\nTry --help\r\n";
+        final String outExpected = "Unable to parse command-line options: Option \"-s\" takes an operand\nTry --help\n";
 
         UniqOptions options = new UniqOptions(new String[] {"-s"});
         assertEquals(outExpected, outActual.toString());

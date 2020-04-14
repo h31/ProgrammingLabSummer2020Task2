@@ -57,7 +57,7 @@ class UniqConsoleTests {
 
     @Test
     void inputInConsole() throws IOException {
-        final String content = "hello\r\nhello";
+        final String content = "hello\nhello";
         setInContent(content);
 
         UniqMain.main(new String[] {"-o", "files/output.txt"});
@@ -69,7 +69,7 @@ class UniqConsoleTests {
 
     @Test
     void inputAndOutputInConsole() throws IOException {
-        final String content = "hello world\r\nHELLO WORLD";
+        final String content = "hello world\nHELLO WORLD";
         setInContent(content);
 
         UniqMain.main(new String[] {"-i"});
