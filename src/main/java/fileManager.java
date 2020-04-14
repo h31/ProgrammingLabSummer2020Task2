@@ -1,11 +1,8 @@
 import java.io.*;
 import java.nio.file.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 class fileManager {
-    Logger log = LogManager.getLogger(flagManager.class.getName());
-
+    messageManager msg = new messageManager();
     String creator (boolean approach, String pathOut, boolean custom) throws IOException {
         Path fOut = Paths.get(pathOut);
         if (custom)
@@ -18,22 +15,17 @@ class fileManager {
                     fOut = Paths.get(pathOut.substring(0, pathOut.lastIndexOf(".")));
                 else {
                     fOut = Paths.get(pathOut + ".txt");
-                    System.out.println("Attention! You are trying to decrypt a file without the .crp extension. Possible failure.");
-                    log.warn("Attempt to decrypt non .crp " + fOut);
+                    msg.attention(1, fOut.toString());
                 }
             }
         try {
             Files.createFile(fOut);
         }
         catch (FileAlreadyExistsException e) {
-            System.err.println("A file with this name already exists in this directory. Please use the -o argument.");
-            log.error("File" + fOut + "already exists");
-            throw e;
+            msg.error(4, fOut.toString());
         }
         catch (AccessDeniedException e) {
-            System.err.println("Access to the folder is forbidden");
-            log.error("Access to the folder " + fOut.getParent() + " is forbidden");
-            throw e;
+            msg.error(5, fOut.getParent().toString());
         }
         return fOut.toString();
     }
@@ -49,8 +41,7 @@ class fileManager {
                 writer(flag.pathOut, null, crypt);
             }
             br.close();
-            System.out.println("Encoding completed");
-            log.info("Encoding completed");
+            msg.basicMsg(1, null);
         }
         else {
             FileInputStream fis = new FileInputStream(flag.pathIn);
@@ -58,8 +49,7 @@ class fileManager {
             String text = crypter.decode(data, flag.key);
             writer(flag.pathOut, text, null);
             fis.close();
-            System.out.println("Decoding completed");
-            log.info("Decoding completed");
+            msg.basicMsg(2, null);
         }
     }
 

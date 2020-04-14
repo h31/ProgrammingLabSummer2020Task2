@@ -1,25 +1,23 @@
-import java.nio.file.*;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Path;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import java.nio.file.*;
 
 public class flagManager {
     public boolean approach;
     public long key;
     public String pathIn;
     public String pathOut;
-    Logger log = LogManager.getLogger(flagManager.class.getName());
-
+    messageManager msg = new messageManager();
     void parsing(String[] args) throws IOException {
+        String command = String.join(" ", args);
+        msg.basicMsg(0, command);
         int mark = args.length;
         boolean custom = false;
         if (args[0].matches("((-c)|(-d))"))
             setApproach(args[0]);
+        else if (args[0].matches("(-h)"))
+            msg.error(0, null);
         else
-            help(!args[0].matches("(-h)"));
+            msg.error(1, command);
         if (args[1].matches("[a-zA-Z0-9]+"))
             setKey(args[1]);
         for (int i = 2; i < args.length; i++)
@@ -46,22 +44,18 @@ public class flagManager {
         approach = mode.equals("-c");
     }
 
-    void setKey (String inputKey) {
+    void setKey (String inputKey) throws IOException {
         if (inputKey.matches("[0-9a-fA-F]+"))
             key = Integer.parseInt (inputKey, 16);
         else {
-            System.err.println("Incorrect cipher key. The key is set in hexadecimal format.");
-            log.error("Incorrect cipher key");
-            throw new IllegalArgumentException(inputKey);
+            msg.error(2, inputKey);
         }
     }
 
-    void setPathIn (String path) throws FileNotFoundException {
+    void setPathIn (String path) throws IOException {
         Path fInput = Paths.get(path);
         if (Files.notExists(fInput.toAbsolutePath()) || !Files.isRegularFile(fInput.toAbsolutePath())) {
-            log.error("The input file does not exist");
-            System.err.println("The input file does not exist");
-            throw new FileNotFoundException(path);
+            msg.error(3, fInput.toAbsolutePath().toString());
         }
         pathIn = path;
     }
@@ -69,28 +63,5 @@ public class flagManager {
     void setPathOut (boolean custom) throws IOException {
         fileManager file = new fileManager();
         pathOut = file.creator(approach, pathOut, custom);
-    }
-
-    void help (boolean error) {
-        if (error) {
-            System.err.println("Error in the use of commands.");
-            log.error("Invalid arguments");
-        }
-        System.out.println("Valid flags are:\n" +
-                "-c encryption\n" +
-                "-d decryption\n" +
-                "This is followed by specifying the encryption key. The key is set in hexadecimal format.\n" +
-                "-o (optional) specify the location of the output file.\n" +
-                "By default, output files are created in the directory of the incoming file." +
-                "-h help");
-        if (!error) {
-            System.out.println("Implementation of ciphxor\n" +
-                    "Version 1.0\n" +
-                    "Mikhail Shomov, student of St. Petersburg Polytechnic University");
-            log.info("Assistance requested");
-            System.exit(0);
-        }
-        else
-            throw new IllegalArgumentException();
     }
 }
