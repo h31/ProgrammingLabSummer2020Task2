@@ -64,7 +64,7 @@ class UniqConsoleTests {
         final String expected = "hello";
 
         UniqTests.assertFileContent("files/output.txt", expected);
-        new File("files/output").delete();
+        new File("files/output.txt").delete();
     }
 
     @Test
