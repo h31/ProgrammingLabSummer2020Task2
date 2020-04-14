@@ -1,8 +1,10 @@
 import java.io.*;
 import java.nio.file.*;
+import java.util.ArrayList;
 
 class fileManager {
     messageManager msg = new messageManager();
+
     String creator (boolean approach, String pathOut, boolean custom) throws IOException {
         Path fOut = Paths.get(pathOut);
         if (custom)
@@ -31,27 +33,25 @@ class fileManager {
     }
 
     void reader (flagManager flag) throws IOException {
-        Crypto crypter = new Crypto();
-
-            FileInputStream fis = new FileInputStream(flag.pathIn);
-            byte[] data = fis.readAllBytes();
-            byte[] text = crypter.decode(data, flag.key);
-            writer(flag.pathOut, null, text);
-            fis.close();
-            msg.basicMsg(2, null);
-
+        ArrayList<Integer> keyNumber = new ArrayList<>();
+        long temp = flag.key;
+        int j = 1;
+        while (temp > 0) {
+            keyNumber.add((int) (temp % (10 * j)));
+            temp /= 10;
+            j++;
+        }
+        FileInputStream fis = new FileInputStream(flag.pathIn);
+        byte[] data = fis.readAllBytes();
+        byte[] text = Cipher.coding(data, keyNumber);
+        writer(flag.pathOut, text);
+        fis.close();
+        msg.basicMsg(2, null);
     }
 
-    void writer (String path, String dataString,  byte[] dataByte) throws IOException {
-        if (dataByte == null) {
-            FileWriter fileOut = new FileWriter(path, true);
-            fileOut.write(dataString + "\n");
-            fileOut.close();
-        }
-        else {
-            FileOutputStream fos = new FileOutputStream(path, true);
-            fos.write(dataByte, 0, dataByte.length);
-            fos.close();
-        }
+    void writer (String path, byte[] dataByte) throws IOException {
+        FileOutputStream fos = new FileOutputStream(path, true);
+        fos.write(dataByte, 0, dataByte.length);
+        fos.close();
     }
 }
