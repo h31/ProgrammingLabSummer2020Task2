@@ -5,6 +5,8 @@ import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
+import java.util.Objects;
+
 public class UniqOptions {
     @Argument(usage = "input file name", metaVar = "INPUT")
     public String inputName;
@@ -41,5 +43,37 @@ public class UniqOptions {
             parser.printUsage(System.out);
             System.exit(0);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UniqOptions options = (UniqOptions) o;
+        return help == options.help &&
+                ignoreCase == options.ignoreCase &&
+                num == options.num &&
+                unique == options.unique &&
+                count == options.count &&
+                Objects.equals(inputName, options.inputName) &&
+                Objects.equals(outputName, options.outputName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(inputName, help, outputName, ignoreCase, num, unique, count);
+    }
+
+    @Override
+    public String toString() {
+        return "UniqOptions{" +
+                "inputName='" + inputName + '\'' +
+                ", help=" + help +
+                ", outputName='" + outputName + '\'' +
+                ", ignoreCase=" + ignoreCase +
+                ", num=" + num +
+                ", unique=" + unique +
+                ", count=" + count +
+                '}';
     }
 }

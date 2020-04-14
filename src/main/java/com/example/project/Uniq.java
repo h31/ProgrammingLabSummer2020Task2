@@ -1,6 +1,7 @@
 package com.example.project;
 
 import java.io.*;
+import java.util.Objects;
 
 public class Uniq {
     private UniqOptions flags;
@@ -122,5 +123,25 @@ public class Uniq {
             if (flags.count) output.write(times + " ");
             output.write(prevLine);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Uniq uniq = (Uniq) o;
+        return flags.equals(uniq.flags);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(flags);
+    }
+
+    @Override
+    public String toString() {
+        return "Uniq{" +
+                "flags=" + flags +
+                '}';
     }
 }
