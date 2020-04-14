@@ -18,26 +18,26 @@ public class flagManager {
             msg.error(0, null);
         else
             msg.error(1, command);
-        if (args[1].matches("[a-zA-Z0-9]+"))
+        if (args.length > 2) {
             setKey(args[1]);
-        for (int i = 2; i < args.length; i++)
-            if (args[i].equals("-o")) {
-                mark = i;
-                custom = true;
-            }
-        StringBuilder path = new StringBuilder();
-        for (int i = 2; i < mark; i++)
-            path.append(args[i]).append(" ");
-        setPathIn(path.toString().trim());
-        path = new StringBuilder();
-        if (custom) {
-            for (int i = mark + 1; i < args.length; i++)
+            for (int i = 2; i < args.length; i++)
+                if (args[i].equals("-o")) {
+                    mark = i;
+                    custom = true;
+                }
+            StringBuilder path = new StringBuilder();
+            for (int i = 2; i < mark; i++)
                 path.append(args[i]).append(" ");
-            pathOut = path.toString().trim();
+            setPathIn(path.toString().trim());
+            path = new StringBuilder();
+            if (custom) {
+                for (int i = mark + 1; i < args.length; i++)
+                    path.append(args[i]).append(" ");
+                pathOut = path.toString().trim();
+            } else
+                pathOut = pathIn;
+            setPathOut(custom);
         }
-        else
-            pathOut = pathIn;
-        setPathOut(custom);
     }
 
     void setApproach(String mode) {

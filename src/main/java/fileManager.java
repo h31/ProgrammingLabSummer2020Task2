@@ -32,31 +32,20 @@ class fileManager {
 
     void reader (flagManager flag) throws IOException {
         Crypto crypter = new Crypto();
-        if (flag.approach) {
-            Path path = Paths.get(flag.pathIn);
-            BufferedReader br = Files.newBufferedReader(path);
-            String line;
-            while((line = br.readLine()) != null){
-                byte[] crypt = crypter.encode(line + "\n", flag.key);
-                writer(flag.pathOut, null, crypt);
-            }
-            br.close();
-            msg.basicMsg(1, null);
-        }
-        else {
+
             FileInputStream fis = new FileInputStream(flag.pathIn);
             byte[] data = fis.readAllBytes();
-            String text = crypter.decode(data, flag.key);
-            writer(flag.pathOut, text, null);
+            byte[] text = crypter.decode(data, flag.key);
+            writer(flag.pathOut, null, text);
             fis.close();
             msg.basicMsg(2, null);
-        }
+
     }
 
     void writer (String path, String dataString,  byte[] dataByte) throws IOException {
         if (dataByte == null) {
             FileWriter fileOut = new FileWriter(path, true);
-            fileOut.write(dataString);
+            fileOut.write(dataString + "\n");
             fileOut.close();
         }
         else {
