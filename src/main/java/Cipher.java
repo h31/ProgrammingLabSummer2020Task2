@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 
 class Cipher {
-
     static byte[] coding (byte[] data, ArrayList<Integer> keyNumber) {
         byte[] text = new byte[data.length];
         for (int i = 0; i < data.length; i++)

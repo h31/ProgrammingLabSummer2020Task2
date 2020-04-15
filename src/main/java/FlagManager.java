@@ -11,7 +11,7 @@ public class FlagManager {
     void parsing(String[] args) throws Exception {
         String command = String.join(" ", args);
         msg.basicMsg(0, command);
-        int mark = args.length;
+        int length = args.length;
         boolean custom = false;
         if (args[0].matches("((-c)|(-d))"))
             setApproach(args[0]);
@@ -19,26 +19,29 @@ public class FlagManager {
             msg.error(0, null);
         else
             msg.error(1, command);
-        if (args.length > 2) {
+        if (length > 2) {
             setKey(args[1]);
             for (int i = 2; i < args.length; i++)
                 if (args[i].equals("-o")) {
-                    mark = i;
+                    length = i;
                     custom = true;
                 }
             StringBuilder path = new StringBuilder();
-            for (int i = 2; i < mark; i++)
+            for (int i = 2; i < length; i++)
                 path.append(args[i]).append(" ");
             setPathIn(path.toString().trim());
             path = new StringBuilder();
             if (custom) {
-                for (int i = mark + 1; i < args.length; i++)
+                for (int i = length + 1; i < args.length; i++)
                     path.append(args[i]).append(" ");
                 pathOut = path.toString().trim();
-            } else
+            }
+            else
                 pathOut = pathIn;
-            setPathOut(custom);
         }
+        else
+            msg.error(1, command);
+        setPathOut(custom);
     }
 
     void setApproach(String mode) {

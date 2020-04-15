@@ -43,8 +43,11 @@ class MainTest {
             assertThrows(IllegalArgumentException.class, () -> Main.main(new String[]{"-с"}));
             assertThrows(IllegalArgumentException.class, () -> Main.main(new String[]{"-t", key2, finalFile.toString()}));
             assertThrows(IllegalArgumentException.class, () -> Main.main(new String[]{"-c", key2, finalFile.toString()}));
+            assertThrows(IllegalArgumentException.class, () -> Main.main(new String[]{"-c", key2}));
             assertThrows(FileNotFoundException.class, () -> Main.main(new String[]{"-c", key1, dir + "test-fail.txt"}));
             assertThrows(FileAlreadyExistsException.class, () -> Main.main(new String[]{"-c", key1, dir + "test.txt"}));
+            assertThrows(FileAlreadyExistsException.class, () -> Main.main(new String[]{"-c", key3, finalFile.toString(), "-o", dir + "test.noncrp"}));
+            assertThrows(FileNotFoundException.class, () -> Main.main(new String[]{"-c", key1, dir}));
             assertThrows(AccessDeniedException.class, () -> Main.main(new String[]{"-c", key1, "/bin/bash"}));
             assertThrows(FileAlreadyExistsException.class, () -> Main.main(new String[]{"-c", key1, dir + "test.txt", "-o", dir + "test.txt"}));
         }
