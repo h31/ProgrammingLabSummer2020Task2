@@ -50,7 +50,7 @@ class MainTest {
         }
 
         {
-            messageManager msg = new messageManager();
+            MessageManager msg = new MessageManager();
             assertThrows(Exception.class, () -> msg.basicMsg(3, null));
             assertThrows(Exception.class, () -> msg.error(9, null));
             assertThrows(Exception.class, () -> msg.attention(2, null));

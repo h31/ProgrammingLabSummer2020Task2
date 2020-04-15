@@ -2,12 +2,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class flagManager {
+public class FlagManager {
     public boolean approach;
     public long key;
     public String pathIn;
     public String pathOut;
-    messageManager msg = new messageManager();
+    MessageManager msg = new MessageManager();
     void parsing(String[] args) throws Exception {
         String command = String.join(" ", args);
         msg.basicMsg(0, command);
@@ -60,7 +60,7 @@ public class flagManager {
     }
 
     void setPathOut (boolean custom) throws Exception {
-        fileManager file = new fileManager();
+        FileManager file = new FileManager();
         pathOut = file.creator(approach, pathOut, custom);
     }
 }

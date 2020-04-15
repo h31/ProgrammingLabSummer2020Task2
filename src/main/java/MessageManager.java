@@ -6,8 +6,8 @@ import java.nio.file.AccessDeniedException;
 import java.nio.file.FileAlreadyExistsException;
 
 
-public class messageManager {
-    Logger log = LogManager.getLogger(messageManager.class.getName());
+public class MessageManager {
+    Logger log = LogManager.getLogger(MessageManager.class.getName());
 
     void basicMsg (int code, String remark) throws Exception {
         switch (code) {

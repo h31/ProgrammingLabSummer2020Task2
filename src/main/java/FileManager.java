@@ -2,8 +2,8 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.ArrayList;
 
-class fileManager {
-    messageManager msg = new messageManager();
+class FileManager {
+    MessageManager msg = new MessageManager();
 
     String creator (boolean approach, String pathOut, boolean custom) throws Exception {
         Path fOut = Paths.get(pathOut);
@@ -31,7 +31,7 @@ class fileManager {
         return fOut.toString();
     }
 
-    void reader (flagManager flag) throws Exception {
+    void reader (FlagManager flag) throws Exception {
         ArrayList<Integer> keyNumber = new ArrayList<>();
         long temp = flag.key;
         int j = 1;
