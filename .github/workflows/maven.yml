@@ -20,10 +20,10 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
       - name: test
         run: mvn -B test --file pom.xml
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml -Dmaven.test.skip=true
       - name: Copy all JAR files to dir staging
         run: mkdir staging && cp target/*.jar staging
       - uses: actions/upload-artifact@v1
