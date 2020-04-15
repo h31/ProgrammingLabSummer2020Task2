@@ -1,36 +1,47 @@
 package com.example.project;
 
-import com.sun.tools.javac.comp.Todo;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 @SuppressWarnings("WeakerAccess")
 
 public class Tailer {
 
-    private final Integer lastSymbols;
+    private final int lastSymbols;
 
-    private final Integer lastStrings;
+    private final int lastStrings;
 
-    public Tailer(Integer lastSymbols, Integer lastStrings) {
+    public Tailer(int lastSymbols, int lastStrings) {
         this.lastSymbols = lastSymbols;
         this.lastStrings = lastStrings;
     }
 
-    public int tail(BufferedReader reader, BufferedWriter writer) throws IOException {
-        if (lastStrings != null) {
-            //TODO
-        } else if (lastSymbols != null) {
-            //TODO
+    private int tail(BufferedReader reader, BufferedWriter writer) throws IOException {
+        if (lastStrings == 0) {
+            return extractSymbols(reader, writer);
         } else {
-            //TODO
+            return extractStrings(reader, writer);
         }
-        return 0; //temporary
     }
 
-    public int tail(String[] inputNames, String outputName) throws IOException {
+    //кидают ли исключения?
+    private int extractSymbols(BufferedReader reader, BufferedWriter writer) {
+        int count = 0;
+
+
+        return count;
+    }
+
+    private int extractStrings(BufferedReader reader, BufferedWriter writer) {
+        int count = 0;
+
+
+        return count;
+    }
+
+    public int tail(ArrayList<String> inputNames, String outputName) throws IOException {
         BufferedWriter writer;
         if (outputName == null) {
             writer = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -39,21 +50,24 @@ public class Tailer {
         }
 
         BufferedReader reader;
-        if (inputNames.length > 1) {
+        if (inputNames == null) {
+            //No input files, console input:
+            reader = new BufferedReader(new InputStreamReader(System.in));
+        } else if (inputNames.size() == 1) {
+            //1 input file:
+            reader = Files.newBufferedReader(Paths.get(inputNames.get(0)));
+        } else {
+            //2 or more input files:
+            int tailCounter = 0;
             for (String inputName : inputNames) {
                 reader = Files.newBufferedReader(Paths.get(inputName));
                 writer.write(new File(inputName).getName());
                 writer.newLine();
-                return tail(reader, writer);
+                tailCounter += tail(reader, writer);
             }
-        } else if (inputNames.length == 1) {
-            reader = Files.newBufferedReader(Paths.get(inputNames[0]));
-            return tail(reader, writer);
-        } else {
-            // Когда считывать с консоли
-            //TODO
+            return tailCounter;
         }
 
-        return 0; //temporary
+        return tail(reader, writer);
     }
 }

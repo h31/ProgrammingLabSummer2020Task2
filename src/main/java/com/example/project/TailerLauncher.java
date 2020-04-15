@@ -4,21 +4,23 @@ import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
+import org.w3c.dom.ls.LSOutput;
 
 import java.io.*;
+import java.util.ArrayList;
 
 public class TailerLauncher {
     @Option(name = "-c", metaVar = "LastSymbols", usage = "Extract last N symbols")
-    private Integer numOfLastSymbols;
+    private int numOfLastSymbols;
 
     @Option(name = "-n", metaVar = "LastStrings", usage = "Extract last N strings")
-    private Integer numOfLastStrings;
+    private int numOfLastStrings;
 
     @Option(name = "-o", metaVar = "OutputName", usage = "Output file name")
     private String outputFileName;
 
     @Argument(metaVar = "InputName", usage = "Input file name")
-    private String[] inputFileNames;
+    private ArrayList<String> inputFileNames;
 
     public static void main(String[] args) {
         new TailerLauncher().launch(args);
@@ -36,9 +38,11 @@ public class TailerLauncher {
             return;
         }
 
-        if (numOfLastStrings != null && numOfLastSymbols != null) {
+        if (numOfLastStrings != 0 && numOfLastSymbols != 0) {
             System.err.println("The simultaneous use of the flags \"-c\" and \"-n\" ");
             return;
+        } else if (numOfLastSymbols == 0 && numOfLastStrings == 0) {
+            numOfLastStrings = 10;
         }
 
         Tailer tailer = new Tailer(numOfLastSymbols, numOfLastStrings);
