@@ -7,7 +7,7 @@ public class flagManager {
     public String pathIn;
     public String pathOut;
     messageManager msg = new messageManager();
-    void parsing(String[] args) throws IOException {
+    void parsing(String[] args) throws Exception {
         String command = String.join(" ", args);
         msg.basicMsg(0, command);
         int mark = args.length;
@@ -44,7 +44,7 @@ public class flagManager {
         approach = mode.equals("-c");
     }
 
-    void setKey (String inputKey) throws IOException {
+    void setKey (String inputKey) throws Exception {
         if (inputKey.matches("[0-9a-fA-F]+"))
             key = Integer.parseInt (inputKey, 16);
         else {
@@ -52,7 +52,7 @@ public class flagManager {
         }
     }
 
-    void setPathIn (String path) throws IOException {
+    void setPathIn (String path) throws Exception {
         Path fInput = Paths.get(path);
         if (Files.notExists(fInput.toAbsolutePath()) || !Files.isRegularFile(fInput.toAbsolutePath())) {
             msg.error(3, fInput.toAbsolutePath().toString());
@@ -60,7 +60,7 @@ public class flagManager {
         pathIn = path;
     }
 
-    void setPathOut (boolean custom) throws IOException {
+    void setPathOut (boolean custom) throws Exception {
         fileManager file = new fileManager();
         pathOut = file.creator(approach, pathOut, custom);
     }

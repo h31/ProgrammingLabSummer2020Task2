@@ -5,7 +5,7 @@ import java.util.ArrayList;
 class fileManager {
     messageManager msg = new messageManager();
 
-    String creator (boolean approach, String pathOut, boolean custom) throws IOException {
+    String creator (boolean approach, String pathOut, boolean custom) throws Exception {
         Path fOut = Paths.get(pathOut);
         if (custom)
             fOut = Paths.get(pathOut);
@@ -46,7 +46,10 @@ class fileManager {
         byte[] text = Cipher.coding(data, keyNumber);
         writer(flag.pathOut, text);
         fis.close();
-        msg.basicMsg(2, null);
+        if (flag.approach)
+            msg.basicMsg(1, null);
+        else
+            msg.basicMsg(2, null);
     }
 
     void writer (String path, byte[] dataByte) throws IOException {

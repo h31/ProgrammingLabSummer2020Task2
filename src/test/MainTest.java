@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MainTest {
     @Test
-    public void main() throws IOException {
+    public void main() throws Exception {
         String dir = "testDirectory/test folder/";
         Files.createDirectory(Paths.get(dir));
         Path file = Paths.get("testDirectory/test.txt");
@@ -39,6 +39,8 @@ class MainTest {
             assertFalse(textEquals(file, fileEDED));
 
             Path finalFile = file;
+            assertThrows(Exception.class, () -> Main.main(new String[]{"-h"}));
+            assertThrows(IllegalArgumentException.class, () -> Main.main(new String[]{"-t", key2, finalFile.toString()}));
             assertThrows(IllegalArgumentException.class, () -> Main.main(new String[]{"-c", key2, finalFile.toString()}));
             assertThrows(FileNotFoundException.class, () -> Main.main(new String[]{"-c", key1, dir + "test-fail.txt"}));
             assertThrows(FileAlreadyExistsException.class, () -> Main.main(new String[]{"-c", key1, dir + "test.txt"}));

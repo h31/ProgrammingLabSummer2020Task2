@@ -2,7 +2,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.FileAlreadyExistsException;
 
@@ -26,7 +25,7 @@ public class messageManager {
         }
     }
 
-    void error (int code, String remark)  throws IOException {
+    void error (int code, String remark) throws Exception {
         String help = "Valid flags are:\n" +
                 "-c encryption\n" +
                 "-d decryption\n" +
@@ -39,32 +38,28 @@ public class messageManager {
                 "Mikhail Shomov(mikle@shomov.spb.ru), student of St. Petersburg Polytechnic University";
         switch (code) {
             case (0):
-                System.out.println(help + author);
-                break;
+                log.info("Help called");
+                throw new Exception(help + author);
             case (1):
                 log.error("Invalid arguments " + remark);
-                System.err.println("Error in the use of commands. \n" + help);
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Error in the use of commands. \n" + help);
             case (2):
                 log.error("Incorrect cipher key " + remark);
-                System.err.println("Incorrect cipher key. The key is set in hexadecimal format.");
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Incorrect cipher key. The key is set in hexadecimal format.");
             case (3):
                 log.error("The input file does not exist " + remark);
-                System.err.println("The input file does not exist");
-                throw new FileNotFoundException();
+                throw new FileNotFoundException("The input file does not exist");
             case (4):
                 log.error("File " + remark + " already exists");
                 throw new FileAlreadyExistsException("A file with this name already exists in this directory. Please use the -o argument.");
             case (5):
                 log.error("Access to the folder " + remark + " is forbidden");
                 throw new AccessDeniedException("Access to the folder " + remark + " is forbidden");
-
         }
     }
 
     void attention (int code, String remark) {
-        switch (code) { //невзирая на предупреждения IDEA, принял решение оставить контсрукцию switch, для возможности масштабирования
+        switch (code) { //не взирая на предупреждения IDEA принял решение использовать конструкцию switch для возможности масштабирования
             case (1):
                 System.out.println("Attention! You are trying to decrypt a file without the .crp extension. Possible failure.");
                 log.warn("Attempt to decrypt non .crp " + remark);
