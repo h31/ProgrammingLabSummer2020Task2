@@ -1,6 +1,10 @@
 # ciphxor  
 
 
+[![Build Status](https://travis-ci.com/shomov/ProgrammingLabSummer2020Task2.svg?branch=master)](https://travis-ci.com/shomov/ProgrammingLabSummer2020Task2)
+[![codecov](https://codecov.io/gh/shomov/ProgrammingLabSummer2020Task2/branch/master/graph/badge.svg)](https://codecov.io/gh/shomov/ProgrammingLabSummer2020Task2)
+
+
 Данная программа представляет собой реализацию консольного приложения, реализующее шифрование посредством алгоритма "исключающее или", иными словами "xor".
 Поддерживает два режима работы: шифрация и дешифрация. Аргумент, указывающий режим, пишется в самом начале:
 - `-с`		шифрация
