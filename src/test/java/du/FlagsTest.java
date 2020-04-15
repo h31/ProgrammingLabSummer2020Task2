@@ -1,10 +1,11 @@
 package du;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class FlagsTest {
-    Flags createFlags(){
+    Flags createFlags() {
         return new Flags(true, true, false);
     }
 

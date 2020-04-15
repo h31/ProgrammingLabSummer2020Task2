@@ -9,80 +9,72 @@ import java.io.*;
 class FileWeight {
     private List<BigDecimal> weights = new ArrayList<>();
     private Flags flags;
-    FileWeight(Arguments args){
+
+    FileWeight(Arguments args) {
         try {
-            for (int i = 0; i != args.getFiles().size(); i++) {
-                if (!new File(args.getFiles().get(i)).exists()) throw new IOException();
-                File file = new File(args.getFiles().get(i));
+            for (String fileName : args.getFiles()) {
+                if (!new File(fileName).exists()) throw new IOException();
+                File file = new File(fileName);
                 if (file.isDirectory()) weights.add(dirSum(file));
                 else weights.add(new BigDecimal(file.length()).setScale(1, RoundingMode.HALF_UP));
             }
-        }catch (IOException e){
+        } catch (IOException e) {
             System.exit(2);
         }
 
         flags = args.getFlags();
     }
-    private BigDecimal dirSum(File dir){
-        File[] elements = dir.listFiles();
+
+    private BigDecimal dirSum(File dir) {
+        File[] files = dir.listFiles();
         BigDecimal sum = new BigDecimal(0).setScale(1, RoundingMode.HALF_UP);
-        for (int j = 0; j!= elements.length; j++){
-            File file = elements[j];
+        for (File file : files) {
             if (file.isDirectory()) {
                 sum = sum.add(dirSum(file));
-            }else {
-                BigDecimal test = new BigDecimal(file.length()).setScale(1,RoundingMode.HALF_UP);
-                sum = sum.add(new BigDecimal(file.length()).setScale(1,RoundingMode.HALF_UP));
-            }
-        }
-        return sum;
-    }
-
-    private BigDecimal sum(){
-        BigDecimal sum = new BigDecimal(0.0).setScale(1,RoundingMode.HALF_UP);
-        for (int i = 0; i != weights.size(); i++){
-            sum = sum.add(weights.get(i));
-        }
-        return sum;
-    }
-
-    String degree(){
-        int divisor = (flags.siFlag()? 1000:1024);
-        BigDecimal bdDivisor = new BigDecimal(divisor).setScale(1,RoundingMode.HALF_UP);
-        String[] degrees = { "B", "KB", "MB", "GB","TB","PB"};
-        if (flags.cFlag()){
-            BigDecimal sum = this.sum();
-            if (flags.hFlag()){
-                int i = 0;
-                while (sum.compareTo(bdDivisor)>0 && i != degrees.length - 1){
-                    sum = sum.divide(bdDivisor, RoundingMode.HALF_UP);
-                    i++;
-                }
-                return sum.toString()+degrees[i];
             } else {
-                return sum.divide(bdDivisor, RoundingMode.HALF_UP).toString();
+                sum = sum.add(new BigDecimal(file.length()).setScale(1, RoundingMode.HALF_UP));
             }
+        }
+        return sum;
+    }
+
+    String getWeight() {
+        if (flags.cFlag()) {
+            return degree(this.sum()).trim();
         } else {
             StringBuilder str = new StringBuilder();
-            if(flags.hFlag()){
-                for (int j = 0; j != weights.size(); j++){
-                    int i = 0;
-                    while (weights.get(j).compareTo(bdDivisor)>0 && i != degrees.length - 1){
-                        weights.set(j, weights.get(j).divide(bdDivisor, RoundingMode.HALF_UP));
-                        i++;
-                    }
-                    str.append(weights.get(j).toString()).append(degrees[i]).append(" ");
-                }
-                return str.toString();
-            } else {
-                for (int j = 0; j != weights.size(); j++){
-
-                    str.append(weights.get(j).divide(bdDivisor, RoundingMode.HALF_UP).toString()).append(" ");
-                }
-                return str.toString();
+            for (BigDecimal weight: weights){
+                str.append(degree(weight));
             }
+            return str.toString().trim();
         }
-     }
+    }
+
+    private BigDecimal sum() {
+        BigDecimal sum = new BigDecimal(0.0).setScale(1, RoundingMode.HALF_UP);
+        for (BigDecimal weight : weights) {
+            sum = sum.add(weight);
+        }
+        return sum;
+    }
+
+    private String degree(BigDecimal weight) {
+        int divisor = (flags.siFlag() ? 1000 : 1024);
+        BigDecimal bdDivisor = new BigDecimal(divisor).setScale(1, RoundingMode.HALF_UP);
+        String[] degrees = {"B", "KB", "MB", "GB", "TB", "PB"};
+        if (flags.hFlag()) {
+            for (String degree: degrees){
+                if (weight.compareTo(bdDivisor) < 0 ){
+                    return weight.toString() + degree + " ";
+                } else {
+                    weight = weight.divide(bdDivisor, RoundingMode.HALF_UP);
+                }
+            }
+            return weight.toString() + "PB ";
+        } else {
+            return weight.divide(bdDivisor, RoundingMode.HALF_UP).toString() + " ";
+        }
+    }
 
     @Override
     public String toString() {

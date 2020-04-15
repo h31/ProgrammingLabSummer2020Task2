@@ -2,7 +2,7 @@ package du;
 
 import java.util.Objects;
 
-public class Flags {
+class Flags {
     private boolean hFlag = false;
     private boolean cFlag = false;
     private boolean siFlag = false;
@@ -13,25 +13,31 @@ public class Flags {
         this.siFlag = siFlag;
     }
 
-    boolean hFlag(){return hFlag;}
+    boolean hFlag() {
+        return hFlag;
+    }
 
-    boolean cFlag(){return cFlag;}
+    boolean cFlag() {
+        return cFlag;
+    }
 
-    boolean siFlag(){return siFlag;}
+    boolean siFlag() {
+        return siFlag;
+    }
 
-    boolean setHFlag(boolean newHFlag){
+    boolean setHFlag(boolean newHFlag) {
         boolean change = !(hFlag == newHFlag);
         hFlag = newHFlag;
         return change;
     }
 
-    boolean setCFlag(boolean newCFlag){
+    boolean setCFlag(boolean newCFlag) {
         boolean change = !(cFlag == newCFlag);
         cFlag = newCFlag;
         return change;
     }
 
-    boolean setSiFlag(boolean newSiFlag){
+    boolean setSiFlag(boolean newSiFlag) {
         boolean change = !(siFlag == newSiFlag);
         siFlag = newSiFlag;
         return change;
@@ -54,7 +60,7 @@ public class Flags {
 
     @Override
     public String toString() {
-        return  "hFlag=" + hFlag +
+        return "hFlag=" + hFlag +
                 ", cFlag=" + cFlag +
                 ", siFlag=" + siFlag;
     }
