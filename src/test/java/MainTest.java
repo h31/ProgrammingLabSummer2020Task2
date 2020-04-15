@@ -44,7 +44,7 @@ class MainTest {
             assertThrows(IllegalArgumentException.class, () -> Main.main(new String[]{"-c", key2, finalFile.toString()}));
             assertThrows(FileNotFoundException.class, () -> Main.main(new String[]{"-c", key1, dir + "test-fail.txt"}));
             assertThrows(FileAlreadyExistsException.class, () -> Main.main(new String[]{"-c", key1, dir + "test.txt"}));
-            assertThrows(AccessDeniedException.class, () -> Main.main(new String[]{"-c", key1, "/run/systemd/generator/mnt-sda1.mount"}));
+            assertThrows(AccessDeniedException.class, () -> Main.main(new String[]{"-c", key1, "/bin/bash"}));
             assertThrows(FileAlreadyExistsException.class, () -> Main.main(new String[]{"-c", key1, dir + "test.txt", "-o", dir + "test.txt"}));
         }
 
