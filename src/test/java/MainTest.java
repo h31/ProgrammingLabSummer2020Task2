@@ -40,12 +40,20 @@ class MainTest {
 
             Path finalFile = file;
             assertThrows(Exception.class, () -> Main.main(new String[]{"-h"}));
+            assertThrows(IllegalArgumentException.class, () -> Main.main(new String[]{"-с"}));
             assertThrows(IllegalArgumentException.class, () -> Main.main(new String[]{"-t", key2, finalFile.toString()}));
             assertThrows(IllegalArgumentException.class, () -> Main.main(new String[]{"-c", key2, finalFile.toString()}));
             assertThrows(FileNotFoundException.class, () -> Main.main(new String[]{"-c", key1, dir + "test-fail.txt"}));
             assertThrows(FileAlreadyExistsException.class, () -> Main.main(new String[]{"-c", key1, dir + "test.txt"}));
             assertThrows(AccessDeniedException.class, () -> Main.main(new String[]{"-c", key1, "/bin/bash"}));
             assertThrows(FileAlreadyExistsException.class, () -> Main.main(new String[]{"-c", key1, dir + "test.txt", "-o", dir + "test.txt"}));
+        }
+
+        {
+            messageManager msg = new messageManager();
+            assertThrows(Exception.class, () -> msg.basicMsg(3, null));
+            assertThrows(Exception.class, () -> msg.error(9, null));
+            assertThrows(Exception.class, () -> msg.attention(2, null));
         }
 
     }

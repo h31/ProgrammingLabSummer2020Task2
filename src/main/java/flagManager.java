@@ -48,16 +48,14 @@ public class flagManager {
     void setKey (String inputKey) throws Exception {
         if (inputKey.matches("[0-9a-fA-F]+"))
             key = Integer.parseInt (inputKey, 16);
-        else {
+        else
             msg.error(2, inputKey);
-        }
     }
 
     void setPathIn (String path) throws Exception {
         Path fInput = Paths.get(path);
-        if (Files.notExists(fInput.toAbsolutePath()) || !Files.isRegularFile(fInput.toAbsolutePath())) {
+        if (Files.notExists(fInput.toAbsolutePath()) || !Files.isRegularFile(fInput.toAbsolutePath()))
             msg.error(3, fInput.toAbsolutePath().toString());
-        }
         pathIn = path;
     }
 

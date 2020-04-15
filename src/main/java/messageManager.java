@@ -9,8 +9,8 @@ import java.nio.file.FileAlreadyExistsException;
 public class messageManager {
     Logger log = LogManager.getLogger(messageManager.class.getName());
 
-    void basicMsg (int code, String remark) {
-        switch (code){
+    void basicMsg (int code, String remark) throws Exception {
+        switch (code) {
             case (0):
                 log.info("The program started with arguments: " + remark);
                 break;
@@ -22,6 +22,8 @@ public class messageManager {
                 System.out.println("Decoding completed");
                 log.info("Decoding completed");
                 break;
+            default:
+                throw new Exception("There is no such message code");
         }
     }
 
@@ -55,14 +57,19 @@ public class messageManager {
             case (5):
                 log.error("Access to the folder " + remark + " is forbidden");
                 throw new AccessDeniedException("Access to the folder " + remark + " is forbidden");
+            default:
+                throw new Exception("There is no such error code");
         }
     }
 
-    void attention (int code, String remark) {
+    void attention (int code, String remark) throws Exception {
         switch (code) { //не взирая на предупреждения IDEA принял решение использовать конструкцию switch для возможности масштабирования
             case (1):
                 System.out.println("Attention! You are trying to decrypt a file without the .crp extension. Possible failure.");
                 log.warn("Attempt to decrypt non .crp " + remark);
+                break;
+            default:
+                throw new Exception("There is no such attention code");
         }
     }
 }

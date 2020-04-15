@@ -12,14 +12,13 @@ class fileManager {
         else
             if (approach)
                 fOut = Paths.get(fOut.toString() + ".crp");
-            else {
+            else
                 if (fOut.getFileName().toString().contains(".crp"))
                     fOut = Paths.get(pathOut.substring(0, pathOut.lastIndexOf(".")));
                 else {
                     fOut = Paths.get(pathOut + ".txt");
                     msg.attention(1, fOut.toString());
                 }
-            }
         try {
             Files.createFile(fOut);
         }
@@ -32,7 +31,7 @@ class fileManager {
         return fOut.toString();
     }
 
-    void reader (flagManager flag) throws IOException {
+    void reader (flagManager flag) throws Exception {
         ArrayList<Integer> keyNumber = new ArrayList<>();
         long temp = flag.key;
         int j = 1;
