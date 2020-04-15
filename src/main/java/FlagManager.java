@@ -49,10 +49,12 @@ public class FlagManager {
     }
 
     void setKey (String inputKey) throws Exception {
-        if (inputKey.matches("[0-9a-fA-F]+"))
+        try {
             key = Integer.parseInt (inputKey, 16);
-        else
+        }
+        catch (NumberFormatException e) {
             msg.error(2, inputKey);
+        }
     }
 
     void setPathIn (String path) throws Exception {
