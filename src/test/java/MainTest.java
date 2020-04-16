@@ -1,3 +1,4 @@
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import java.io.*;
 import java.nio.file.*;
@@ -77,8 +78,8 @@ class MainTest {
         return equal;
     }
 
-    @Test
-    public void deleteFolderAndItsContent() throws IOException {
+    @AfterEach
+    void deleteFolderAndItsContent() throws IOException {
         Path folder = Paths.get("testDirectory/test folder");
         Files.walkFileTree(folder, new SimpleFileVisitor<>() {
             public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
@@ -86,14 +87,10 @@ class MainTest {
                 return FileVisitResult.CONTINUE;
             }
             public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-                if (exc != null) {
-                    throw exc;
-                }
                 Files.delete(dir);
                 return FileVisitResult.CONTINUE;
             }
         });
-        assertTrue(Files.notExists(folder));
     }
     //The idea is borrowed from https://stackoverflow.com/questions/20281835/how-to-delete-a-folder-with-files-using-java
 }
