@@ -15,63 +15,25 @@ public class Uniq {
     }
 
     public void launch() throws IOException {
-        BufferedReader input;
-        BufferedWriter output;
-
-        if (flags.inputName != null && flags.outputName != null) {
-            input = new BufferedReader(new FileReader(flags.inputName));
-            output = new BufferedWriter(new FileWriter(flags.outputName));
+        try {
+            BufferedReader input = (flags.inputName != null) ? new BufferedReader(new FileReader(flags.inputName))
+                    : new BufferedReader(new InputStreamReader(System.in));
+            BufferedWriter output = (flags.outputName != null) ? new BufferedWriter(new FileWriter(flags.outputName))
+                    : new BufferedWriter(new OutputStreamWriter(System.out));
             if (flags.unique || flags.count) makeUniqueWithFlag(input, output);
             else makeUnique(input, output);
             input.close();
             output.close();
+        } catch (FileNotFoundException fnfEx) {
+            System.out.print("Unable to find file \"" + flags.inputName + "\"\n");
         }
-
-        if (flags.outputName == null && flags.inputName == null) {
-            input = new BufferedReader(new InputStreamReader(System.in));
-            output = new BufferedWriter(new OutputStreamWriter(System.out));
-            if (flags.unique || flags.count) makeUniqueWithFlag(input, output);
-            else makeUnique(input, output);
-            input.close();
-            output.close();
-        } else if (flags.inputName == null) {
-            input = new BufferedReader(new InputStreamReader(System.in));
-            output = new BufferedWriter(new FileWriter(flags.outputName));
-            if (flags.unique || flags.count) makeUniqueWithFlag(input, output);
-            else makeUnique(input, output);
-            input.close();
-            output.close();
-        } else if (flags.outputName == null) {
-            input = new BufferedReader(new FileReader(flags.inputName));
-            output = new BufferedWriter(new OutputStreamWriter(System.out));
-            if (flags.unique || flags.count) makeUniqueWithFlag(input, output);
-            else makeUnique(input, output);
-            input.close();
-            output.close();
-        }
-
     }
 
     private void makeUnique(BufferedReader input, BufferedWriter output) throws IOException {
         String prevLine = "";
         String line;
         while ((line = input.readLine()) != null) {
-            if (
-                    (prevLine.length() >= flags.num && line.length() >= flags.num) && (
-                            flags.ignoreCase && !line
-                                    .substring(flags.num)
-                                    .toLowerCase()
-                                    .equals(prevLine.substring(flags.num).toLowerCase())
-                                    || !flags.ignoreCase && !line
-                                    .substring(flags.num)
-                                    .equals(prevLine.substring(flags.num))
-                    ) || !(prevLine.length() >= flags.num && line.length() >= flags.num) && (
-                            prevLine.length() < flags.num
-                                    && line.length() >= flags.num
-                                    || prevLine.length() >= flags.num
-                                    || prevLine.equals("")
-                    )
-            ) {
+            if (areDuplicates(prevLine, line)) {
                 if (!prevLine.equals("")) output.write("\n");
                 output.write(line);
             }
@@ -86,22 +48,7 @@ public class Uniq {
         boolean skip = false;
         int times = 1;
         while ((line = input.readLine()) != null) {
-            if (
-                    (prevLine.length() >= flags.num && line.length() >= flags.num) && (
-                            flags.ignoreCase && !line
-                                    .substring(flags.num)
-                                    .toLowerCase()
-                                    .equals(prevLine.substring(flags.num).toLowerCase())
-                                    || !flags.ignoreCase && !line
-                                    .substring(flags.num)
-                                    .equals(prevLine.substring(flags.num))
-                    ) || !(prevLine.length() >= flags.num && line.length() >= flags.num) && (
-                            prevLine.length() < flags.num
-                                    && line.length() >= flags.num
-                                    || prevLine.length() >= flags.num
-                                    || prevLine.equals("")
-                    )
-            ) {
+            if (areDuplicates(prevLine, line)) {
                 if (!skip && !prevLine.equals("")) {
                     if (flags.count) output.write(times + " ");
                     if (times > 1) output.write(firstRepeated + "\n");
@@ -123,6 +70,21 @@ public class Uniq {
             if (flags.count) output.write(times + " ");
             output.write(prevLine);
         }
+    }
+
+    private boolean areDuplicates(String firstLine, String secondLine) {
+        final boolean indexesInbound = firstLine.length() >= flags.num && secondLine.length() >= flags.num;
+        final boolean linesNotEqualFlagI =
+                indexesInbound && flags.ignoreCase && !secondLine.substring(flags.num).toLowerCase()
+                        .equals(firstLine.substring(flags.num).toLowerCase());
+        final boolean linesNotEqual = indexesInbound && !flags.ignoreCase && !secondLine
+                .substring(flags.num)
+                .equals(firstLine.substring(flags.num));
+        final boolean oneOfLinesIndexInbound = firstLine.length() < flags.num
+                && secondLine.length() >= flags.num
+                || firstLine.length() >= flags.num
+                || firstLine.equals("");
+        return indexesInbound && (linesNotEqual || linesNotEqualFlagI) || !indexesInbound && oneOfLinesIndexInbound;
     }
 
     @Override

@@ -3,10 +3,7 @@ package com.example.project;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,7 +16,7 @@ class UniqTests {
         while ((line = reader.readLine()) != null) {
             sb.append(line).append("\n");
         }
-        if (sb.lastIndexOf("\n") != -1) sb.deleteCharAt(sb.lastIndexOf("\n"));
+        if (sb.lastIndexOf("\n") > -1) sb.deleteCharAt(sb.lastIndexOf("\n"));
         assertEquals(expected, sb.toString());
 
         reader.close();
@@ -170,7 +167,15 @@ class UniqTests {
     }
 
     @Test
-    void wrongInputName() {
-        assertThrows(IOException.class, () -> UniqMain.main(new String[] {"wrong.txt"}));
+    void wrongInputName() throws IOException {
+        ByteArrayOutputStream outActual = new ByteArrayOutputStream();
+        final PrintStream original = System.out;
+        System.setOut(new PrintStream(outActual));
+
+        final String expected = "Unable to find file \"wrong.txt\"\n";
+        UniqMain.main(new String[] {"wrong.txt"});
+
+        assertEquals(expected, outActual.toString());
+        System.setOut(original);
     }
 }
