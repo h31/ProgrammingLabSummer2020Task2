@@ -65,7 +65,7 @@ class ProcessingTest {
     boolean putArgs(String[] args) {
         Processing element = createProcessing(args);
         return element.getSi() & element.getH() & element.getC() &
-                Arrays.asList(new File("src\\test\\resources")).equals(element.getListOfFiles());
+                Arrays.asList(new File("src/test/resources")).equals(element.getListOfFiles());
     }
 
     @Test
