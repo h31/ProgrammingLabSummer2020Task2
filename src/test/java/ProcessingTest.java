@@ -56,7 +56,7 @@ class ProcessingTest {
 
     @Test
     void getListOfFiles() {
-        assertEquals(Arrays.asList(new File("src/test\\resources")),
+        assertEquals(Arrays.asList(new File("src/test/resources")),
                 createProcessing(new String[]{"-h", "--si", "-c", "src/test/resources", "src/test/resources/erttet.txt"}).getListOfFiles());
         assertEquals(Arrays.asList(new File("src/test/resources"), new File("src/test/resources/cat.txt")),
                 createProcessing(new String[]{"-h", "--si", "-c", "src/test/resources", "src/test/resources/cat.txt"}).getListOfFiles());
