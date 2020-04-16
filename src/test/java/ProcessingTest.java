@@ -56,10 +56,10 @@ class ProcessingTest {
 
     @Test
     void getListOfFiles() {
-        assertEquals(Arrays.asList(new File("src\\test\\resources")),
-                createProcessing(new String[]{"-h", "--si", "-c", "src\\test\\resources", "src\\test\\resources\\erttet.txt"}).getListOfFiles());
-        assertEquals(Arrays.asList(new File("src\\test\\resources"), new File("src\\test\\resources\\cat.txt")),
-                createProcessing(new String[]{"-h", "--si", "-c", "src\\test\\resources", "src\\test\\resources\\cat.txt"}).getListOfFiles());
+        assertEquals(Arrays.asList(new File("src/test\\resources")),
+                createProcessing(new String[]{"-h", "--si", "-c", "src/test/resources", "src/test/resources/erttet.txt"}).getListOfFiles());
+        assertEquals(Arrays.asList(new File("src/test/resources"), new File("src/test/resources/cat.txt")),
+                createProcessing(new String[]{"-h", "--si", "-c", "src/test/resources", "src/test/resources/cat.txt"}).getListOfFiles());
 
     }
     boolean putArgs(String[] args) {
@@ -70,13 +70,13 @@ class ProcessingTest {
 
     @Test
     void checkInput() {
-        assertTrue(putArgs(new String[]{"-h", "--si", "-c", "src\\test\\resources"}));
-        assertFalse(putArgs(new String[]{"--si", "-c", "src\\test\\resources"}));
-        assertFalse(putArgs(new String[]{"-h", "-c", "src\\test\\resources"}));
-        assertFalse(putArgs(new String[]{"-h", "src\\test\\resources"}));
-        assertFalse(putArgs(new String[]{"--si", "src\\test\\resources"}));
-        assertFalse(putArgs(new String[]{"-c", "src\\test\\resources"}));
-        assertFalse(putArgs(new String[]{"-h", "--si", "src\\test\\resources"}));
+        assertTrue(putArgs(new String[]{"-h", "--si", "-c", "src/test/resources"}));
+        assertFalse(putArgs(new String[]{"--si", "-c", "src/test/resources"}));
+        assertFalse(putArgs(new String[]{"-h", "-c", "src/test/resources"}));
+        assertFalse(putArgs(new String[]{"-h", "src/test/resources"}));
+        assertFalse(putArgs(new String[]{"--si", "src/test/resources"}));
+        assertFalse(putArgs(new String[]{"-c", "src/test/resources"}));
+        assertFalse(putArgs(new String[]{"-h", "src/test/resources"}));
         NullPointerException thrown = assertThrows(NullPointerException.class, () ->
            createProcessing(new String[]{"-h", "--si"}));
         assertTrue(thrown.getMessage().contains("Вы не ввели имена файлов. Список имен пуст"));
@@ -84,10 +84,10 @@ class ProcessingTest {
 
     @Test
     void cFlagSize() {
-        assertTrue(createProcessing(new String[]{"-h", "--si", "-c", "src\\test\\resources", "src\\test\\resources\\cat.txt"}).cFlagSize().equals("13.8K "));
-        assertTrue(createProcessing(new String[]{"-c", "src\\test\\resources", "src\\test\\resources\\cat.txt"}).cFlagSize().equals("13.5K "));
-        assertTrue(createProcessing(new String[]{"-h", "-c", "src\\test\\resources", "src\\test\\resources\\cat.txt"}).cFlagSize().equals("13.5K "));
-        assertTrue(createProcessing(new String[]{"--si", "-c", "src\\test\\resources", "src\\test\\resources\\cat.txt"}).cFlagSize().equals("13.8K "));
+        assertTrue(createProcessing(new String[]{"-h", "--si", "-c", "src/test/resources", "src/test/resources/cat.txt"}).cFlagSize().equals("13.8K "));
+        assertTrue(createProcessing(new String[]{"-c", "src/test/resources", "src/test/resources/cat.txt"}).cFlagSize().equals("13.5K "));
+        assertTrue(createProcessing(new String[]{"-h", "-c", "src/test/resources", "src/test/resources/cat.txt"}).cFlagSize().equals("13.5K "));
+        assertTrue(createProcessing(new String[]{"--si", "-c", "src/test/resources", "src/test/resources/cat.txt"}).cFlagSize().equals("13.8K "));
     }
 
     List<String> sizeList(String[] args) {
