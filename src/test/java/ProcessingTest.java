@@ -84,10 +84,10 @@ class ProcessingTest {
 
     @Test
     void cFlagSize() {
-        assertTrue(createProcessing(new String[]{"-h", "--si", "-c", "src/test/resources", "src/test/resources/cat.txt"}).cFlagSize().equals("13.8K "));
-        assertTrue(createProcessing(new String[]{"-c", "src/test/resources", "src/test/resources/cat.txt"}).cFlagSize().equals("13.5K "));
-        assertTrue(createProcessing(new String[]{"-h", "-c", "src/test/resources", "src/test/resources/cat.txt"}).cFlagSize().equals("13.5K "));
-        assertTrue(createProcessing(new String[]{"--si", "-c", "src/test/resources", "src/test/resources/cat.txt"}).cFlagSize().equals("13.8K "));
+        assertTrue(createProcessing(new String[]{"-h", "--si", "-c", "src/test/resources", "src/test/resources/cat.txt"}).cFlagSize().equals("10.1K "));
+        assertTrue(createProcessing(new String[]{"-c", "src/test/resources", "src/test/resources/cat.txt"}).cFlagSize().equals("9.9K "));
+        assertTrue(createProcessing(new String[]{"-h", "-c", "src/test/resources", "src/test/resources/cat.txt"}).cFlagSize().equals("9.9K "));
+        assertTrue(createProcessing(new String[]{"--si", "-c", "src/test/resources", "src/test/resources/cat.txt"}).cFlagSize().equals("10.1K "));
     }
 
     List<String> sizeList(String[] args) {
@@ -105,15 +105,15 @@ class ProcessingTest {
 
     @Test
     void necessarySizeOutput() {
-        assertEquals(sizeList(new String[]{"-h", "--si", "-c", "src/test/resources/cat.txt", "src/test/resources"}), Arrays.asList("5.0K ", "8.8K "));
-        assertEquals(sizeList(new String[]{"--si", "-c", "src/test/resources/cat.txt", "src/test/resources"}), Arrays.asList("5.0K ", "8.8K "));
-        assertEquals(sizeList(new String[]{"-c", "src/test/resources/cat.txt", "src/test/resources"}), Arrays.asList("4.9K ", "8.6K "));
-        assertEquals(sizeList(new String[]{"-h", "-c", "src/test/resources/cat.txt", "src/test/resources"}), Arrays.asList("4.9K ", "8.6K "));
-        assertEquals(sizeList(new String[]{"-h", "--si", "src/test/resources/cat.txt", "src/test/resources"}), Arrays.asList("5.0K ", "8.8K "));
-        assertEquals(sizeList(new String[]{"-h", "src/test/resources/cat.txt", "src/test/resources"}), Arrays.asList("4.9K ", "8.6K "));
-        assertEquals(sizeList(new String[]{"--si", "src/test/resources/cat.txt", "src/test/resources"}), Arrays.asList("5.0K ", "8.8K "));
-        assertEquals(sizeList(new String[]{"src/test/resources/cat.txt", "src/test/resources"}), Arrays.asList("4.9K ", "8.6K "));
-        assertEquals(sizeList(new String[]{"src/test/resources/regina.txt", "src/test/resources"}), Arrays.asList("8.6K "));
+        assertEquals(sizeList(new String[]{"-h", "--si", "-c", "src/test/resources/cat.txt", "src/test/resources"}), Arrays.asList("5.0K ", "5.1K "));
+        assertEquals(sizeList(new String[]{"--si", "-c", "src/test/resources/cat.txt", "src/test/resources"}), Arrays.asList("5.0K ", "5.1K "));
+        assertEquals(sizeList(new String[]{"-c", "src/test/resources/cat.txt", "src/test/resources"}), Arrays.asList("4.9K ", "5.0K "));
+        assertEquals(sizeList(new String[]{"-h", "-c", "src/test/resources/cat.txt", "src/test/resources"}), Arrays.asList("4.9K ", "5.0K "));
+        assertEquals(sizeList(new String[]{"-h", "--si", "src/test/resources/cat.txt", "src/test/resources"}), Arrays.asList("5.0K ", "5.1K "));
+        assertEquals(sizeList(new String[]{"-h", "src/test/resources/cat.txt", "src/test/resources"}), Arrays.asList("4.9K ", "5.0K "));
+        assertEquals(sizeList(new String[]{"--si", "src/test/resources/cat.txt", "src/test/resources"}), Arrays.asList("5.0K ", "5.1K "));
+        assertEquals(sizeList(new String[]{"src/test/resources/cat.txt", "src/test/resources"}), Arrays.asList("4.9K ", "5.0K "));
+        assertEquals(sizeList(new String[]{"src/test/resources/regina.txt", "src/test/resources"}), Arrays.asList("5.0K "));
 
     }
 }
