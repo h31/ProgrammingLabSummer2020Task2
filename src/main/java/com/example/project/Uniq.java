@@ -60,6 +60,7 @@ public class Uniq {
                     times = 1;
                 } else {
                     skip = false;
+                    times = 1;
                 }
             } else if (!prevLine.equals("")) {
                 if (flags.count) {
