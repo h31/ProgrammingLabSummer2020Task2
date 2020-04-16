@@ -30,6 +30,7 @@ public class FlagManager {
 
     void parsing(String[] args) throws Exception {
         final CmdLineParser parser = new CmdLineParser(this);
+        msg.basicMsg(0, String.join(" ", args));
         try {
             parser.parseArgument(args);
         } catch (CmdLineException e) {
