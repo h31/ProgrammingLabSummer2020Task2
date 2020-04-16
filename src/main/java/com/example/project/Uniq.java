@@ -20,7 +20,8 @@ public class Uniq {
                     : new BufferedReader(new InputStreamReader(System.in));
             BufferedWriter output = (flags.outputName != null) ? new BufferedWriter(new FileWriter(flags.outputName))
                     : new BufferedWriter(new OutputStreamWriter(System.out));
-            if (flags.unique || flags.count) makeUniqueWithFlag(input, output);
+            if (flags.unique || flags.count)
+                makeUniqueWithFlag(input, output);
             else makeUnique(input, output);
             input.close();
             output.close();
@@ -34,7 +35,8 @@ public class Uniq {
         String line;
         while ((line = input.readLine()) != null) {
             if (areDuplicates(prevLine, line)) {
-                if (!prevLine.equals("")) output.write("\n");
+                if (!prevLine.equals(""))
+                    output.write("\n");
                 output.write(line);
             }
             prevLine = line;
@@ -50,8 +52,10 @@ public class Uniq {
         while ((line = input.readLine()) != null) {
             if (areDuplicates(prevLine, line)) {
                 if (!skip && !prevLine.equals("")) {
-                    if (flags.count) output.write(times + " ");
-                    if (times > 1) output.write(firstRepeated + "\n");
+                    if (flags.count)
+                        output.write(times + " ");
+                    if (times > 1)
+                        output.write(firstRepeated + "\n");
                     else output.write(prevLine + "\n");
                     times = 1;
                 } else {
@@ -59,7 +63,8 @@ public class Uniq {
                 }
             } else if (!prevLine.equals("")) {
                 if (flags.count) {
-                    if (times == 1) firstRepeated = prevLine;
+                    if (times == 1)
+                        firstRepeated = prevLine;
                     times++;
                 }
                 if (flags.unique) skip = true;
@@ -67,7 +72,8 @@ public class Uniq {
             prevLine = line;
         }
         if (!skip) {
-            if (flags.count) output.write(times + " ");
+            if (flags.count)
+                output.write(times + " ");
             output.write(prevLine);
         }
     }

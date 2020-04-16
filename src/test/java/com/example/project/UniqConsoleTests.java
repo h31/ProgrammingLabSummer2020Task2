@@ -43,16 +43,16 @@ class UniqConsoleTests {
 
     @Test
     void outputOnTheConsole() throws IOException {
-         UniqMain.main(new String[] {"files/input.txt", "-i", "-s", "2"});
+        UniqMain.main(new String[]{"files/input.txt", "-i", "-s", "2"});
 
-         final String expected = "А роза упала на лапу Азора\n" +
-                 "  А роза упала на лапу Азора\n" +
-                 "А роза упала на лапу Азора\n" +
-                 "Съешь еще этих мягких французских булок, да выпей чай\n" +
-                 "а роза упала на лапу азора\n" +
-                 "Съешь еще этих мягких французских булок, да выпей чай";
+        final String expected = "А роза упала на лапу Азора\n" +
+                "  А роза упала на лапу Азора\n" +
+                "А роза упала на лапу Азора\n" +
+                "Съешь еще этих мягких французских булок, да выпей чай\n" +
+                "а роза упала на лапу азора\n" +
+                "Съешь еще этих мягких французских булок, да выпей чай";
 
-         assertEquals(expected, output.toString());
+        assertEquals(expected, output.toString());
     }
 
     @Test
@@ -60,7 +60,7 @@ class UniqConsoleTests {
         final String content = "hello\nhello";
         setInContent(content);
 
-        UniqMain.main(new String[] {"-o", "files/output.txt"});
+        UniqMain.main(new String[]{"-o", "files/output.txt"});
         final String expected = "hello";
 
         UniqTests.assertFileContent("files/output.txt", expected);
@@ -72,7 +72,7 @@ class UniqConsoleTests {
         final String content = "hello world\nHELLO WORLD";
         setInContent(content);
 
-        UniqMain.main(new String[] {"-i"});
+        UniqMain.main(new String[]{"-i"});
         final String expected = "hello world";
 
         assertEquals(expected, output.toString());

@@ -16,7 +16,8 @@ class UniqTests {
         while ((line = reader.readLine()) != null) {
             sb.append(line).append("\n");
         }
-        if (sb.lastIndexOf("\n") > -1) sb.deleteCharAt(sb.lastIndexOf("\n"));
+        if (sb.lastIndexOf("\n") > -1)
+            sb.deleteCharAt(sb.lastIndexOf("\n"));
         assertEquals(expected, sb.toString());
 
         reader.close();
@@ -29,7 +30,7 @@ class UniqTests {
 
     @Test
     void withoutArgs() throws IOException {
-        UniqMain.main(new String[] {"files/input.txt", "-o", "files/output.txt"});
+        UniqMain.main(new String[]{"files/input.txt", "-o", "files/output.txt"});
         final String expected = "А роза упала на лапу Азора\n" +
                 "а роза упала на лапу азора\n" +
                 "  А роза упала на лапу Азора\n" +
@@ -46,7 +47,7 @@ class UniqTests {
 
     @Test
     void ignoreUppercase() throws IOException {
-        UniqMain.main(new String[] {"files/input.txt", "-o", "files/output.txt", "-i"});
+        UniqMain.main(new String[]{"files/input.txt", "-o", "files/output.txt", "-i"});
         final String expected = "А роза упала на лапу Азора\n" +
                 "  А роза упала на лапу Азора\n" +
                 "А роза упала на лапу Азора\n" +
@@ -62,7 +63,7 @@ class UniqTests {
 
     @Test
     void ignoreFirstSymbols() throws IOException {
-        UniqMain.main(new String[] {"files/input.txt", "-o", "files/output.txt", "-s", "2"});
+        UniqMain.main(new String[]{"files/input.txt", "-o", "files/output.txt", "-s", "2"});
         final String expected = "А роза упала на лапу Азора\n" +
                 "а роза упала на лапу азора\n" +
                 "  А роза упала на лапу Азора\n" +
@@ -77,14 +78,14 @@ class UniqTests {
 
     @Test
     void ignoreAllSymbols() throws IOException {
-        UniqMain.main(new String[] {"files/input.txt", "-o", "files/output.txt", "-s", "999"});
+        UniqMain.main(new String[]{"files/input.txt", "-o", "files/output.txt", "-s", "999"});
         final String expected = "А роза упала на лапу Азора";
         assertFileContent("files/output.txt", expected);
     }
 
     @Test
     void ignoreSymbolsAndUppercase() throws IOException {
-        UniqMain.main(new String[] {"files/input.txt", "-o", "files/output.txt", "-s", "2", "-i"});
+        UniqMain.main(new String[]{"files/input.txt", "-o", "files/output.txt", "-s", "2", "-i"});
         final String expected = "А роза упала на лапу Азора\n" +
                 "  А роза упала на лапу Азора\n" +
                 "А роза упала на лапу Азора\n" +
@@ -96,7 +97,7 @@ class UniqTests {
 
     @Test
     void onlyUnique() throws IOException {
-        UniqMain.main(new String[] {"files/input.txt", "-o", "files/output.txt", "-u"});
+        UniqMain.main(new String[]{"files/input.txt", "-o", "files/output.txt", "-u"});
         final String expected = "А роза упала на лапу Азора\n" +
                 "а роза упала на лапу азора\n" +
                 "  А роза упала на лапу Азора\n" +
@@ -112,7 +113,7 @@ class UniqTests {
 
     @Test
     void uniqueIgnoreUppercase() throws IOException {
-        UniqMain.main(new String[] {"-i", "files/input.txt", "-o", "files/output.txt", "-u"});
+        UniqMain.main(new String[]{"-i", "files/input.txt", "-o", "files/output.txt", "-u"});
         final String expected = "  А роза упала на лапу Азора\n" +
                 "А роза упала на лапу Азора\n" +
                 "  роза упала на лапу Азора\n" +
@@ -126,7 +127,7 @@ class UniqTests {
 
     @Test
     void uniqueIgnoreFirstSymbols() throws IOException {
-        UniqMain.main(new String[] {"files/input.txt", "-o", "files/output.txt", "-u", "-s", "2"});
+        UniqMain.main(new String[]{"files/input.txt", "-o", "files/output.txt", "-u", "-s", "2"});
         final String expected = "А роза упала на лапу Азора\n" +
                 "а роза упала на лапу азора\n" +
                 "  А роза упала на лапу Азора\n" +
@@ -134,12 +135,12 @@ class UniqTests {
                 "fdроза упала на лапу Азора\n" +
                 "а роза упала на лапу азора\n" +
                 "Съешь еще этих мягких французских булок, да выпей чай";
-    assertFileContent("files/output.txt", expected);
+        assertFileContent("files/output.txt", expected);
     }
 
     @Test
     void countDuplicates() throws IOException {
-        UniqMain.main(new String[] {"files/input.txt", "-o", "files/output.txt", "-c"});
+        UniqMain.main(new String[]{"files/input.txt", "-o", "files/output.txt", "-c"});
         final String expected = "1 А роза упала на лапу Азора\n" +
                 "1 а роза упала на лапу азора\n" +
                 "1   А роза упала на лапу Азора\n" +
@@ -156,7 +157,7 @@ class UniqTests {
 
     @Test
     void countDuplicatesIgnoringUppercaseAndFirstSymbols() throws IOException {
-        UniqMain.main(new String[] {"files/input.txt", "-o", "files/output.txt", "-c", "-i", "-s", "2"});
+        UniqMain.main(new String[]{"files/input.txt", "-o", "files/output.txt", "-c", "-i", "-s", "2"});
         final String expected = "2 А роза упала на лапу Азора\n" +
                 "1   А роза упала на лапу Азора\n" +
                 "5 А роза упала на лапу Азора\n" +
@@ -173,7 +174,7 @@ class UniqTests {
         System.setOut(new PrintStream(outActual));
 
         final String expected = "Unable to find file \"wrong.txt\"\n";
-        UniqMain.main(new String[] {"wrong.txt"});
+        UniqMain.main(new String[]{"wrong.txt"});
 
         assertEquals(expected, outActual.toString());
         System.setOut(original);

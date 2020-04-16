@@ -19,7 +19,7 @@ class OptionsTests {
 
     @Test
     void names() {
-        UniqOptions options = new UniqOptions(new String[] {"-o", "output.txt", "input.txt", "-s", "4"});
+        UniqOptions options = new UniqOptions(new String[]{"-o", "output.txt", "input.txt", "-s", "4"});
         assertEquals("output.txt", options.outputName);
         assertEquals("input.txt", options.inputName);
         assertEquals(4, options.num);
@@ -33,7 +33,7 @@ class OptionsTests {
 
         final String outExpected = "Unable to parse command-line options: \"output\" is not a valid value for \"-s\"\nTry --help\n";
 
-        UniqOptions options = new UniqOptions(new String[] {"-s", "output"});
+        new UniqOptions(new String[]{"-s", "output"});
         assertEquals(outExpected, outActual.toString());
 
         System.setOut(original);
@@ -47,7 +47,7 @@ class OptionsTests {
 
         final String outExpected = "Unable to parse command-line options: Option \"-s\" takes an operand\nTry --help\n";
 
-        UniqOptions options = new UniqOptions(new String[] {"-s"});
+        new UniqOptions(new String[]{"-s"});
         assertEquals(outExpected, outActual.toString());
 
         System.setOut(original);
