@@ -1,23 +1,19 @@
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
+import java.io.*;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        Flags flag = new Flags();
-        flag.checkFlags(args);
-        ArrayList<File> fileList = flag.getLisOfFiles();
-        BufferedWriter writer = new BufferedWriter(new FileWriter("output"));
+        Processing example = new Processing();
+        example.checkInput(args);
+        List<File> fileList = example.getListOfFiles();
         for (int j = 0; j < fileList.size(); j++) {
-            writer.write((new Data(fileList.get(j))).toStringOutput(flag));
-            if (j != fileList.size() - 1) writer.newLine();
+            Size element = new Size(fileList.get(j));
+            System.out.print(example.necessarySizeOutput(element.getSize()) + element.getName());
+            if (j != fileList.size() - 1) System.out.print("\n");
         }
-        if (flag.getC()) {
-            writer.newLine();
-            writer.write(Data.sumSize(flag));
+        if (example.getC() & !example.getListOfFiles().isEmpty()) {
+            System.out.print("\n");
+            System.out.println(example.cFlagSize().trim());
         }
-        writer.close();
     }
 }
