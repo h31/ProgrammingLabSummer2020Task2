@@ -33,6 +33,6 @@ class SizeTest {
 
     @Test
     void getDirectorySize() {
-        assertEquals(8796.0, Size.getDirectorySize(new File("src/test/resources")));
-    }
+        assertEquals(5003.0, Size.getDirectorySize(new File("src/test/resources")));
+}
 }
