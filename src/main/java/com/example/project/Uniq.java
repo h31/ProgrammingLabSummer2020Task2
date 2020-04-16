@@ -16,13 +16,16 @@ public class Uniq {
 
     public void launch() throws IOException {
         try {
-            BufferedReader input = (flags.inputName != null) ? new BufferedReader(new FileReader(flags.inputName))
+            BufferedReader input = (flags.inputName != null)
+                    ? new BufferedReader(new FileReader(flags.inputName))
                     : new BufferedReader(new InputStreamReader(System.in));
-            BufferedWriter output = (flags.outputName != null) ? new BufferedWriter(new FileWriter(flags.outputName))
+            BufferedWriter output = (flags.outputName != null)
+                    ? new BufferedWriter(new FileWriter(flags.outputName))
                     : new BufferedWriter(new OutputStreamWriter(System.out));
             if (flags.unique || flags.count)
                 makeUniqueWithFlag(input, output);
-            else makeUnique(input, output);
+            else
+                makeUnique(input, output);
             input.close();
             output.close();
         } catch (FileNotFoundException fnfEx) {
@@ -56,7 +59,8 @@ public class Uniq {
                         output.write(times + " ");
                     if (times > 1)
                         output.write(firstRepeated + "\n");
-                    else output.write(prevLine + "\n");
+                    else
+                        output.write(prevLine + "\n");
                     times = 1;
                 } else {
                     skip = false;
@@ -84,14 +88,14 @@ public class Uniq {
         final boolean linesNotEqualFlagI =
                 indexesInbound && flags.ignoreCase && !secondLine.substring(flags.num).toLowerCase()
                         .equals(firstLine.substring(flags.num).toLowerCase());
-        final boolean linesNotEqual = indexesInbound && !flags.ignoreCase && !secondLine
-                .substring(flags.num)
-                .equals(firstLine.substring(flags.num));
+        final boolean linesNotEqual =
+                indexesInbound && !flags.ignoreCase && !secondLine.substring(flags.num)
+                        .equals(firstLine.substring(flags.num));
         final boolean oneOfLinesIndexInbound = firstLine.length() < flags.num
                 && secondLine.length() >= flags.num
                 || firstLine.length() >= flags.num
                 || firstLine.equals("");
-        return indexesInbound && (linesNotEqual || linesNotEqualFlagI) || !indexesInbound && oneOfLinesIndexInbound;
+        return linesNotEqual || linesNotEqualFlagI || !indexesInbound && oneOfLinesIndexInbound;
     }
 
     @Override
