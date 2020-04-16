@@ -1,6 +1,10 @@
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import org.kohsuke.args4j.Argument;
+import org.kohsuke.args4j.CmdLineException;
+import org.kohsuke.args4j.CmdLineParser;
+import org.kohsuke.args4j.Option;
 
 public class FlagManager {
     public boolean approach;
@@ -8,44 +12,44 @@ public class FlagManager {
     public String pathIn;
     public String pathOut;
     MessageManager msg = new MessageManager();
-    void parsing(String[] args) throws Exception {
-        String command = String.join(" ", args);
-        msg.basicMsg(0, command);
-        int length = args.length;
-        boolean custom = false;
-        if (args[0].matches("((-c)|(-d))"))
-            setApproach(args[0]);
-        else if (args[0].matches("(-h)"))
-            msg.error(0, null);
-        else
-            msg.error(1, command);
-        if (length > 2) {
-            setKey(args[1]);
-            for (int i = 2; i < args.length; i++)
-                if (args[i].equals("-o")) {
-                    length = i;
-                    custom = true;
-                }
-            StringBuilder path = new StringBuilder();
-            for (int i = 2; i < length; i++)
-                path.append(args[i]).append(" ");
-            setPathIn(path.toString().trim());
-            path = new StringBuilder();
-            if (custom) {
-                for (int i = length + 1; i < args.length; i++)
-                    path.append(args[i]).append(" ");
-                pathOut = path.toString().trim();
-            }
-            else
-                pathOut = pathIn;
-        }
-        else
-            msg.error(1, command);
-        setPathOut(custom);
-    }
 
-    void setApproach(String mode) {
-        approach = mode.equals("-c");
+    @Option(name = "-h")
+    boolean help;
+
+    @Option(name = "-c")
+    String keyEncryption = "";
+
+    @Option(name = "-d")
+    String keyDecryption = "";
+
+    @Argument()
+    String inputFileName;
+
+    @Option(name = "-o")
+    String outputFileName;
+
+    void parsing(String[] args) throws Exception {
+        final CmdLineParser parser = new CmdLineParser(this);
+        try {
+            parser.parseArgument(args);
+        } catch (CmdLineException e) {
+            msg.error(1, String.join(" ", args));
+        }
+        if (help)
+            msg.error(0, null);
+        if (!keyEncryption.equals(""))
+            setKey(keyEncryption);
+        else if (!keyDecryption.equals(""))
+            setKey(keyDecryption);
+        else
+            msg.error(1, String.join(" ", args));
+        approach = !keyEncryption.equals("");
+        setPathIn(inputFileName);
+        if (outputFileName != null)
+            pathOut = outputFileName;
+        else
+            pathOut = pathIn;
+        setPathOut(outputFileName != null);
     }
 
     void setKey (String inputKey) throws Exception {
