@@ -60,14 +60,17 @@ public class Tailer {
             //2 or more input files:
             int tailCounter = 0;
             for (String inputName : inputNames) {
-                reader = Files.newBufferedReader(Paths.get(inputName));
-                writer.write(new File(inputName).getName());
-                writer.newLine();
-                tailCounter += tail(reader, writer);
+                try (BufferedReader reader1 = Files.newBufferedReader(Paths.get(inputName)); writer) {
+                    writer.write(new File(inputName).getName());
+                    writer.newLine();
+                    tailCounter += tail(reader1, writer);
+                }
             }
             return tailCounter;
         }
 
-        return tail(reader, writer);
+        try (reader; writer) {
+            return tail(reader, writer);
+        }
     }
 }
