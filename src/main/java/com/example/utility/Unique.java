@@ -5,10 +5,14 @@ import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.PrintStream;
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
 
-import java.util.*;
-
-//изменить имена в тестах
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Scanner;
+import java.util.Objects;
 
 public class Unique {
     private final StringBuilder dataForOutFile = new StringBuilder();//строки для помещения в файл
@@ -22,6 +26,8 @@ public class Unique {
     public ArrayList<String> getAllLines() {
         return allLines;
     }
+
+    UniqueLauncher uniqueLauncher = new UniqueLauncher();
 
     /**
      * Отдельный метод реализующий ввод данных из консоли
@@ -50,42 +56,48 @@ public class Unique {
         }
     }
 
-    /**
-     * Отдельный метод реализующий вывод данных в файл
-     */
-    public void outputFileData(String output) throws IOException {
-        File file = new File(output);
-        if (file.exists()) {//Проверка существованмя файла
-            System.setOut(new PrintStream(output));
-            System.out.write(dataForOutFile.toString().getBytes());
-        } else {
-            System.err.print("File not found" + ": " + output);
-        }
+    void append(String firstString) {
+        if (uniqueWords.isEmpty())
+            dataForOutFile.append(firstString).append("\n");
+        else
+            dataForOutFile.append(uniqueWords.iterator().next()).append("\n");
+
+        uniqueWords.clear();
     }
 
     /**
-     * Сравнение игнорируя первые несколько символов каждой строки или регистр
+     * Сравнение игнорируя первые несколько символов каждой строки, регистр или сравнение по умолчанию
      */
-    public void equalsIgnoreSomeChars(int countIgnore) {
-        StringBuilder firstString = new StringBuilder(allLines.get(0));
+    public void equalsCombined(String option, int num) {
+        String firstString = allLines.get(0);
 
         for (int i = 1; i < allLines.size(); i++) {
-            String wordWithIgnore = firstString.substring(countIgnore, allLines.get(i - 1).length());//выделение подстроки
+            if (option.equals("i")) {//ветки в условиях не обьедены для большей читаемости кода
+                if (firstString.equalsIgnoreCase(allLines.get(i))) {
+                    uniqueWords.add(firstString);
+                } else {
+                    append(firstString);
+                    firstString = allLines.get(i);
+                }
 
-            if (wordWithIgnore.equals(allLines.get(i).substring(countIgnore)) || wordWithIgnore.equalsIgnoreCase(allLines.get(i).substring(countIgnore))) {
-                uniqueWords.add(firstString.toString());
+            } else if (option.equals("s")) {
+                String wordWithIgnore = firstString.substring(num, allLines.get(i - 1).length());//выделение подстроки
+
+                if (wordWithIgnore.equals(allLines.get(i).substring(num))) {//проверка слово с игнорируемыми символами
+                    uniqueWords.add(firstString);
+                } else {
+                    append(firstString);
+                    firstString = allLines.get(i);
+                }
             } else {
-                if (uniqueWords.isEmpty())
-                    dataForOutFile.append(firstString.append("\n"));
-                else
-                    dataForOutFile.append(uniqueWords.iterator().next()).append("\n");
-
-                firstString.setLength(0);
-                firstString.append(allLines.get(i));
-                uniqueWords.clear();
+                if (firstString.equals(allLines.get(i))) {
+                    uniqueWords.add(firstString);
+                } else {
+                    append(firstString);
+                    firstString = allLines.get(i);
+                }
             }
         }
-
         dataForOutFile.append(firstString);
     }
 

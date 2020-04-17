@@ -57,11 +57,17 @@ class UniqueTest {
         assertFileContent("2 hello world\n" + "1 hello\n" + "2 i am a text\n" + "1 go\n");
     }
 
+    @Test
+    void equalsDefault() throws IOException {
+        UniqueLauncher.main(new String[]{"-o", "output.txt", "inputForDefault.txt"});
+
+        assertFileContent("hello\n" + "Hello\n" + "Go\n" + "go\n" + "Walk\n");
+    }
+
     /**
      * Тестирование случаев неправильного использования
      */
     private ByteArrayOutputStream outException = new ByteArrayOutputStream();
-
     private ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 
     private final ByteArrayInputStream inputContentIgnoreCase = new ByteArrayInputStream(("Hello\\\\nHELLO\\\\nHow are you\\\\nhow are you").getBytes());
@@ -82,12 +88,6 @@ class UniqueTest {
         assertEquals("File not found: input.txt", outException.toString());
     }
 
-    @Test
-    void exceptionFlags() throws IOException {
-        UniqueLauncher.main(new String[]{"-o", "output.txt", "inputForCountString.txt"});
-
-        assertEquals("No flags was found or invalid argument", outException.toString());
-    }
 
     @Test
     void exceptionOutput() throws IOException {

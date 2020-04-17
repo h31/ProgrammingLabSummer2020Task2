@@ -1,12 +1,13 @@
 package com.example.utility;
 
 //библиотека args4j для обработки аргументов командной строки
+
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.Objects;
 
 public class UniqueLauncher {
@@ -18,7 +19,7 @@ public class UniqueLauncher {
     private String nameOfOutput;
 
     @Option(name = "-s", metaVar = "IgnoreNumString", usage = "Ignore begin 'num' string")
-    private int num = -1;
+    private int num;
 
     @Option(name = "-c", metaVar = "CountString", usage = "Write counted string")
     private boolean flagCisSet;
@@ -28,6 +29,14 @@ public class UniqueLauncher {
 
     @Argument(metaVar = "InputName", usage = "Input file name")
     private String nameOfInput;
+
+    public boolean isFlagIisSet() {
+        return flagIisSet;
+    }
+
+    public int getNum() {
+        return num;
+    }
 
     public static void main(String[] args) throws IOException {
         new UniqueLauncher().launch(args);
@@ -60,17 +69,25 @@ public class UniqueLauncher {
             } else if (flagUisSet) {
                 unique.equalsUnique();
             } else if (flagIisSet) {
-                unique.equalsIgnoreSomeChars(0);
+                unique.equalsCombined("i",0);
             } else if (num > 0) {
-                unique.equalsIgnoreSomeChars(num);
+                unique.equalsCombined("s",num);
             } else {
-                System.err.print("No flags was found or invalid argument");
+                unique.equalsCombined("default",0);
             }
 
-            if (nameOfOutput == null)
+
+            if (nameOfOutput != null) {
+                File file = new File(nameOfOutput);
+                if (file.exists()) {//Проверка существованмя файла
+                    System.setOut(new PrintStream(new BufferedOutputStream(new FileOutputStream(nameOfOutput)), true));
+                    System.out.write(unique.getDataForOutFile().toString().getBytes());
+                } else {
+                    System.err.print("File not found" + ": " + nameOfOutput);
+                }
+            } else {
                 System.out.write(unique.getDataForOutFile().toString().getBytes());
-            else
-                unique.outputFileData(nameOfOutput);
+            }
         }
     }
 
