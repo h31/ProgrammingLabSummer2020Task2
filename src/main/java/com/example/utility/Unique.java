@@ -4,9 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.PrintStream;
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
 
 import java.util.Arrays;
 import java.util.ArrayList;
@@ -26,8 +23,6 @@ public class Unique {
     public ArrayList<String> getAllLines() {
         return allLines;
     }
-
-    UniqueLauncher uniqueLauncher = new UniqueLauncher();
 
     /**
      * Отдельный метод реализующий ввод данных из консоли
