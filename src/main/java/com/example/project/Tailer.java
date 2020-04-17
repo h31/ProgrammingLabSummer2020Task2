@@ -3,7 +3,9 @@ package com.example.project;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Objects;
 
 @SuppressWarnings("WeakerAccess")
 
@@ -19,25 +21,46 @@ public class Tailer {
     }
 
     private int tail(BufferedReader reader, BufferedWriter writer) throws IOException {
-        if (lastStrings == 0) {
-            return extractSymbols(reader, writer);
-        } else {
+        if (lastSymbols == 0) {
             return extractStrings(reader, writer);
+        } else {
+            return extractSymbols(reader, writer);
         }
     }
 
-    //кидают ли исключения?
-    private int extractSymbols(BufferedReader reader, BufferedWriter writer) {
+    private int extractSymbols(BufferedReader reader, BufferedWriter writer) throws IOException {
+        ArrayDeque<Character> deque = new ArrayDeque<>(lastSymbols);
         int count = 0;
+        int sym = reader.read();
+        while (sym != -1) {
+            if (deque.size() == lastSymbols) deque.pollLast();
+            deque.add((char) sym);
+            sym = reader.read();
+        }
 
-
+        while (deque.peekFirst() != null) {
+            writer.write(String.valueOf(Objects.requireNonNull(deque.pollFirst())));
+            count++;
+        }
         return count;
     }
 
-    private int extractStrings(BufferedReader reader, BufferedWriter writer) {
+    private int extractStrings(BufferedReader reader, BufferedWriter writer) throws IOException {
+        ArrayDeque<String> deque = new ArrayDeque<>(lastStrings);
         int count = 0;
+        String string = reader.readLine();
+        while (string != null) {
+            if (deque.size() == lastStrings) deque.pollFirst();
+            deque.add(string);
+            count++;
+            string = reader.readLine();
+        }
 
-
+        while (deque.peekFirst() != null) {
+            writer.write(Objects.requireNonNull(deque.pollFirst()));
+            if (deque.size() > 0) writer.newLine();
+            count++;
+        }
         return count;
     }
 
