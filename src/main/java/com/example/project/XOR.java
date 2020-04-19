@@ -1,3 +1,5 @@
+package main.java.com.example.project;
+
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.Scanner;
@@ -20,12 +22,10 @@ public class XOR {
             while ((c = reader.read()) != -1) {
                 if (c >= '0' && c <= '9') {
                     int res = (c ^ key[i % key.length]);
-                    System.out.print(res);
                     writer.write( res + 48);
                     i += 1;
                 }else {
                     int res = c ^ key[i % key.length];
-                    System.out.print((char) res);
                     writer.write((char) res);
                     i += 1;
                 }
