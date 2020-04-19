@@ -31,8 +31,6 @@ public class XOR {
                 }
             }
             writer.flush();
-        } else {
-            System.out.print("Введите правильный ключ");
         }
     }
 
