@@ -1,0 +1,22 @@
+input.txt
+ABCDEFGHIJKLM
+абвгдеёжзийклмноп
+рстуфхцчшщъыьэюя
+0123456789
+9876543210
+
+a
+b
+The quick brown fox jumps over the lazy dog
+The eleventh line
+input1.txt
+first line
+second line
+third line
+fourth line
+fifth line
+sixth line
+seventh line
+eighth line
+ninth line
+tenth line

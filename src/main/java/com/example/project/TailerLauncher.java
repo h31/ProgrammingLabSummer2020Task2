@@ -38,8 +38,7 @@ public class TailerLauncher {
         }
 
         if (numOfLastStrings != 0 && numOfLastSymbols != 0) {
-            System.err.println("The simultaneous use of the flags \"-c\" and \"-n\" ");
-            return;
+            throw new Error("The simultaneous use of the flags \"-c\" and \"-n\" ");
         } else if (numOfLastSymbols == 0 && numOfLastStrings == 0) {
             numOfLastStrings = 10;
         }

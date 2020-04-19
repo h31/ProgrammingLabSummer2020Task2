@@ -1,0 +1,12 @@
+input.txt
+
+a
+b
+The quick brown fox jumps over the lazy dog
+The eleventh line
+input1.txt
+sixth line
+seventh line
+eighth line
+ninth line
+tenth line

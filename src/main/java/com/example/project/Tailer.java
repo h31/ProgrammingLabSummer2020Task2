@@ -33,7 +33,7 @@ public class Tailer {
         int count = 0;
         int sym = reader.read();
         while (sym != -1) {
-            if (deque.size() == lastSymbols) deque.pollLast();
+            if (deque.size() == lastSymbols) deque.pollFirst();
             deque.add((char) sym);
             sym = reader.read();
         }
@@ -52,7 +52,6 @@ public class Tailer {
         while (string != null) {
             if (deque.size() == lastStrings) deque.pollFirst();
             deque.add(string);
-            count++;
             string = reader.readLine();
         }
 
@@ -75,21 +74,25 @@ public class Tailer {
         BufferedReader reader;
         if (inputNames == null) {
             //No input files, console input:
+            System.out.println("Enter your text:");
             reader = new BufferedReader(new InputStreamReader(System.in));
         } else if (inputNames.size() == 1) {
             //1 input file:
             reader = Files.newBufferedReader(Paths.get(inputNames.get(0)));
         } else {
             //2 or more input files:
-            int tailCounter = 0;
-            for (String inputName : inputNames) {
-                try (BufferedReader reader1 = Files.newBufferedReader(Paths.get(inputName)); writer) {
-                    writer.write(new File(inputName).getName());
-                    writer.newLine();
-                    tailCounter += tail(reader1, writer);
+            try (writer) {
+                int tailCounter = 0;
+                for (String inputName : inputNames) {
+                    try (BufferedReader reader1 = Files.newBufferedReader(Paths.get(inputName))) {
+                        writer.write(new File(inputName).getName());
+                        writer.newLine();
+                        tailCounter += tail(reader1, writer);
+                        writer.newLine();
+                    }
                 }
+                return tailCounter;
             }
-            return tailCounter;
         }
 
         try (reader; writer) {
