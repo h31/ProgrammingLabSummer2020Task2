@@ -45,6 +45,7 @@ public class TransposeLauncher {
         else a = Integer.parseInt(area);
         try {
             transpose.transpose(a, truncate, rightAlign);
+            System.out.println("transposed");
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
