@@ -32,6 +32,7 @@ public class XOR {
             }
             writer.flush();
         }
+
     }
 
 }
