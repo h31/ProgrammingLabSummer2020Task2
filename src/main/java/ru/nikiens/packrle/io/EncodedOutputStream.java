@@ -6,7 +6,7 @@ import java.nio.file.Paths;
 import java.util.Objects;
 
 public class EncodedOutputStream extends FilterOutputStream {
-    private static final int MAX__RUN_LEN = 257;
+    private static final int MAX_RUN_LEN = 257;
 
     private int count, current;
 
@@ -30,7 +30,7 @@ public class EncodedOutputStream extends FilterOutputStream {
         Objects.checkFromIndexSize(off, len, b.length);
 
         for (int i = 0; i < len; i++) {
-            if (b[off + i] != current || count == MAX__RUN_LEN) {
+            if (b[off + i] != current || count == MAX_RUN_LEN) {
                 writeEncoded();
                 current = b[off + i];
             } else {
