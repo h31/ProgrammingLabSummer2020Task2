@@ -13,7 +13,7 @@ import java.nio.file.Paths
 class BehaviourTest extends Specification {
     def encoded = Paths.get("src", "test", "resources", "encoded.txt.rlz")
     def decoded = Paths.get("src", "test", "resources", "decoded.txt")
-    def boas = new ByteArrayOutputStream()
+    def baos = new ByteArrayOutputStream()
     def cmd = new CommandLine(new PackRLE())
     def eu = new ExtensionUtil("rlz")
 
@@ -24,11 +24,11 @@ class BehaviourTest extends Specification {
     def "stdin -> stdout by default"() {
         setup: "Simulate standard input/output"
             System.setIn(Files.newInputStream(decoded))
-            System.setOut(new PrintStream(boas))
+            System.setOut(new PrintStream(baos))
         when:
             cmd.execute()
         then:
-            boas.toString() == getFileContents(encoded)
+            baos.toString() == getFileContents(encoded)
     }
 
     def "Must decompress by default for .rlz extension"() {
@@ -44,13 +44,13 @@ class BehaviourTest extends Specification {
 
     def "Decompress to stdout, if forced and no <output> specified"() {
         setup: "Simulate standard output"
-            System.setOut(new PrintStream(boas))
+            System.setOut(new PrintStream(baos))
         and: "Create derlz-ed file"
             def derlz = Files.copy(encoded, eu.truncate(encoded))
         when:
             cmd.execute("-u", derlz.toString())
         then:
-            boas.toString() == getFileContents(decoded)
+            baos.toString().split("\r\n").join(System.lineSeparator()) == getFileContents(decoded)
         cleanup:
             Files.delete(derlz)
     }
