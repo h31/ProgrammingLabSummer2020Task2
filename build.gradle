@@ -33,10 +33,3 @@ jar {
         attributes 'Main-Class': 'ru.nikiens.packrle.PackRLE'
     }
 }
-
-gradleEnterprise {
-    buildScan {
-        termsOfServiceUrl = 'https://gradle.com/terms-of-service'
-        termsOfServiceAgree = 'yes'
-    }
-}
