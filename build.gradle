@@ -33,3 +33,8 @@ jar {
         attributes 'Main-Class': 'ru.nikiens.packrle.PackRLE'
     }
 }
+
+buildScan {
+    licenseAgreementUrl = "https://gradle.com/terms-of-service"
+    licenseAgree = "yes"
+}
