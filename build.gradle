@@ -30,7 +30,6 @@ application {
 
 jar {
     manifest {
-        attributes 'Implementation-Title': 'Gradle Quickstart',
-                'Main-Class': 'ru.nikiens.packrle.PackRLE'
+        attributes 'Main-Class': 'ru.nikiens.packrle.PackRLE'
     }
 }
