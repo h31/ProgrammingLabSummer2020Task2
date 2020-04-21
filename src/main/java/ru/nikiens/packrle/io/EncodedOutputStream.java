@@ -8,7 +8,7 @@ import java.util.Objects;
 public class EncodedOutputStream extends FilterOutputStream {
     private static final int MAX_RUN_LEN = 257;
 
-    private int count, current;
+    private int count, previous;
 
     public EncodedOutputStream(OutputStream out) {
         super(out);
@@ -16,10 +16,10 @@ public class EncodedOutputStream extends FilterOutputStream {
 
     private void writeEncoded() throws IOException {
         if (count >= 1) {
-            super.write(current);
+            super.write(previous);
 
             if (count >= 2) {
-                super.write(current);
+                super.write(previous);
                 super.write(count - 2);
             }
         }
@@ -30,9 +30,9 @@ public class EncodedOutputStream extends FilterOutputStream {
         Objects.checkFromIndexSize(off, len, b.length);
 
         for (int i = 0; i < len; i++) {
-            if (b[off + i] != current || count == MAX_RUN_LEN) {
+            if (b[off + i] != previous || count == MAX_RUN_LEN) {
                 writeEncoded();
-                current = b[off + i];
+                previous = b[off + i];
             } else {
                 count++;
             }
