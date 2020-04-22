@@ -16,15 +16,13 @@ public class ExceptionHandler implements IExecutionExceptionHandler {
         ResourceBundle rb = ResourceBundle.getBundle("Messages", Locale.getDefault());
         PrintWriter w = commandLine.getErr();
 
-        w.println("pack-rle: ");
         if (ex instanceof NoSuchFileException) {
             // В getMessage() у NoSuchFileException содержится путь
-            w.print(rb.getString("err.noSuchFile") + " " + ex.getMessage());
+            w.println("pack-rle: " + rb.getString("err.noSuchFile") + " " + ex.getMessage());
         } else {
-            w.print(rb.getString("err.terminate"));
+            w.println("pack-rle: " + rb.getString("err.terminate"));
             w.println(ex.getMessage());
         }
-
         return commandLine.getCommandSpec().exitCodeOnExecutionException();
     }
 }
