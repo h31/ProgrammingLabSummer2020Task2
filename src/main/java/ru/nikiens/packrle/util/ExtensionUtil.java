@@ -1,6 +1,9 @@
 package ru.nikiens.packrle.util;
 
-import java.nio.file.*;
+import java.nio.file.FileSystems;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
+import java.nio.file.PathMatcher;
 
 public class ExtensionUtil {
     private String extension;

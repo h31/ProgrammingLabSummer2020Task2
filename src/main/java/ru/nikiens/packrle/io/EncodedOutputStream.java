@@ -1,8 +1,8 @@
 package ru.nikiens.packrle.io;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.FilterOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Objects;
 
 public class EncodedOutputStream extends FilterOutputStream {
