@@ -67,7 +67,7 @@ class BehaviourTest extends Specification {
     }
 
     def "Must compress other files by default"() {
-        setup:
+        given:
             def rlz = eu.append(decoded)
         when:
             cmd.execute(decoded.toString())
