@@ -6,7 +6,8 @@ import java.io.InputStream;
 import java.util.Objects;
 
 public class DecodedInputStream extends FilterInputStream {
-    private int count, previous = -1;
+    private int previous = -1;
+    private int count;
     private boolean hasRun;
 
     public DecodedInputStream(InputStream in) {
@@ -26,30 +27,20 @@ public class DecodedInputStream extends FilterInputStream {
 
         int b = super.read();
 
+        if (hasRun) {
+            count = b - 1;
+            hasRun = false;
+
+            if (count == -1) {
+                count = 0;
+                return read();
+            }
+            return previous;
+        }
+
         if (b == previous) {
-            if (hasRun) {
-                count = b - 1;
-                hasRun = false;
-
-                if (count == -1) {
-                    count = 0;
-                    return read();
-                }
-            } else {
-                hasRun = true;
-            }
+            hasRun = true;
         } else {
-            if (hasRun) {
-                count = b - 1;
-                hasRun = false;
-
-                if (count == -1) {
-                    count = 0;
-                    return read();
-                }
-
-                return previous;
-            }
             previous = b;
         }
         return b;
