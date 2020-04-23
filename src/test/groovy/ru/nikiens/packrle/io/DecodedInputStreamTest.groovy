@@ -35,6 +35,7 @@ class DecodedInputStreamTest extends Specification {
             [97, 97, 0]  || 'aa'
             [97, 98, 99] || 'abc'
             [97, 97, 3]  || 'a' * 5
+            [0, 0, 0]    || '\u0000' * 2
     }
 
     def "Test decoding large runs"() {

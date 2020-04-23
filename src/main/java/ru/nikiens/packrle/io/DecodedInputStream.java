@@ -30,6 +30,11 @@ public class DecodedInputStream extends FilterInputStream {
             if (hasRun) {
                 count = b - 1;
                 hasRun = false;
+
+                if (count == -1) {
+                    count = 0;
+                    return read();
+                }
             } else {
                 hasRun = true;
             }
@@ -39,18 +44,13 @@ public class DecodedInputStream extends FilterInputStream {
                 hasRun = false;
 
                 if (count == -1) {
-                    previous = super.read();
                     count = 0;
+                    return read();
                 }
 
                 return previous;
             }
-            if (count == -1) {
-                previous = super.read();
-                count = 0;
-            } else {
-                previous = b;
-            }
+            previous = b;
         }
         return b;
     }
