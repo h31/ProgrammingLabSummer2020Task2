@@ -14,17 +14,6 @@ public class DecodedInputStream extends FilterInputStream {
         super(in);
     }
 
-    private int processLengthByte(int b) throws IOException {
-        count = b - 1;
-        hasRun = false;
-
-        if (count == -1) {
-            count = 0;
-            return read();
-        }
-        return previous;
-    }
-
     public int read() throws IOException {
         if (count > 0) {
             count--;
@@ -39,7 +28,9 @@ public class DecodedInputStream extends FilterInputStream {
         int b = super.read();
 
         if (hasRun) {
-            return processLengthByte(b);
+            count = b;
+            hasRun = false;
+            return read();
         }
 
         if (b == previous) {

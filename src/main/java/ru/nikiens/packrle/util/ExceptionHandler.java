@@ -20,8 +20,8 @@ public class ExceptionHandler implements IExecutionExceptionHandler {
             // В getMessage() у NoSuchFileException содержится путь
             w.println("pack-rle: " + rb.getString("err.noSuchFile") + " " + ex.getMessage());
         } else {
-            w.println("pack-rle: " + rb.getString("err.terminate"));
             w.println(ex.getMessage());
+            w.println("pack-rle: " + rb.getString("err.terminate"));
         }
         return commandLine.getCommandSpec().exitCodeOnExecutionException();
     }
