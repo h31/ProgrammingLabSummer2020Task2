@@ -10,9 +10,7 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Path;
 import java.util.concurrent.Callable;
 
@@ -62,8 +60,8 @@ public class PackRLE implements Callable<Integer> {
         setDefaults();
         IOProvider ioProvider = new IOProvider(incompatible.pack, input, output);
 
-        try (BufferedInputStream r = ioProvider.getBufferedInputStream();
-             BufferedOutputStream w = ioProvider.getBufferedOutputStream()) {
+        try (InputStream r = ioProvider.getInputStream();
+             OutputStream w = ioProvider.getOutputStream()) {
             r.transferTo(w);
         }
         return 0;

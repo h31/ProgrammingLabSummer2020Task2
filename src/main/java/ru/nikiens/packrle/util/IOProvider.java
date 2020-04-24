@@ -18,20 +18,20 @@ public class IOProvider {
         this.output = output;
     }
 
-    private InputStream getInputStream() throws IOException {
-        return (input == null) ? System.in : Files.newInputStream(input);
+    private BufferedInputStream getBufferedInputStream() throws IOException {
+        return new BufferedInputStream((input == null) ? System.in : Files.newInputStream(input));
     }
 
-    public BufferedInputStream getBufferedInputStream() throws IOException {
-        return new BufferedInputStream((pack) ? getInputStream() : new DecodedInputStream(getInputStream()));
+    public InputStream getInputStream() throws IOException {
+        return (pack) ? getBufferedInputStream() : new DecodedInputStream(getBufferedInputStream());
     }
 
-    private OutputStream getOutputStream() throws IOException {
-        return (output == null) ? System.out : Files.newOutputStream(output);
+    private BufferedOutputStream getBufferedOutputStream() throws IOException {
+        return new BufferedOutputStream((output == null) ? System.out : Files.newOutputStream(output));
     }
 
-    public BufferedOutputStream getBufferedOutputStream() throws IOException {
-        return new BufferedOutputStream((pack) ? new EncodedOutputStream(getOutputStream()) : getOutputStream());
+    public OutputStream getOutputStream() throws IOException {
+        return (pack) ? new EncodedOutputStream(getBufferedOutputStream()) : getBufferedOutputStream();
     }
 }
 
