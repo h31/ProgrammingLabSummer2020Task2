@@ -30,6 +30,7 @@ public class DecodedInputStream extends FilterInputStream {
         if (hasRun) {
             count = b;
             hasRun = false;
+            previous = (count == 0) ? -1 : previous;
             return read();
         }
 
