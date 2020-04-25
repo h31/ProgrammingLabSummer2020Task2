@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> r1remote/master
 # Created by https://www.gitignore.io/api/java,maven,gradle,kotlin,jetbrains+all
 # Edit at https://www.gitignore.io/?templates=java,maven,gradle,kotlin,jetbrains+all
 
@@ -158,4 +161,8 @@ gradle-app.setting
 ### Gradle Patch ###
 **/build/
 
+<<<<<<< HEAD
 # End of https://www.gitignore.io/api/java,maven,gradle,kotlin,jetbrains+all
+=======
+# End of https://www.gitignore.io/api/java,maven,gradle,kotlin,jetbrains+all
+>>>>>>> r1remote/master

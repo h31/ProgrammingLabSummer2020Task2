@@ -1,0 +1,40 @@
+plugins {
+    id 'application'
+    id 'groovy'
+}
+
+group 'ru.nikiens.pack-rle'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.10
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'info.picocli:picocli:4.2.0'
+
+    testCompile 'org.codehaus.groovy:groovy-all:2.5.8'
+    testCompile platform('org.spockframework:spock-bom:2.0-M1-groovy-2.5')
+    testCompile 'org.spockframework:spock-core'
+}
+
+test {
+    useJUnitPlatform()
+
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+    }
+}
+
+application {
+    mainClassName = 'ru.nikiens.packrle.PackRLE'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'ru.nikiens.packrle.PackRLE'
+    }
+}
