@@ -1,8 +1,6 @@
 package com.example.project;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.HashMap;
 
 class Transpose {
@@ -23,17 +21,19 @@ class Transpose {
         if (inputName == null) {
             reader = new BufferedReader(new InputStreamReader(System.in));
         } else {
-            reader = Files.newBufferedReader(Paths.get(inputName));
+            reader = new BufferedReader(new FileReader(inputName));
         }
         inputStrings = reader.readLine();
         while (inputStrings != null) {
             String[] words = inputStrings.split("\\s+");
             for (int i = 0; i < words.length; i++) {
-                int length = a - words[i].length();
+                int wordsLength = words[i].length();
+                int length = a - wordsLength;
                 StringBuilder w = new StringBuilder();
                 if (length <= 0) {
-                    if (t) w.append(words[i], 0, a);
-                    else w.append(words[i]);
+                    if (!t) w.append(words[i]);
+                    if (t & !r) w.append(words[i], 0, a);
+                    if (t & r) w.append(words[i], wordsLength - a, wordsLength);
                 } else if (!r) {
                     w.append(words[i]);
                     for (int j = 0; j < length; j++) w.append(" ");
@@ -52,7 +52,7 @@ class Transpose {
         BufferedWriter writer;
         if (outputName == null) {
             for (int key : transposeMap.keySet()) {
-                System.out.println(transposeMap.get(key).trim());
+                System.out.println(transposeMap.get(key));
             }
         } else {
             File file = new File(outputName);
