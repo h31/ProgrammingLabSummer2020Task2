@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class Find {
-   public static void main(String[] args) throws IOException, ConcurrentModificationException {
+   public static void main(String[] args) throws FileNotFoundException {
       ArrayList<String> keys = new ArrayList<>(); //список для поиска имён директории и файла
       Collections.addAll(keys, args);
       boolean d = false; // содержится ли ключ -d
@@ -35,8 +35,8 @@ public class Find {
                     }
                 }
             } else foundDir = true;
-            if (!foundDir ) throw new FileNotFoundException("Directory wasn't found.");
-            if (keys.isEmpty()) throw  new FileNotFoundException("Enter file name.");
+            if (!foundDir ) throw new FileNotFoundException("Directory wasn't found");
+            if (keys.isEmpty()) throw  new FileNotFoundException("Enter file name");
          }
       }
 
@@ -46,6 +46,9 @@ public class Find {
           for (int i = 1; i < keys.size(); i++) {
           name += " " + keys.get(i);
           }
+      }
+      if (name.matches("(.*)[/?*:\"<>](.*)")) {
+          throw new IllegalArgumentException("File contains invalid chars");
       }
 
       if (!d && !r) { // Поиск в текущей директории
@@ -65,10 +68,10 @@ public class Find {
       File directory = new File(dirName);
 
       if (d && !r) { // Поиск в указанной директории
-          for (File files: directory.listFiles()) {
-              if (files.getName().equals(name)) {
+          for (File file: directory.listFiles()) {
+              if (file.getName().equals(name)) {
                   System.out.println("File " + name + " was found");
-                  System.out.println("Absolute path: " + files.getAbsolutePath());
+                  System.out.println("Absolute path: " + file.getAbsolutePath());
               }
           }
          }
@@ -87,7 +90,7 @@ public class Find {
                    System.out.println("File " + file.getName() + " was found");
                    System.out.println("Absolute path: " + file.getAbsolutePath());
                }
-           } else if (file.isDirectory()) find(file, fileName);
+           } else if (file.isDirectory() && !file.isHidden()) find(file, fileName);
        }
    }
 
