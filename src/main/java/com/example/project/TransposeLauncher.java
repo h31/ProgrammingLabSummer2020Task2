@@ -23,6 +23,9 @@ public class TransposeLauncher {
     @Argument(metaVar = "file", usage = "Input file name")
     private String inputFileName;
 
+    public TransposeLauncher() {
+    }
+
     public static void main(String[] args) {
         new TransposeLauncher().launch(args);
     }
