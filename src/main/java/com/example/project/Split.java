@@ -5,7 +5,7 @@ import java.util.Arrays;
 
  public class Split {
 
-    public static void main(String[] args) throws IOException {
+    public void main(String[] args) throws IOException {
         int flagL = Arrays.asList(args).indexOf("-l");
         int flagC = Arrays.asList(args).indexOf("-c");
         int flagN = Arrays.asList(args).indexOf("-n");
@@ -55,13 +55,16 @@ import java.util.Arrays;
             else
                 size = sizeParent / countFile + 1;
         }
-
+        if (size <= 0 || countFile <= 0) {
+            System.out.println("Числа должны быть больше 0");
+            throw new IllegalArgumentException();
+        }
         String name = nameFiles(args, input);
         ArrayList<String> outputFiles = outputFiles(args, countFile, name);
         write(outputFiles, list, size, sizeParent, flagC);
     }
 
-    static String nameFiles(String[] args, String input) {
+    String nameFiles(String[] args, String input) {
         int flagO = Arrays.asList(args).indexOf("-o");
         String name = "x";
         if (flagO != -1) {
@@ -79,7 +82,7 @@ import java.util.Arrays;
         return name;
     }
 
-    static ArrayList<String> outputFiles(String[] args, int countFile, String name) {
+    ArrayList<String> outputFiles(String[] args, int countFile, String name) {
         int flagD = Arrays.asList(args).indexOf("-d");
         ArrayList<String> outputFiles = new ArrayList<>();
         String[] letters = new String[]
@@ -111,10 +114,10 @@ import java.util.Arrays;
         return outputFiles;
     }
 
-    static ArrayList<String> reader(String input) throws IOException {
+    ArrayList<String> reader(String input) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(input));
         String str;
-        ArrayList<String> list = new ArrayList();
+        ArrayList<String> list = new ArrayList<String>();
         while((str = reader.readLine()) != null ){
             if(!str.isEmpty()){
                 list.add(str);
@@ -124,13 +127,13 @@ import java.util.Arrays;
         return list;
     }
 
-    static void write(ArrayList outputFiles, ArrayList list, int size, int sizeParent, int flagC) {
+    void write(ArrayList<String> outputFiles, ArrayList<String> list, int size, int sizeParent, int flagC) {
         int countSize = 0;
         int count = 0;
         if (flagC != - 1) {
             int divStr = 0;
             for (int i = 0; i < sizeParent; i++) {
-                String str = (String) list.get(i);
+                String str = list.get(i);
                 for (int j = 0; j < str.length(); j++) {
                     if (countSize >= size) {
                         count++;
@@ -180,6 +183,5 @@ import java.util.Arrays;
                 }
             }
     }
-
 }
 
