@@ -1,21 +1,31 @@
 package com.example.project;
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-class Split {
+ public class Split {
+
     public static void main(String[] args) throws IOException {
         int flagL = Arrays.asList(args).indexOf("-l");
         int flagC = Arrays.asList(args).indexOf("-c");
         int flagN = Arrays.asList(args).indexOf("-n");
-        int flagFile = Arrays.asList(args).indexOf("file");
-        String input;
-        if (flagFile != -1)
-            input = args[flagFile + 1];
-        else
+        int flagFile = -1;
+        String input = null;
+        for (int i = 0; i < args.length; i++)
+            if (args[i].matches("[0-9A-Za-z/]+.(txt)")) {
+                flagFile = i;
+                input = args[flagFile];
+                break;
+            }
+        if (flagFile == -1) {
+            System.out.println("Не указан файл");
             throw new IllegalArgumentException();
+        }
         ArrayList<String> list = reader(input);
-        if (!((flagL == flagC) || (flagL == flagN) || (flagC == flagN)))
+        if (!((flagL == flagC) || (flagL == flagN) || (flagC == flagN))) {
+            System.out.println("Лишние флаги");
             throw new IllegalArgumentException();
+        }
         int size = 100;
         int sizeParent = list.size();
         int countFile = sizeParent / size;
@@ -89,8 +99,10 @@ class Split {
                     i = 0;
                     j++;
                 }
-                if (j > 25)
+                if (j > 25) {
+                    System.out.println("Превышено количество выходных файлов");
                     throw new ArrayIndexOutOfBoundsException();
+                }
                 outputFiles.add(name + letters[j] + letters[i] + ".txt");
                 i++;
                 countFile--;
@@ -168,5 +180,6 @@ class Split {
                 }
             }
     }
-    }
+
+}
 

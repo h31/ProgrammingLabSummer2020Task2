@@ -75,7 +75,7 @@ class SplitTest {
 
     @Test
     void mainTest() throws IOException {
-        String[] args = new String[]{"file", "input/testFile.txt", "-l", "2", "-o", "qwerty"};
+        String[] args = new String[]{"input/testFile.txt", "-l", "2", "-o", "qwerty"};
         ArrayList<String> outputFiles = new ArrayList<>();
         outputFiles.add("qwertyaa.txt");
         outputFiles.add("qwertyab.txt");
@@ -88,7 +88,7 @@ class SplitTest {
         delAll(outputFiles);
         assertEquals(exp1, res1);
         assertEquals(exp2, res2);
-        args = new String[]{"file", "input/testFile.txt", "-n", "2","-d"};
+        args = new String[]{"input/testFile.txt", "-n", "2","-d"};
         outputFiles.clear();
         outputFiles.add("x1.txt");
         outputFiles.add("x2.txt");
@@ -112,10 +112,10 @@ class SplitTest {
     }
 
     @Test
-    void Errors() {
+    void errors() {
         assertThrows(IllegalArgumentException.class, () -> Split.main(new String[]{"-c", "4", "-o","-","-d"}));
-        assertThrows(IllegalArgumentException.class, () -> Split.main(new String[]{"file", "input/testFile.txt", "-c", "4", "-n","3","-d"}));
-        assertThrows(ArrayIndexOutOfBoundsException.class, () -> Split.main(new String[]{"file", "input/testFile.txt", "-n","677",}));
+        assertThrows(IllegalArgumentException.class, () -> Split.main(new String[]{"input/testFile.txt", "-c", "4", "-n","3","-d"}));
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> Split.main(new String[]{"input/testFile.txt", "-n","677",}));
     }
 
     private ArrayList<String> readAll(ArrayList<String> outputFiles) throws IOException {
