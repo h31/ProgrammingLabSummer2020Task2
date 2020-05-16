@@ -129,6 +129,8 @@ import java.util.Arrays;
     }
 
     void write(ArrayList<String> outputFiles, ArrayList<String> list, int size, int sizeParent, int flagC) {
+        File filePath = new File("output");
+        filePath.mkdir();
         int countSize = 0;
         int count = 0;
         if (flagC != - 1) {
@@ -142,8 +144,6 @@ import java.util.Arrays;
                         divStr = 0;
                     }
                     countSize++;
-                    File filePath = new File("output");
-                    filePath.mkdir();
                     File file = new File(filePath + "/" + outputFiles.get(count));
                     try {
                         BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
@@ -170,8 +170,6 @@ import java.util.Arrays;
                     countSize = 0;
                 }
                 countSize++;
-                File filePath = new File("output");
-                filePath.mkdir();
                 File file = new File(filePath + "/" + outputFiles.get(count));
                 try {
                     BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
