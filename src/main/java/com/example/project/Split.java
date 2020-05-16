@@ -5,7 +5,8 @@ import java.util.Arrays;
 
  public class Split {
 
-    public void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException {
+        Split split = new Split();
         int flagL = Arrays.asList(args).indexOf("-l");
         int flagC = Arrays.asList(args).indexOf("-c");
         int flagN = Arrays.asList(args).indexOf("-n");
@@ -21,7 +22,7 @@ import java.util.Arrays;
             System.out.println("Не указан файл");
             throw new IllegalArgumentException();
         }
-        ArrayList<String> list = reader(input);
+        ArrayList<String> list = split.reader(input);
         if (!((flagL == flagC) || (flagL == flagN) || (flagC == flagN))) {
             System.out.println("Лишние флаги");
             throw new IllegalArgumentException();
@@ -59,9 +60,9 @@ import java.util.Arrays;
             System.out.println("Числа должны быть больше 0");
             throw new IllegalArgumentException();
         }
-        String name = nameFiles(args, input);
-        ArrayList<String> outputFiles = outputFiles(args, countFile, name);
-        write(outputFiles, list, size, sizeParent, flagC);
+        String name = split.nameFiles(args, input);
+        ArrayList<String> outputFiles = split.outputFiles(args, countFile, name);
+        split.write(outputFiles, list, size, sizeParent, flagC);
     }
 
     String nameFiles(String[] args, String input) {
