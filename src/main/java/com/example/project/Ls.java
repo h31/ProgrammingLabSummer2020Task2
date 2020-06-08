@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Ls {
-    protected static final class ProgramFile {
+    protected static class ProgramFile {
         private final File file;
 
         protected ProgramFile(File file) {
@@ -71,9 +71,13 @@ public class Ls {
     }
 
     public static void main(String[] args) throws IOException {
-        ArrayList<String> flags = new ArrayList<>();
+        List<String> flags = new ArrayList<>();
         String outputFileName = null;
         TreeMap<String, String> treeMap = new TreeMap<String, String>();
+        if (args.length == 0) {
+            System.out.println("ls [-l] [-h] [-r] [-o output.file] directory_or_file");
+            System.exit(0);
+        }
         for (int i = 0; i < args.length; i++) {
             switch (args[i]) {
                 case "-l":
@@ -86,19 +90,19 @@ public class Ls {
                     flags.add("-r");
                     break;
                 case "-o":
+                    if (i == args.length - 1) {
+                        System.out.println("ls [-l] [-h] [-r] [-o output.file] directory_or_file");
+                        System.exit(0);
+                    }
                     flags.add("-o");
                     outputFileName = args[i + 1];
                     break;
             }
         }
-        Map<String, String> lst = new HashMap();
-        if (args.length == 0) {
-            System.out.println("ls [-l] [-h] [-r] [-o output.file] directory_or_file");
-            System.exit(0);
-        }
+        HashMap lst = new HashMap();
         File directoryOrFile = new File(args[args.length - 1]);
         if (directoryOrFile.isDirectory()) { // если директория - вывожу список файлов
-            for (File file : directoryOrFile.listFiles()) {
+            for (File file : Objects.requireNonNull(directoryOrFile.listFiles())) {
                 if (file.isFile()) {
                     lst.put(file.getName(), file.getName());
                     if (flags.contains("-l")) {
@@ -123,7 +127,7 @@ public class Ls {
             }
         }
         assert outputFileName != null;
-        if ((flags.contains("o")) && (new File(outputFileName).isFile())) {
+        if ((flags.contains("-o")) && (new File(outputFileName).isFile())) {
             File tempFile = new File(outputFileName);
             BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile));
             if (flags.contains("-r")) {

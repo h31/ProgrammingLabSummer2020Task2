@@ -13,10 +13,9 @@ class LsTest {
 
     @Test
     void main() throws IOException {
-        String str = "";
         File tempfile = new File("src/test/resources/testfolder/randomText.txt");
         Ls.ProgramFile programFile = new Ls.ProgramFile(tempfile);
-        str = programFile.getFilePermissions();
+        String str = programFile.getFilePermissions();
         if (System.getProperty("os.name").toLowerCase().contains("win")) {
             assertEquals("rwx", str);
         } else{
@@ -37,7 +36,6 @@ class LsTest {
         File file = new File("src/test/resources/testfolder/CalculatorTest.txt");
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         Ls.ProgramFile lastModifiedFile = new Ls.ProgramFile(file);
-        str = lastModifiedFile.getLastModificate();
         //assertEquals("26.03.2020 15:47:06", lastModifiedFile.getLastModificate());
         assertEquals(sdf.format(new Date(file.lastModified())), lastModifiedFile.getLastModificate());
 
