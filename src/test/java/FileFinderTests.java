@@ -14,36 +14,36 @@ public class FileFinderTests {
     @Test
     public void test1() throws Exception {
         assertEquals("Файл testFileTwo не найден.",
-                fileFind.run(new String[]{"-d", String.valueOf(currentDirectory), "testFileTwo"}));
+                fileFind.start(new String[]{"-d", String.valueOf(currentDirectory), "testFileTwo"}));
     }
 
     @Test
     public void test2() throws Exception {
         assertEquals("Файл testFileTwo найден." + "\n" + "Путь: " + testFileTwo.getAbsolutePath(),
-                fileFind.run(new String[]{"-r", "-d", String.valueOf(currentDirectory), "testFileTwo"}));
+                fileFind.start(new String[]{"-r", "-d", String.valueOf(currentDirectory), "testFileTwo"}));
     }
 
     @Test
     public void test3() throws Exception {
         assertEquals("Файл testFileOne найден." + "\n" + "Путь: " + testFileOne.getAbsolutePath(),
-                fileFind.run(new String[]{"-r", "testFileOne"}));
+                fileFind.start(new String[]{"-r", "testFileOne"}));
     }
 
     @Test
     public void test4() throws Exception {
         assertEquals("Файл testFileThree найден." + "\n" + "Путь: " + testFileThree.getAbsolutePath(),
-                fileFind.run(new String[]{"-r", "testFileThree"}));
+                fileFind.start(new String[]{"-r", "testFileThree"}));
     }
 
     @Test
     public void test5() throws Exception {
         assertEquals("Файл testFileFour не найден.",
-                fileFind.run(new String[]{"-r", "-d", String.valueOf(currentDirectory), "testFileFour"}));
+                fileFind.start(new String[]{"-r", "-d", String.valueOf(currentDirectory), "testFileFour"}));
     }
 
     @Test
     public void test6() throws Exception {
         assertEquals("Файл Test.txt найден." + "\n" + "Путь: " + Test.getAbsolutePath(),
-                fileFind.run(new String[]{"-d", String.valueOf(currentDirectory), "Test.txt"}));
+                fileFind.start(new String[]{"-d", String.valueOf(currentDirectory), "Test.txt"}));
     }
 }

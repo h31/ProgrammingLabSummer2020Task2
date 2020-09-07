@@ -2,9 +2,7 @@ import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
-
 import java.io.File;
-import java.io.IOException;
 
 public class FileFinder {
 
@@ -19,9 +17,9 @@ public class FileFinder {
         File[] list = topDirectory.listFiles();
         for (File file : list) {
             if (subdirectories && file.isDirectory()) {
-                search(file, fileName);
-                if (!search(file, fileName).equals("Файл " + fileName + " не найден."))
+                if (!("Файл " + fileName + " не найден.").equals(search(file, fileName))) {
                     return search(file, fileName);
+                } search(file, fileName);
             } else if (file.getName().equals(String.valueOf(fileName))) {
                 return "Файл " + file.getName() + " найден." + "\n" + "Путь: " + file.getAbsolutePath();
             }
@@ -29,13 +27,14 @@ public class FileFinder {
         return "Файл " + fileName + " не найден.";
     }
 
-    public String run(String[] args) throws IOException {
+    public String start(String[] args) {
         CmdLineParser parser = new CmdLineParser(this);
         try {
             parser.parseArgument(args);
         } catch (CmdLineException e) {
             System.err.println(e.getMessage());
-            System.err.println("Команда должна принимать следующий вид: -r -d directory filename.txt");
+            System.out.println("Команда должна принимать следующий вид: -r -d directory filename.txt");
+            System.exit(0);
         }
         if (directoryName != null) {
             File directory = new File(String.valueOf(directoryName));
