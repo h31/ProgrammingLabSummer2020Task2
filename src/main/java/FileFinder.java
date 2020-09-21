@@ -2,6 +2,7 @@ import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
+
 import java.io.File;
 
 public class FileFinder {
@@ -34,11 +35,10 @@ public class FileFinder {
         } catch (CmdLineException e) {
             System.err.println(e.getMessage());
             System.out.println("Команда должна принимать следующий вид: -r -d directory filename.txt");
-            System.exit(0);
+            System.exit(6);
         }
         if (directoryName != null) {
-            File directory = new File(String.valueOf(directoryName));
-            return search(directory, filename);
+            return search(directoryName, filename);
         }
         File directory = new File(new File(".").getAbsolutePath());
         return search(directory, filename);
