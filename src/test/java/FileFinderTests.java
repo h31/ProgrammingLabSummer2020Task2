@@ -1,11 +1,13 @@
 import org.junit.jupiter.api.Test;
+
 import java.io.File;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class FileFinderTests {
     FileFinder fileFind = new FileFinder();
 
-    File currentDirectory = new File(new File(".").getAbsolutePath());
+    File currentDirectory = new File(new File("").getAbsolutePath());
     File testFileOne = new File(currentDirectory + "//directoryForTests//testDirectoryOne", "testFileOne");
     File testFileTwo = new File(currentDirectory + "//directoryForTests//testDirectoryTwo", "testFileTwo");
     File testFileThree = new File(currentDirectory + "//directoryForTests", "testFileThree");

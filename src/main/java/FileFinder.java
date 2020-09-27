@@ -20,8 +20,8 @@ public class FileFinder {
             if (subdirectories && file.isDirectory()) {
                 if (!("Файл " + fileName + " не найден.").equals(search(file, fileName))) {
                     return search(file, fileName);
-                } search(file, fileName);
-            } else if (file.getName().equals(String.valueOf(fileName))) {
+                }
+            } else if (file.getName().equals(fileName.getName())) {
                 return "Файл " + file.getName() + " найден." + "\n" + "Путь: " + file.getAbsolutePath();
             }
         }
@@ -40,7 +40,7 @@ public class FileFinder {
         if (directoryName != null) {
             return search(directoryName, filename);
         }
-        File directory = new File(new File(".").getAbsolutePath());
+        File directory = new File(new File("").getAbsolutePath());
         return search(directory, filename);
     }
 }
