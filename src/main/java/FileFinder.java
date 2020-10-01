@@ -35,7 +35,7 @@ public class FileFinder {
         } catch (CmdLineException e) {
             System.err.println(e.getMessage());
             System.out.println("Команда должна принимать следующий вид: -r -d directory filename.txt");
-            System.exit(6);
+            System.exit(1);
         }
         if (directoryName != null) {
             return search(directoryName, filename);

@@ -8,9 +8,9 @@ public class FileFinderTests {
     FileFinder fileFind = new FileFinder();
 
     File currentDirectory = new File(new File("").getAbsolutePath());
-    File testFileOne = new File(currentDirectory + "//directoryForTests//testDirectoryOne", "testFileOne");
-    File testFileTwo = new File(currentDirectory + "//directoryForTests//testDirectoryTwo", "testFileTwo");
-    File testFileThree = new File(currentDirectory + "//directoryForTests", "testFileThree");
+    File testFileOne = new File(currentDirectory + "/directoryForTests/testDirectoryOne", "testFileOne");
+    File testFileTwo = new File(currentDirectory + "/directoryForTests/testDirectoryTwo", "testFileTwo");
+    File testFileThree = new File(currentDirectory + "/directoryForTests", "testFileThree");
     File Test = new File(currentDirectory, "Test.txt");
 
     @Test
