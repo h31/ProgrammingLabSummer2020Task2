@@ -16,6 +16,9 @@ public class FileFinder {
 
     private String search(File topDirectory, File fileName) {
         File[] list = topDirectory.listFiles();
+        if (list == null) {
+            return "Вы указали не существующий путь";
+        }
         for (File file : list) {
             if (subdirectories && file.isDirectory()) {
                 if (!("Файл " + fileName + " не найден.").equals(search(file, fileName))) {
