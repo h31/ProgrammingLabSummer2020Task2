@@ -1,8 +1,8 @@
 # ciphxor  
 
 
-[![Build Status](https://travis-ci.com/shomov/ProgrammingLabSummer2020Task2.svg?branch=master)](https://travis-ci.com/shomov/ProgrammingLabSummer2020Task2)
-[![codecov](https://codecov.io/gh/shomov/ProgrammingLabSummer2020Task2/branch/master/graph/badge.svg)](https://codecov.io/gh/shomov/ProgrammingLabSummer2020Task2)
+[![Build Status](https://travis-ci.org/shomov/ciphxor.svg?branch=master)](https://travis-ci.org/shomov/ciphxor)
+[![codecov](https://codecov.io/gh/shomov/ciphxor/branch/master/graph/badge.svg)](https://codecov.io/gh/shomov/ciphxor)
 
 
 Данная программа представляет собой реализацию консольного приложения, реализующее шифрование посредством алгоритма "исключающее или", иными словами "xor".
